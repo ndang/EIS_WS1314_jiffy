@@ -22,6 +22,17 @@ img
     float:right;
 }
 
+
+#mi_logo {
+	position: absolute;
+	right: 20px;
+	bottom: 10px;
+	width: 400px;
+	height: 55px;
+	background: url("../../images/vieldrin_small.png") no-repeat bottom right;	
+}
+
+
 /*********************************************
  * NICHT JIFFY
  *********************************************/
