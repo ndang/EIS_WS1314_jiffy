@@ -39,10 +39,12 @@ p.list_head {
   //text-transform: uppercase;
   text-shadow: none;
   padding: 15px 0; 
+  text-align:left;
 }
 
 .ulist > li {
 	margin-top: 20px;
+    float:left;
 }
 
 #mi_logo {
