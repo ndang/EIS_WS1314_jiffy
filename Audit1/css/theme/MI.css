@@ -1,4 +1,19 @@
+/*********************************************
+ * JIFFY
+ *********************************************/
+#mci{
+    width: 50%;
+    float:left;
+}
 
+#wba{
+    width: 50%;
+    float:right;
+}
+
+/*********************************************
+ * NICHT JIFFY
+ *********************************************/
 
 html * {
   color-profile: sRGB;
@@ -27,13 +42,22 @@ body {
  *********************************************/
 .reveal h1,
 .reveal h2,
-.reveal h3,
-.reveal h4,
-.reveal h5,
-.reveal h6 {
+.reveal h3 {
   margin: 0 0 20px 0;
   color: white;
   background-color:#dd1166;
+  font-family: "Myriad Pro", sans-serif;
+  line-height: 0.9em;
+  //text-transform: uppercase;
+  text-shadow: none;
+  padding: 15px 0; }
+
+.reveal h4,
+.reveal h5,
+.reveal h6
+{
+  margin: 0 0 20px 0;
+  color: #77cc00;
   font-family: "Myriad Pro", sans-serif;
   line-height: 0.9em;
   //text-transform: uppercase;
