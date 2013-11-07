@@ -19,7 +19,7 @@ body {
   background-color: #000; }
 
 .reveal {
-  font-family:"Myriad Pro";
+  font-family:"Myriad Pro", sans-serif;
   font-size: 36px;
   font-weight: 200;
   color: #fff; }
@@ -41,7 +41,7 @@ body {
   margin: 0 0 20px 0;
   color: white;
   background-color:#dd1166;
-  font-family: "Myriad Pro";
+  font-family: "Myriad Pro", sans-serif;
   line-height: 0.9em;
   //text-transform: uppercase;
   text-shadow: none; }
