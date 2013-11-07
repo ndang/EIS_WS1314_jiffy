@@ -1,23 +1,49 @@
 /*********************************************
  * JIFFY
  *********************************************/
-#alleinstellungsmerkmale
-{
+
+#alleinstellungsmerkmale {
     margin-top: 70px;
+}
+
+
+#title_content {
+	margin-top: 100px;
+	width: 100%;
+}
+
+#titletable {
+	margin: 0 auto;
+}
+
+#titletable tr td:first-child {
+	text-align: right;
 }
 
 #mci
 {
-    width: 50%;
+    width: 60%;
     float:left;
 }
 
 #wba
 {
-    width: 50%;
+    width: 40%;
     float:right;
 }
 
+p.list_head {
+  color: #77cc00;
+  font-family: "Myriad Pro", sans-serif;
+  line-height: 0.9em;
+  //text-transform: uppercase;
+  text-shadow: none;
+  padding: 15px 0; 
+}
+
+.ulist > li {
+	margin-top: 20px;
+}
 
 #mi_logo {
 	position: absolute;
