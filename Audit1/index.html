@@ -64,7 +64,7 @@
                 
                 <section>
                     <h2>Was ist "jiffy"?</h2>
-                        <div><img src="img/Ziel.png" alt="Ziel"></div>
+                        <div><img src="images/Ziel.png" alt="Ziel"></div>
                         <div>
                             <ul id="alleinstellungsmerkmale">
                                 <li>Echtzeitkommunikation</li>
@@ -79,9 +79,9 @@
                     <h2>Was wurde erreicht?</h2>
                     <div id="mci">
                         <h4>MCI Teil</h4>
-                        <div>
+                        <div class="con_align_left">
                             <p class="list_head">Vorgehensmodell</p>
-                            <ul>
+                            <ul class="ulist">
                                 <li>User Centred Design</li>
                                 <li>Software Life Cycle</li>
                                 <ul>
@@ -91,9 +91,9 @@
                                 </ul>
                             </ul>
                         </div>
-                        <div>
+                        <div class="con_align_left">
                             <p class="list_head">Nutzungskontextanalyse</p>
-                            <ul>
+                            <ul class="ulist">
                                 <li>Stakeholder</li>
                                 <li>Arbeitsaufgaben</li>
                                 <li>soziale, physikalische Umgebung</li>
@@ -103,24 +103,51 @@
                     </div>
                     <div id="wba">
                         <h4>WBA Teil</h4>
+                        <div class="con_align_left">
+                            <p class="list_head">Kommunikation</p>
+                            <ul class="ulist">
+                                <li>Lehrer &harr; Eltern (Bestätigung)</li>
+                                <li>Eltern &harr; Eltern</li>
+                                <li>Verwaltung &rarr; Eltern</li>
+                            </ul>
+                        </div>
+                        <div class="con_align_left">
+                            <p class="list_head">Systemarchitektur</p>
+                            <ul class="ulist">
+                                <li>Zentrale Einheit (problematisch)</li>
+                                <li>Apache ActiveMQ als MoM</li>
+                                <li>MySQL als rel. Datenbank</li>
+                                <li>Android- & stationäre Clients</li>
+                            </ul>
+                        </div>
+                        <div class="con_align_left">
+                            <p class="list_head">Datenmodell</p>
+                            <ul class="ulist">
+                                <li>Recht komplex</li>
+                            </ul>
+                        </div>
                     </div>
                 </section>
                 
                 <section>
                     <h2>Herausforderungen &amp; ungelöste Probleme</h2>
-                    <p class="list_head">Systemarchitektur</p>
-                    <ul class="ulist">
-                        <li>Initiale Systemarchitektur bedurfte einer zentralen Einheit für die Authentifizierung von Usern</li>
-                        <li>Zentrale Einheit fungiert als Message Proxy (Publisher)</li>
-                        <li>Erkenntnisse einiger PoCs ergeben neue Möglichkeiten</li>
-                    </ul>
-                    <p class="list_head">Ontologie (RDF/OWL)</p>
-                    <ul class="ulist">
-                    	<li>Integration in das System</li>
-                    	<li>Machine 2 Machine Kommunikation (M2M)</li>
-                        <li>Einsatz bzw. Auswertung durch Reasoner</li>
-				        <li>externe Datenrepräsentation (JSON oder XML?)</li>
-                    </ul>
+                    <div class="con_align_left">
+		                <p class="list_head">Systemarchitektur</p>
+		                <ul class="ulist">
+		                    <li>Initiale Systemarchitektur bedurfte einer zentralen Einheit für die Authentifizierung von Usern</li>
+		                    <li>Zentrale Einheit fungiert als Message Proxy (Publisher)</li>
+		                    <li>Erkenntnisse einiger PoCs ergeben neue Möglichkeiten</li>
+		                </ul>
+		            </div>
+		            <div class="con_align_left">
+		                <p class="list_head">Ontologie (RDF/OWL)</p>
+		                <ul class="ulist">
+		                	<li>Integration in das System</li>
+		                	<li>"Machine 2 Machine"-Informationsaustausch (M2M)</li>
+		                    <li>Einsatz bzw. Auswertung durch Reasoner</li>
+						    <li>externe Datenrepräsentation (JSON oder XML?)</li>
+		                </ul>
+		            </div>
                 </section>
             </div>
 		</div>

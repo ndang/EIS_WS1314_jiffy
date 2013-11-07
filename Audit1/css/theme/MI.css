@@ -2,58 +2,76 @@
  * JIFFY
  *********************************************/
 
+
 #alleinstellungsmerkmale {
-    margin-top: 70px;
+    margin-top: 20px;
 }
 
 
 #title_content {
-	margin-top: 100px;
-	width: 100%;
+  margin-top: 100px;
+  width: 100%;
 }
 
 #titletable {
-	margin: 0 auto;
+  margin: 0 auto;
 }
 
 #titletable tr td:first-child {
-	text-align: right;
+  text-align: right;
 }
 
 #mci
 {
-    width: 60%;
-    float:left;
+  width: 50%;
+  float:left;
 }
 
 #wba
 {
-    width: 40%;
+    width: 48%;
     float:right;
 }
+
+
+#mci h4,
+#wba h4 {
+  font-weight: bold;
+  text-align: left;
+}
+
+
+div.con_align_left {
+  text-align: left;
+}
+
+
+
 
 p.list_head {
   color: #77cc00;
   font-family: "Myriad Pro", sans-serif;
   line-height: 0.9em;
-  //text-transform: uppercase;
   text-shadow: none;
   padding: 15px 0; 
-  text-align:left;
+  text-align: left;
+  margin: 15px 0 0;
 }
 
-.ulist > li {
-	margin-top: 20px;
-    float:left;
+.ulist > li,
+.ulist ul li {
+  margin-left: 20px;
 }
+
+
 
 #mi_logo {
-	position: absolute;
-	right: 20px;
-	bottom: 10px;
-	width: 400px;
-	height: 55px;
-	background: url("../../images/vieldrin_small.png") no-repeat bottom right;	
+  position: absolute;
+  right: 20px;
+  bottom: 10px;
+  width: 400px;
+  height: 55px;
+  background: url("../../images/vieldrin_small.png") no-repeat bottom right;
 }
 
 
@@ -74,7 +92,7 @@ body {
 
 .reveal {
   font-family:"Myriad Pro", sans-serif;
-  font-size: 36px;
+  font-size: 30px;
   font-weight: 200;
   color: #fff; }
 
