@@ -49,7 +49,7 @@ public class MainApplication {
 		
         // Abfrage aufbauen
         String q =
-        "PREFIX myOnto: " + NS +
+        "PREFIX myOnto: <" + NS + "> "
         "SELECT * " +
         "WHERE {?s myOnto:knows \"42\"." + 
 	        "?s myOnto:knows myOnto:Alice}";
