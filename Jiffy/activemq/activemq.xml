@@ -89,8 +89,8 @@
                         xmlns="http://www.springframework.org/schema/beans">
              	<property name="host" value="localhost"/>
              	<property name="database" value="jiffy"/>
-             	<property name="table" value="Person"/>
-             	<property name="usernameField" value="benutzername"/>
+             	<property name="table" value="User"/>
+             	<property name="usernameField" value="username"/>
              	<property name="passHashField" value="pass_hash"/>
              	<property name="username" value="root"/>
              	<property name="password" value="12345"/>
