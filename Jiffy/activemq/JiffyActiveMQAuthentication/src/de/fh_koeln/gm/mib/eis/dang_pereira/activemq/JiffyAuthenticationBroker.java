@@ -84,7 +84,7 @@ public class JiffyAuthenticationBroker extends AbstractAuthenticationBroker {
         			con = DriverManager.getConnection("jdbc:mysql://" + this.host + "/" + this.database, this.username, this.password);
         			
         			stmt = con.createStatement();
-        			String stmt_str = "SELECT COUNT(person_id) FROM " + this.table + " ";
+        			String stmt_str = "SELECT COUNT(*) FROM " + this.table + " ";
         				stmt_str += " WHERE " + usernameField + " = '" + info.getUserName() + "' ";
         				stmt_str += 	" AND " + passHashField + " = '" + passHash + "'";
         			rs = stmt.executeQuery(stmt_str);
