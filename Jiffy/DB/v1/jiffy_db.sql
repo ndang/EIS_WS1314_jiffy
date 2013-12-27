@@ -237,24 +237,6 @@ COLLATE = utf8_general_ci;
 
 
 -- -----------------------------------------------------
--- Table `jiffy`.`Questionmessage`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `jiffy`.`Questionmessage` (
-  `guardian_message_id` INT NOT NULL ,
-  `response_message` TEXT NULL ,
-  PRIMARY KEY (`guardian_message_id`) ,
-  INDEX `fk_Questionmessage_Guardianmessage` (`guardian_message_id` ASC) ,
-  CONSTRAINT `fk_Questionmessage_Guardianmessage`
-    FOREIGN KEY (`guardian_message_id` )
-    REFERENCES `jiffy`.`Guardianmessage` (`guardian_message_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-
--- -----------------------------------------------------
 -- Table `jiffy`.`Excusemessage`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `jiffy`.`Excusemessage` (
