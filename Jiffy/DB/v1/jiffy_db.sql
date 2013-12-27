@@ -159,21 +159,7 @@ CREATE  TABLE IF NOT EXISTS `jiffy`.`Schoolmessage` (
   `message` TEXT NULL ,
   `send_date` DATETIME NULL ,
   `type` ENUM('NOTENNACHRICHT', 'INFORMATIONSMITTEILUNG') NULL ,
-  `to_guardian_user_id` INT NOT NULL ,
-  `from_teacher_user_id` INT NOT NULL ,
-  PRIMARY KEY (`school_message_id`) ,
-  INDEX `fk_Schoolmessage_Guardian` (`to_guardian_user_id` ASC) ,
-  INDEX `fk_Schoolmessage_Teacher` (`from_teacher_user_id` ASC) ,
-  CONSTRAINT `fk_Schoolmessage_Guardian`
-    FOREIGN KEY (`to_guardian_user_id` )
-    REFERENCES `jiffy`.`Guardian` (`user_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Schoolmessage_Teacher`
-    FOREIGN KEY (`from_teacher_user_id` )
-    REFERENCES `jiffy`.`Teacher` (`user_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`school_message_id`) )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_general_ci;
@@ -305,6 +291,38 @@ CREATE  TABLE IF NOT EXISTS `jiffy`.`Student_visits_Class` (
   CONSTRAINT `fk_Student_visits_Class_Class`
     FOREIGN KEY (`class_id` )
     REFERENCES `jiffy`.`Class` (`class_id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_general_ci;
+
+
+-- -----------------------------------------------------
+-- Table `jiffy`.`Teacher_to_Guardian`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `jiffy`.`Teacher_to_Guardian` (
+  `teacher_to_guardian_id` INT NOT NULL ,
+  `school_message_id` INT NOT NULL ,
+  `from_teacher_user_id` INT NOT NULL ,
+  `to_guardian_user_id` INT NOT NULL ,
+  PRIMARY KEY (`teacher_to_guardian_id`) ,
+  INDEX `fk_Teacher_to_Guardian_Teacher1` (`from_teacher_user_id` ASC) ,
+  INDEX `fk_Teacher_to_Guardian_Guardian1` (`to_guardian_user_id` ASC) ,
+  INDEX `fk_Teacher_to_Guardian_Schoolmessage1` (`school_message_id` ASC) ,
+  CONSTRAINT `fk_Teacher_to_Guardian_Teacher1`
+    FOREIGN KEY (`from_teacher_user_id` )
+    REFERENCES `jiffy`.`Teacher` (`user_id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Teacher_to_Guardian_Guardian1`
+    FOREIGN KEY (`to_guardian_user_id` )
+    REFERENCES `jiffy`.`Guardian` (`user_id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Teacher_to_Guardian_Schoolmessage1`
+    FOREIGN KEY (`school_message_id` )
+    REFERENCES `jiffy`.`Schoolmessage` (`school_message_id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
