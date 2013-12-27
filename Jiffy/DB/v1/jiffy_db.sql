@@ -194,12 +194,12 @@ COLLATE = utf8_general_ci;
 -- Table `jiffy`.`Informationnote`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `jiffy`.`Informationnote` (
-  `schul_nachricht_id` INT NOT NULL ,
-  `betreff_zeitpunkt` DATETIME NULL ,
-  PRIMARY KEY (`schul_nachricht_id`) ,
-  INDEX `fk_Informationnote_Schoolmessage` (`schul_nachricht_id` ASC) ,
+  `school_message_id` INT NOT NULL ,
+  `description_date` DATETIME NULL ,
+  PRIMARY KEY (`school_message_id`) ,
+  INDEX `fk_Informationnote_Schoolmessage` (`school_message_id` ASC) ,
   CONSTRAINT `fk_Informationnote_Schoolmessage`
-    FOREIGN KEY (`schul_nachricht_id` )
+    FOREIGN KEY (`school_message_id` )
     REFERENCES `jiffy`.`Schoolmessage` (`school_message_id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
