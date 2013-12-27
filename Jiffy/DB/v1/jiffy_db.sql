@@ -104,13 +104,13 @@ COLLATE = utf8_general_ci;
 
 
 -- -----------------------------------------------------
--- Table `jiffy`.`Subject`
+-- Table `jiffy`.`Schoolsubject`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `jiffy`.`Subject` (
-  `subject_id` INT NOT NULL AUTO_INCREMENT ,
+CREATE  TABLE IF NOT EXISTS `jiffy`.`Schoolsubject` (
+  `schoolsubject_id` INT NOT NULL AUTO_INCREMENT ,
   `description` VARCHAR(45) NULL ,
   `teacher_user_id` INT NOT NULL ,
-  PRIMARY KEY (`subject_id`) ,
+  PRIMARY KEY (`schoolsubject_id`) ,
   INDEX `fk_Subject_Teacher` (`teacher_user_id` ASC) ,
   CONSTRAINT `fk_Subject_Teacher`
     FOREIGN KEY (`teacher_user_id` )
@@ -131,14 +131,14 @@ CREATE  TABLE IF NOT EXISTS `jiffy`.`Grade` (
   `zeitpunkt` DATETIME NULL ,
   `grade_weight` TINYINT NULL ,
   `comment` TEXT NULL ,
-  `subject_id` INT NOT NULL ,
+  `schoolsubject_id` INT NOT NULL ,
   `student_user_id` INT NOT NULL ,
   PRIMARY KEY (`grade_id`) ,
-  INDEX `fk_Grade_Subject` (`subject_id` ASC) ,
+  INDEX `fk_Grade_Subject` (`schoolsubject_id` ASC) ,
   INDEX `fk_Grade_Student` (`student_user_id` ASC) ,
   CONSTRAINT `fk_Grade_Subject`
-    FOREIGN KEY (`subject_id` )
-    REFERENCES `jiffy`.`Subject` (`subject_id` )
+    FOREIGN KEY (`schoolsubject_id` )
+    REFERENCES `jiffy`.`Schoolsubject` (`schoolsubject_id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Grade_Student`
@@ -156,6 +156,7 @@ COLLATE = utf8_general_ci;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `jiffy`.`Schoolmessage` (
   `school_message_id` INT NOT NULL AUTO_INCREMENT ,
+  `subject` VARCHAR(100) NULL ,
   `message` TEXT NULL ,
   `send_date` DATETIME NULL ,
   `type` ENUM('NOTENNACHRICHT', 'INFORMATIONSMITTEILUNG') NULL ,
@@ -213,6 +214,7 @@ COLLATE = utf8_general_ci;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `jiffy`.`Guardianmessage` (
   `guardian_message_id` INT NOT NULL AUTO_INCREMENT ,
+  `subject` VARCHAR(100) NULL ,
   `message` TEXT NULL ,
   `send_date` DATETIME NULL ,
   `type` ENUM('FRAGENACHRICHT', 'ENTSCHULDIGUNGSNACHRICHT') NULL ,
