@@ -20,6 +20,7 @@ import org.apache.activemq.security.SecurityContext;
 
 public class JiffyAuthenticationBroker extends AbstractAuthenticationBroker {
 	
+	/* Variablen mit den Standardwerten */
 	private String host = "localhost";
 	private String database = "auth";
 	private String table = "user_auth";
@@ -29,11 +30,14 @@ public class JiffyAuthenticationBroker extends AbstractAuthenticationBroker {
 	private String password = "password";
 	private String hashAlgorithm = "SHA-256";
 	
+	/* Helpervariablen für die Initiierung einer Verbindung,
+	 *  dem Erstellen eines Statements und dem Entgegennehmen der zurückgegebenen Datensätze
+	 */
 	private Connection con = null;
 	private Statement stmt = null;
 	private ResultSet rs = null;
 	
-
+	
     public JiffyAuthenticationBroker(Broker next, String host, String database, String table, String username, String password,
     										String hash_algorithm, String username_field, String pass_hash_field) {
         super(next);
@@ -49,15 +53,22 @@ public class JiffyAuthenticationBroker extends AbstractAuthenticationBroker {
     }
 
 
+    /**
+     * Methode die bei jedem Verbindungsaufbau eines Clients aufgerufen wird
+     */
     @Override
     public void addConnection(ConnectionContext context, ConnectionInfo info) throws Exception {
 
         SecurityContext s = context.getSecurityContext();
         if (s == null) {
             
+        	/* Für den Abgleich mit Datensätzen in der Datenbank, muss der Benutzername und das Passwort gegeben sein */
             if (info.getUserName() != null && info.getPassword() != null) {
             	
             	
+            	/* Bildung des Haswerts des gegebenen Passworts,
+            	 * da das Passwort in der Datenbank ebenfalls nur als Hashwert geführt wird
+            	 * */
             	String passHash = "";
     			
     			MessageDigest md = MessageDigest.getInstance(hashAlgorithm);
@@ -72,8 +83,8 @@ public class JiffyAuthenticationBroker extends AbstractAuthenticationBroker {
     	        passHash = sb.toString();
     			
             	
-            	
         		try {
+        			/* Laden des JDBC-Treibers */
         			Class.forName("com.mysql.jdbc.Driver");
         		}
         		catch (ClassNotFoundException e) {
@@ -81,8 +92,12 @@ public class JiffyAuthenticationBroker extends AbstractAuthenticationBroker {
         		}
 
         		try {
+        			/* Verbindungsaufbau mit der Datenbank mit den aus der Konfiguartionsdatei gelesenen Anmeldeinformationen */
         			con = DriverManager.getConnection("jdbc:mysql://" + this.host + "/" + this.database, this.username, this.password);
         			
+        			/* Erstellung des Statements, mit dem überprüft wird, ob es einen Datensatz mit der Benutzername-Passworthash-Komination
+        			 *	in der entsprechenden Benutzertabelle existiert
+        			 */
         			stmt = con.createStatement();
         			String stmt_str = "SELECT COUNT(*) FROM " + this.table + " ";
         				stmt_str += " WHERE " + usernameField + " = '" + info.getUserName() + "' ";
@@ -95,6 +110,7 @@ public class JiffyAuthenticationBroker extends AbstractAuthenticationBroker {
             	
         		rs.next();
         		
+        		/* Wenn nur ein Datensatz gefunden wird, dann soll die Anmeldung erfolgreich zuende geführt werden */
             	if(rs.getString(1).equals("1")) {
             		s = new SecurityContext(info.getUserName()) {
                         @Override

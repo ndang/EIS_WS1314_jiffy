@@ -18,7 +18,10 @@ import org.apache.activemq.broker.BrokerPlugin;
  */
 
 public class JiffyAuthenticationPlugin implements BrokerPlugin {
-	
+
+    /* Variablen mit den Standardwerten
+     *  Die Werte werden von ActiveMQ beim Starten durch die in der Konfigurationsdatei gefundenen Werte ersetzt
+     */	
 	private String host = "localhost";
 	private String database = "auth";
 	private String table = "user_auth";
@@ -36,6 +39,7 @@ public class JiffyAuthenticationPlugin implements BrokerPlugin {
     }
 
     public Broker installPlugin(Broker parent) {
+        /* Erzeugen des AuthenticationBrokers mit der Übergabe der aus der Konfiguartionsdatei unter anderem ausgelesenen DB-Anmeldedaten */
         JiffyAuthenticationBroker broker = new JiffyAuthenticationBroker(parent, host, database, table, username, password,
         																	hashAlgorithm, usernameField, passHashField);
         return broker;
