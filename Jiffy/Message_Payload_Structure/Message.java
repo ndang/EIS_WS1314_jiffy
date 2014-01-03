@@ -34,6 +34,8 @@ public class Message {
 	@JsonProperty("to_user_id")
 	public Integer to_user_id;
 	
+	@JsonProperty("student_ref")
+	public Integer student_ref;
 	
 	@JsonProperty("school")
 	public School school;
@@ -114,6 +116,7 @@ public class Message {
 				"'msg_send_date': "+ this.msg_send_date + "\n\t" +
 				"'from_user_id': "+ this.from_user_id + "\n\t" +
 				"'to_user_id': "+ this.to_user_id + "\n\t" +
+				"'student_ref': "+ this.student_ref + "\n\t" +
 				"'school': "+ this.school + "\n\t" +
 				"'guardian': "+ this.guardian + "\n}";
 	}
