@@ -1,0 +1,31 @@
+
+{
+    "msg_type": "school|guardian|null(kein String)",
+    "msg_id": 1,
+    "msg_subject": "Betreff",
+    "msg_text": "Nachrichtentext",
+    "msg_send_date": "YYYY-MM-DD HH:MM:SS",
+    "from_user_id": 1,
+    "to_user_id": 2,
+    
+    
+    "school": {
+        "msg_subtype": "grade|info|null(kein_String)",
+        "grade": {
+            "grade_id": 1
+        },
+    
+        "info": {
+            "class_broadcast": true,
+            "desc_date": "YYYY-MM-DD HH:MM:SS"
+        }
+    },
+    
+    "guardian": {
+        "msg_subtype": "excuse|null(kein String)",
+        "excuse": {
+            "date_from": "YYYY-MM-DD HH:MM:SS",
+            "date_to": "YYYY-MM-DD HH:MM:SS"
+        }
+    }
+}
