@@ -16,6 +16,9 @@ public class Message {
 	@JsonProperty("msg_id")
 	public Integer msg_id;
 	
+	@JsonProperty("msg_ref")
+	public Integer msg_ref;
+	
 	@JsonProperty("msg_subject")
 	public String msg_subject;
 	
@@ -105,6 +108,7 @@ public class Message {
 	public String toString() {
 		return "{\t'msg_type': " + this.msg_type + ",\n\t" +
 				"'msg_id': "+ this.msg_id + "\n\t" +
+				"'msg_ref': "+ this.msg_ref + "\n\t" +
 				"'msg_subject': "+ this.msg_subject + "\n\t" +
 				"'msg_text': "+ this.msg_text + "\n\t" +
 				"'msg_send_date': "+ this.msg_send_date + "\n\t" +
