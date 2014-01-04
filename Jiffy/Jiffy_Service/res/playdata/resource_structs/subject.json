@@ -1,0 +1,12 @@
+{
+    "subject": {
+        "id": 1,
+        "uri": null
+    },
+    
+    "description":  "Deutsch (Leistungskurs)",
+    "teacher":      {
+        "id": 3,
+        "uri": "/teacher/3"
+    }
+}

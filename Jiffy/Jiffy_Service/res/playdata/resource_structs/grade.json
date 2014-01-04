@@ -1,0 +1,21 @@
+{
+    "grade": {
+        "id":   1,
+        "uri":  "/student/2/grade/1"
+    },
+    
+    "value":        1.35,
+    "grade_weight": 20,
+    "comment":      "comment!",
+    "subject":      {
+        "subject": {
+            "id":   1,
+            "uri":  null
+        },
+        "description":  "Deutsch (Leistungskurs)",
+        "teacher":      {
+            "id":   3,
+            "uri":  "/teacher/3"
+        }
+    }
+}

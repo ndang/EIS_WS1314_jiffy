@@ -1,0 +1,17 @@
+{
+    "classes": [
+        {
+            "class": {
+                "id":   1,
+                "uri":  "/class/1"
+            },
+            
+            "year":         2010,
+            "description":  "9",
+            "teacher":      {
+                "id":   3,
+                "uri":  "/teacher/3"
+            }
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "user": {
+        "id":   1,
+        "uri":  "/user/1"
+    },
+    
+    "name":         "Petra Humboldt",
+    "user_type":    "GUARDIAN",
+    "gender":       "female"
+}
