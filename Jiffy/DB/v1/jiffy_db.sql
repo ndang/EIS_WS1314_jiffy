@@ -13,7 +13,7 @@ CREATE  TABLE IF NOT EXISTS `jiffy`.`User` (
   `name` VARCHAR(200) NULL ,
   `username` VARCHAR(45) NULL ,
   `pass_hash` VARCHAR(64) NULL ,
-  `type` ENUM('LEHRKRAFT', 'SCHUELER', 'ERZIEHUNGSBERECHTIGTER') NULL ,
+  `type` ENUM('TEACHER', 'STUDENT', 'GUARDIAN') NULL ,
   `gender` ENUM('FEMALE', 'MALE') NULL ,
   PRIMARY KEY (`user_id`) ,
   UNIQUE INDEX `benutzername_UNIQUE` (`username` ASC) )
