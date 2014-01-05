@@ -23,10 +23,10 @@ public class MainGlobalConsumer {
 		/* Instanz des Config-Objekts beziehen */
 		Config cfg = Config.getInstance();
 		
-		String broker_host = cfg.broker.host;
-		String broker_port = cfg.broker.port;
-		String broker_user = cfg.broker.user;
-		String broker_pass = cfg.broker.pass;
+		String	broker_host = cfg.broker.host;
+		Integer	broker_port = cfg.broker.port;
+		String	broker_user = cfg.broker.user;
+		String	broker_pass = cfg.broker.pass;
 
 		
 		try {

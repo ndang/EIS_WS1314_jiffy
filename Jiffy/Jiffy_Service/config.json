@@ -1,27 +1,31 @@
 {
     "mysql_db": {
-        "host": "jdbc:mysql://localhost",
-        "name": "jiffy",
-        "user": "root",
-        "pass": "12345"
+        "host":         "jdbc:mysql://localhost",
+        "name":         "jiffy",
+        "user":         "root",
+        "pass":         "12345",
+        "table":        "User",
+        "user_field":    "username",
+        "pass_field":    "pass_hash",
+        "pass_algo":     "SHA-256"
         },
 
     "rest_endpoint": {
         "host": "https://localhost",
-        "port": "8080"
+        "port": 8080
         },
 
     "broker": {
         "host": "ssl://localhost",
-        "port": "8883",
+        "port": 8883,
         "user": "jiffy_service",
         "pass": "12345"
         },
 
     "ssl": {
         "path_ks": "res/broker.ks",
-        "pass_ks": "passwort",
+        "pass_ks": "koelnerdom",
         "path_ts": "res/client.ts",
-        "pass_ts": "passwort"
+        "pass_ts": "koelnerdom"
     }
 }

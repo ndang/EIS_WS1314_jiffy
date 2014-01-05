@@ -43,6 +43,18 @@ public class Config {
 		
 		@JsonProperty("pass")
 		public String pass = "12345";
+		
+		@JsonProperty("table")
+		public String table = "User";
+		
+		@JsonProperty("user_field")
+		public String userfield = "username";
+		
+		@JsonProperty("pass_field")
+		public String passfield = "pass_hash";
+		
+		@JsonProperty("pass_algo")
+		public String passalgo = "SHA-256";
 	}
 	
     /**
@@ -55,7 +67,7 @@ public class Config {
 		public String host = "https://localhost";
 		
 		@JsonProperty("port")
-		public String port = "8080";
+		public Integer port = 8080;
 	}
 	
     /**
@@ -68,7 +80,7 @@ public class Config {
 		public String host = "ssl://localhost";
 		
 		@JsonProperty("port")
-		public String port = "8883";
+		public Integer port = 8883;
 		
 		@JsonProperty("user")
 		public String user = "jiffy_service";

@@ -63,36 +63,8 @@ public class DBHandler implements IDataHandler {
 	}
 	
 	
-	@Override
-	public ArrayList<String> getPersonsExample() {
-
-		ArrayList<String> arr_list = new ArrayList<String>();
-		
-		
-		Statement stmt;
-		try {
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT person_id, name, benutzername, pass_hash FROM Person");
-			
-			while(rs.next()) {
-				
-				String id = rs.getString(1);
-				String name = rs.getString(2);
-				String username = rs.getString(3);
-				String passhash = rs.getString(4);
-				
-				arr_list.add(id + " | " + name + " | " + username + " | " + passhash);
-			}
-			
-			rs.close();
-			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		
-		return arr_list;
-	}
+	
+	
 	
 	
 	
