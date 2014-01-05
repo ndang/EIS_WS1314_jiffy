@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.fh_koeln.gm.mib.eis.dang_pereira.message_consumer.Message;
+import de.fh_koeln.gm.mib.eis.dang_pereira.message_consumer.msg_struct.Message;
 
 public class MainMessageJSON {
 
@@ -13,7 +13,7 @@ public class MainMessageJSON {
 		
 		
 		ObjectMapper m = new ObjectMapper();
-		Message msg = m.readValue(new File("res/message_example.json"), Message.class);
+		Message msg = m.readValue(new File("res/playdata/message_example.json"), Message.class);
 		
 		
 		System.out.println(msg);

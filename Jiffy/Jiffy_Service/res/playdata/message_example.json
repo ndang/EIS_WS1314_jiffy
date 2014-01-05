@@ -6,17 +6,26 @@
     "msg_subject": "Betreff",
     "msg_text": "Nachrichtentext",
     "msg_send_date": "YYYY-MM-DD HH:MM:SS",
-    "from_user_id": 1,
-    "to_user_id": 2,
-    "student_ref": 3,
-    
+    "from_user_id": {
+        "id": 1,
+        "uri": "/user/1"
+    },
+    "to_user_id": {
+        "id": 2,
+        "uri": "/user/2"
+    },
+    "student_id": {
+        "id": 3,
+        "uri": "/user/3"
+    },
     
     "school": {
         "msg_subtype": "grade|info|null(kein_String)",
         "grade": {
-            "grade_id": 1
+            "id":  1,
+            "uri": "/student/3/grade/1"
         },
-    
+		
         "info": {
             "class_broadcast": true,
             "desc_date": "YYYY-MM-DD HH:MM:SS"
