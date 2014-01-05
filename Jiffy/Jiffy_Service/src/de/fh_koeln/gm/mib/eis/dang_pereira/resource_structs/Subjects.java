@@ -10,6 +10,8 @@ public class Subjects {
 	ArrayList<Subject> subjects;
 
 	
+	public Subjects() {}
+	
 	public Subjects(ArrayList<Subject> subjects) {
 		this.subjects = subjects;
 	}

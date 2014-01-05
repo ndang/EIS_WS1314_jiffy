@@ -20,6 +20,8 @@ public class Student extends User {
 	Id latest_class;
 	
 	
+	public Student() {}
+	
 	public Student(Id user, String name, String user_type, String gender) {
 		super(user, name, user_type, gender);
 	}

@@ -20,6 +20,8 @@ public class User {
 	String gender;
 	
 
+	public User() {}
+	
 	public User(Id user, String name, String user_type, String gender) {
 		this.user = user;
 		this.name = name;

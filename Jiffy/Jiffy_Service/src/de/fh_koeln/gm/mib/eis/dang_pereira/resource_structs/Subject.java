@@ -14,6 +14,8 @@ public class Subject {
 	Id teacher;
 	
 	
+	public Subject() {}
+	
 	public Subject(Id subject, String description, Id teacher) {
 		this.subject = subject;
 		this.description = description;

@@ -17,6 +17,10 @@ public class Guardian extends User {
 	Boolean contact_person;
 	
 	
+	public Guardian() {
+		super();
+	}
+	
 	public Guardian(Id user, String name, String user_type, String gender) {
 		super(user, name, user_type, gender);
 	}

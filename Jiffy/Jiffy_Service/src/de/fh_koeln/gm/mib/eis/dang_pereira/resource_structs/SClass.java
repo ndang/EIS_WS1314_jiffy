@@ -17,6 +17,8 @@ public class SClass {
 	Id teacher;
 	
 	
+	public SClass() {}
+	
 	public SClass(Id class_id, Integer year, String description, Id teacher) {
 		this.class_id = class_id;
 		this.year = year;

@@ -11,6 +11,8 @@ public class Id {
 	String uri;
 	
 
+	public Id() {}
+	
 	public Id(Integer id, String uri) {
 		this.id = id;
 		this.uri = uri;

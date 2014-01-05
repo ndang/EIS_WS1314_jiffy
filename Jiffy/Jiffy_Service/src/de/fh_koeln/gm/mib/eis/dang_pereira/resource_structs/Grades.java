@@ -10,6 +10,8 @@ public class Grades {
 	ArrayList<Grade> grades;
 	
 	
+	public Grades() {}
+	
 	public Grades(ArrayList<Grade> grades) {
 		this.grades = grades;
 	}

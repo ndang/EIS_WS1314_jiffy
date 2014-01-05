@@ -9,6 +9,9 @@ public class Users {
 	@JsonProperty("users")
 	ArrayList<User> users;
 	
+	
+	public Users() {}
+	
 	public Users(ArrayList<User> users) {
 		this.users = users;
 	}

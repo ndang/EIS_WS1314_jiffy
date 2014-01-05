@@ -22,6 +22,8 @@ public class Grade {
 	Subject subject;
 	
 	
+	public Grade() {}
+	
 	public Grade(Id grade, BigDecimal value, Integer grade_weight, String comment, Subject subject) {
 		this.grade = grade;
 		this.value = value;

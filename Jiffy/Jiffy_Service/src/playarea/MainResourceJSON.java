@@ -11,6 +11,8 @@ import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Grades;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Guardian;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.SClass;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Student;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Subject;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Subjects;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.User;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Users;
 
@@ -49,8 +51,14 @@ public class MainResourceJSON {
 		//System.out.println(c);
 		
 		
-		Classes cs = m.readValue(new File("res/playdata/resource_structs/classes.json"), Classes.class);
-		System.out.println(cs);
+		//Classes cs = m.readValue(new File("res/playdata/resource_structs/classes.json"), Classes.class);
+		//System.out.println(cs);
+		
+		//Subject s = m.readValue(new File("res/playdata/resource_structs/subject.json"), Subject.class);
+		//System.out.println(s);
+		
+		Subjects ss = m.readValue(new File("res/playdata/resource_structs/subjects.json"), Subjects.class);
+		System.out.println(ss);
 		
 	}
 

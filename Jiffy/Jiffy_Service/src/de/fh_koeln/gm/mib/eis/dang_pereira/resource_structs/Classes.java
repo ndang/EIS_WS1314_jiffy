@@ -10,6 +10,8 @@ public class Classes {
 	ArrayList<SClass> classes;
 	
 	
+	public Classes() {}
+	
 	public Classes(ArrayList<SClass> classes) {
 		this.classes = classes;
 	}
