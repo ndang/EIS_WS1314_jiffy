@@ -19,6 +19,49 @@ public class User {
 	@JsonProperty("gender")
 	String gender;
 	
+
+	public User(Id user, String name, String user_type, String gender) {
+		this.user = user;
+		this.name = name;
+		this.user_type = user_type;
+		this.gender = gender;
+	}
+	
+	
+	public Id getUser() {
+		return this.user;
+	}
+	
+	public void setUser(Id user) {
+		this.user = user;
+	}
+	
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
+	public String getUserType() {
+		return this.user_type;
+	}
+	
+	public void setUserType(String user_type) {
+		this.user_type = user_type;
+	}
+	
+	public String getGender() {
+		return this.gender;
+	}
+	
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	
 	
 	protected String getFormattedData() {
 		
@@ -34,5 +77,4 @@ public class User {
 				this.getFormattedData() + "\r\n" +
 				"}";
 	}
-	
 }

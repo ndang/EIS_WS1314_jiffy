@@ -73,7 +73,7 @@ public class RESTAuthTest {
 		try {
 			success = UserDBAuth.authUser(BasicAuthHelper.extractAuthCreds(headers));
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.err.println(e.getMessage());
 			e.printStackTrace();
 		}
 			

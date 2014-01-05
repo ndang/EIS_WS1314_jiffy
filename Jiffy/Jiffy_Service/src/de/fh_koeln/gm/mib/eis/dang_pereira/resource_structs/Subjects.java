@@ -9,6 +9,21 @@ public class Subjects {
 	@JsonProperty("subjects")
 	ArrayList<Subject> subjects;
 
+	
+	public Subjects(ArrayList<Subject> subjects) {
+		this.subjects = subjects;
+	}
+	
+	
+	public ArrayList<Subject> getSubjects() {
+		return this.subjects;
+	}
+	
+	public void setSubjects(ArrayList<Subject> subjects) {
+		this.subjects = subjects;
+	}
+	
+	
 	public String toString() {
 		
 		String tmp = "{\"subjects\": [\r\n";

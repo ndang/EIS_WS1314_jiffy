@@ -9,6 +9,20 @@ public class Users {
 	@JsonProperty("users")
 	ArrayList<User> users;
 	
+	public Users(ArrayList<User> users) {
+		this.users = users;
+	}
+	
+	
+	public ArrayList<User> getUsers() {
+		return this.users;
+	}
+	
+	public void setUsers(ArrayList<User> users) {
+		this.users = users;
+	}
+	
+	
 	public String toString() {
 		
 		String tmp = "{\"users\": [\r\n";

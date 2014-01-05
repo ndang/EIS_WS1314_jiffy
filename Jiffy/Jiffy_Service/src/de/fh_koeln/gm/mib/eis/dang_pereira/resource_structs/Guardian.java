@@ -17,6 +17,35 @@ public class Guardian extends User {
 	Boolean contact_person;
 	
 	
+	public Guardian(Id user, String name, String user_type, String gender) {
+		super(user, name, user_type, gender);
+	}
+
+	public Guardian(Id user, String name, String user_type, String gender, String language, Boolean contact_person) {
+		super(user, name, user_type, gender);
+		
+		this.language = language;
+		this.contact_person = contact_person;
+	}
+	
+	
+	public String getLanguage() {
+		return this.language;
+	}
+	
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+	
+	public Boolean getContactPerson() {
+		return this.contact_person;
+	}
+	
+	public void setContactPerson(Boolean contact_person) {
+		this.contact_person = contact_person;
+	}
+	
+	
 	public String toString() {
 		
 		return "{" +

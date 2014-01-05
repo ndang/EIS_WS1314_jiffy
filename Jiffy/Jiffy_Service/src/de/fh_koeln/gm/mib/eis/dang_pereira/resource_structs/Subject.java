@@ -13,6 +13,40 @@ public class Subject {
 	@JsonProperty("teacher")
 	Id teacher;
 	
+	
+	public Subject(Id subject, String description, Id teacher) {
+		this.subject = subject;
+		this.description = description;
+		this.teacher = teacher;
+	}
+	
+	
+	public Id getSubject() {
+		return this.subject;
+	}
+	
+	public void setSubject(Id subject) {
+		this.subject = subject;
+	}
+	
+	
+	public String getDescription() {
+		return this.description;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	
+	public Id getTeacher() {
+		return this.teacher;
+	}
+	
+	public void setTeacher(Id teacher) {
+		this.teacher = teacher;
+	}
+	
 
 	public String toString() {
 		

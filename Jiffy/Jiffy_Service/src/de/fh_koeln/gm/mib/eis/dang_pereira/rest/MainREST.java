@@ -21,7 +21,7 @@ public class MainREST {
 		
 		/* Den Serverlet-Adapter erzeugen und initialisieren */
         ServletAdapter adapter = new ServletAdapter();
-        adapter.addInitParameter("com.sun.jersey.config.property.packages", "de.fhkoeln.gm.mib.eis.dang_pereira.rest.resources");
+        adapter.addInitParameter("com.sun.jersey.config.property.packages", "de.fh_koeln.gm.mib.eis.dang_pereira.rest.resources");
         adapter.setContextPath("/");
         adapter.setServletInstance(new ServletContainer());
 
@@ -48,8 +48,6 @@ public class MainREST {
 			System.err.println("Konnte Grizzly nicht starten: " + e.getMessage());
 			e.printStackTrace();
 		}
-        
-        System.exit(1);
 	}
 	
 	

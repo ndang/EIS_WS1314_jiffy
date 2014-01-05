@@ -9,6 +9,21 @@ public class Grades {
 	@JsonProperty("grades")
 	ArrayList<Grade> grades;
 	
+	
+	public Grades(ArrayList<Grade> grades) {
+		this.grades = grades;
+	}
+	
+	
+	public ArrayList<Grade> getGrades() {
+		return this.grades;
+	}
+	
+	public void setClasses(ArrayList<Grade> grades) {
+		this.grades = grades;
+	}
+	
+	
 	public String toString() {
 		
 		String tmp = "{\"grades\": [\r\n";

@@ -17,6 +17,50 @@ public class SClass {
 	Id teacher;
 	
 	
+	public SClass(Id class_id, Integer year, String description, Id teacher) {
+		this.class_id = class_id;
+		this.year = year;
+		this.description = description;
+		this.teacher = teacher;
+	}
+	
+	
+	public Id getClassId() {
+		return this.class_id;
+	}
+	
+	public void setClassId(Id class_id) {
+		this.class_id = class_id;
+	}
+	
+	
+	public Integer getYear() {
+		return this.year;
+	}
+	
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+	
+	
+	public String getDescription() {
+		return this.description;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	
+	public Id getTeacher() {
+		return this.teacher;
+	}
+	
+	public void setTeacher(Id teacher) {
+		this.teacher = teacher;
+	}
+	
+	
 	public String toString() {
 		
 		return "{" +

@@ -9,6 +9,21 @@ public class Classes {
 	@JsonProperty("classes")
 	ArrayList<SClass> classes;
 	
+	
+	public Classes(ArrayList<SClass> classes) {
+		this.classes = classes;
+	}
+	
+	
+	public ArrayList<SClass> getClasses() {
+		return this.classes;
+	}
+	
+	public void setClasses(ArrayList<SClass> classes) {
+		this.classes = classes;
+	}
+	
+	
 	public String toString() {
 		
 		String tmp = "{\"classes\": [\r\n";

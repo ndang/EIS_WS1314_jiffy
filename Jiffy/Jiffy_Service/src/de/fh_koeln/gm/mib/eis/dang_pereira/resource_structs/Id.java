@@ -10,6 +10,30 @@ public class Id {
 	@JsonProperty("uri")
 	String uri;
 	
+
+	public Id(Integer id, String uri) {
+		this.id = id;
+		this.uri = uri;
+	}
+	
+	
+	public Integer getID() {
+		return this.id;
+	}
+	
+	public void setID(Integer id) {
+		this.id = id;
+	}
+	
+	
+	public String getURI() {
+		return this.uri;
+	}
+	
+	public void setURI(String uri) {
+		this.uri = uri;
+	}
+	
 	
 	public String toString() {
 		

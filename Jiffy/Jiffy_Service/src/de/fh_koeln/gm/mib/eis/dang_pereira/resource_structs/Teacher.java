@@ -9,6 +9,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = false)
 public class Teacher extends User {
 	
+	public Teacher(Id user, String name, String user_type, String gender) {
+		super(user, name, user_type, gender);
+	}
+
 	public String toString() {
 		
 		return super.toString();

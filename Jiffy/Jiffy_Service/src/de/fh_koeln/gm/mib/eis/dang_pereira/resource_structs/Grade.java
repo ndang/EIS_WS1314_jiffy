@@ -22,6 +22,60 @@ public class Grade {
 	Subject subject;
 	
 	
+	public Grade(Id grade, BigDecimal value, Integer grade_weight, String comment, Subject subject) {
+		this.grade = grade;
+		this.value = value;
+		this.grade_weight = grade_weight;
+		this.comment = comment;
+		this.subject = subject;
+	}
+	
+	
+	public Id getGrade() {
+		return this.grade;
+	}
+	
+	public void setGrade(Id grade) {
+		this.grade = grade;
+	}
+	
+	
+	public BigDecimal getvalue() {
+		return this.value;
+	}
+	
+	public void setValue(BigDecimal value) {
+		this.value = value;
+	}
+	
+	
+	public Integer getGradeWeight() {
+		return this.grade_weight;
+	}
+	
+	public void setGradeWeight(Integer grade_weight) {
+		this.grade_weight = grade_weight;
+	}
+	
+	
+	public String getComment() {
+		return this.comment;
+	}
+	
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+	
+	
+	public Subject getSubject() {
+		return this.subject;
+	}
+	
+	public void setClasses(Subject subject) {
+		this.subject = subject;
+	}
+	
+	
 	public String toString() {
 		
 		return "{" +

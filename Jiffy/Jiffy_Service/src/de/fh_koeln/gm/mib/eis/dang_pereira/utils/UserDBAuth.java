@@ -59,11 +59,13 @@ public class UserDBAuth {
 			throw new Exception("Verbindung zur MySQL-Datenbank konnte nicht hergestellt werden: " + e.getMessage());
 		}
     	
-		rs.next();
-		
-    	if(rs.getString(1).equals("1")) {
-    		return true;
-    	}
+		if(rs != null) {
+			rs.next();
+			
+	    	if(rs.getString(1).equals("1")) {
+	    		return true;
+	    	}
+		}
 		
 		return false;
 	}
