@@ -1,6 +1,8 @@
 package de.fh_koeln.gm.mib.eis.dang_pereira.message_consumer.msg_struct;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 /**
  * Zielklasse für das Marshalling/Unmarshalling von Nachrichten im JSON-Datenformat für den Einsatz mit "Jackson"
@@ -44,60 +46,149 @@ public class Message {
 	public GuardianMsg guardian;
 	
 	
-	public class SchoolMsg {
-		@JsonProperty("msg_subtype")
-		public String msg_subtype;
-		
-		@JsonProperty("grade")
-		public Id grade;
-		
-		@JsonProperty("info")
-		public InfoMsg info;
-		
-		
-		public class InfoMsg {
-			@JsonProperty("class_broadcast")
-			public Boolean class_broadcast;
-			
-			@JsonProperty("desc_date")
-			public String desc_date;
-			
-			public String toString() {
-				return "{ \"class_broadcast\": " + this.class_broadcast + ", \"desc_date\": " + this.desc_date + " }";
-			}
-		}
-		
-		public String toString() {
-			return "{ \"msg_subtype\": " + this.msg_subtype + ", \"grade\": " + this.grade + ", \"info\": " + this.info + " }";
-		}
-	}
+	public Message() {}
 	
-	public class GuardianMsg {
-		@JsonProperty("msg_subtype")
-		public String msg_subtype;
+	
+	public Message(	String		msg_type,		Integer		msg_id,		Integer		msg_ref,
+					String		msg_subject,	String		msg_text,	String		msg_send_date,
+					Id			from_user_id,	Id			to_user_id, Id			student_id,
+					SchoolMsg	school,			GuardianMsg guardian) {
 		
-		@JsonProperty("excuse")
-		public ExcuseMsg excuse;
-		
-		public class ExcuseMsg {
-			@JsonProperty("date_from")
-			public String date_from;
-			
-			@JsonProperty("date_to")
-			public String date_to;
-			
-			public String toString() {
-				
-				return "{ \"date_from\": " + this.date_from + ", \"date_to\": " + this.date_to + " }";
-			}
-		}
-		
-		public String toString() {
-			return "{ \"msg_subtype\": " + this.msg_subtype + ", \"excuse\": " + this.excuse + " }";
-		}
+		this.msg_type		= msg_type;
+		this.msg_id			= msg_id;
+		this.msg_ref		= msg_ref;
+		this.msg_subject	= msg_subject;
+		this.msg_text		= msg_text;
+		this.msg_send_date	= msg_send_date;
+		this.from_user_id	= from_user_id;
+		this.to_user_id		= to_user_id;
+		this.student_id		= student_id;
+		this.school			= school;
+		this.guardian		= guardian;
 	}
 	
 	
+	@JsonGetter("msg_id")
+	public Integer getMsgID() {
+		return this.msg_id;
+	}
+
+	@JsonSetter("msg_id")
+	public void setMsgID(Integer msg_id) {
+		this.msg_id = msg_id;
+	}
+	
+	
+	@JsonGetter("msg_type")
+	public String getMsgType() {
+		return this.msg_type;
+	}
+
+	@JsonSetter("msg_type")
+	public void setMsgType(String msg_type) {
+		this.msg_type = msg_type;
+	}
+	
+	
+	@JsonGetter("msg_ref")
+	public Integer getMsgRef() {
+		return this.msg_ref;
+	}
+
+	@JsonSetter("msg_ref")
+	public void setMsgRef(Integer msg_ref) {
+		this.msg_ref = msg_ref;
+	}
+	
+	
+	@JsonGetter("msg_subject")
+	public String getMsgSubject() {
+		return this.msg_subject;
+	}
+
+	@JsonSetter("msg_subject")
+	public void setMsgSubject(String msg_subject) {
+		this.msg_subject = msg_subject;
+	}
+	
+	
+	@JsonGetter("msg_text")
+	public String getMsgText() {
+		return this.msg_text;
+	}
+
+	@JsonSetter("msg_text")
+	public void setMsgText(String msg_text) {
+		this.msg_text = msg_text;
+	}
+	
+	@JsonGetter("msg_send_date")
+	public String getMsgSendDate() {
+		return this.msg_send_date;
+	}
+
+	@JsonSetter("msg_send_date")
+	public void setMsgSendDate(String msg_send_date) {
+		this.msg_send_date = msg_send_date;
+	}
+	
+	
+	@JsonGetter("from_user_id")
+	public Id getFromUserId() {
+		return this.from_user_id;
+	}
+
+	@JsonSetter("from_user_id")
+	public void setFromUserId(Id from_user_id) {
+		this.from_user_id = from_user_id;
+	}
+	
+	
+	@JsonGetter("to_user_id")
+	public Id getToUserId() {
+		return this.to_user_id;
+	}
+
+	@JsonSetter("to_user_id")
+	public void setToUserId(Id to_user_id) {
+		this.to_user_id = to_user_id;
+	}
+	
+	
+	@JsonGetter("student_id")
+	public Id getStudentId() {
+		return this.student_id;
+	}
+
+	@JsonSetter("student_id")
+	public void setStudentId(Id student_id) {
+		this.student_id = student_id;
+	}
+
+
+	@JsonGetter("school")
+	public SchoolMsg getSchool() {
+		return this.school;
+	}
+
+	@JsonSetter("school")
+	public void setSchool(SchoolMsg school) {
+		this.school = school;
+	}
+
+
+	@JsonGetter("guardian")
+	public GuardianMsg getGuardian() {
+		return this.guardian;
+	}
+
+	@JsonSetter("guardian")
+	public void setGuardian(GuardianMsg guardian) {
+		this.guardian = guardian;
+	}
+
+	
+
 	public String toString() {
 		return "{\t\"msg_type\": " + this.msg_type + ",\n\t" +
 				"\"msg_id\": "+ this.msg_id + "\n\t" +
