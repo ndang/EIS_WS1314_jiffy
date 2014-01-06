@@ -1,5 +1,8 @@
 package de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs;
 
+import org.codehaus.jackson.annotate.JsonSetter;
+
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -34,29 +37,33 @@ public class Student extends User {
 		this.latest_class = latest_class;
 	}
 
-
+	
+	@JsonGetter("guardian")
 	public Id getGuardian() {
 		return this.guardian;
 	}
 	
+	@JsonSetter("guardian")
 	public void setGuardian(Id guardian) {
 		this.guardian = guardian;
 	}
 	
-	
+	@JsonGetter("grades_uri")
 	public String getGradesURI() {
 		return this.grades_uri;
 	}
 	
+	@JsonSetter("grades_uri")
 	public void setGradesURI(String grades_uri) {
 		this.grades_uri = grades_uri;
 	}
 	
-	
+	@JsonGetter("latest_class")
 	public Id getLatestClass() {
 		return this.latest_class;
 	}
 	
+	@JsonSetter("latest_class")
 	public void setLatestClass(Id latest_class) {
 		this.latest_class = latest_class;
 	}

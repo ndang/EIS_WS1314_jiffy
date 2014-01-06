@@ -1,6 +1,8 @@
 package de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class Id {
 
@@ -18,20 +20,23 @@ public class Id {
 		this.uri = uri;
 	}
 	
-	
+	@JsonGetter("id")
 	public Integer getID() {
 		return this.id;
 	}
 	
+	@JsonSetter("id")
 	public void setID(Integer id) {
 		this.id = id;
 	}
 	
 	
+	@JsonGetter("uri")
 	public String getURI() {
 		return this.uri;
 	}
 	
+	@JsonSetter("uri")
 	public void setURI(String uri) {
 		this.uri = uri;
 	}

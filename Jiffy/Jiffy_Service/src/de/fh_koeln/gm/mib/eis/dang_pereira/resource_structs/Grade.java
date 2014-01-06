@@ -2,7 +2,9 @@ package de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class Grade {
 
@@ -32,47 +34,52 @@ public class Grade {
 		this.subject = subject;
 	}
 	
-	
+	@JsonGetter("grade")
 	public Id getGrade() {
 		return this.grade;
 	}
 	
+	@JsonSetter("grade")
 	public void setGrade(Id grade) {
 		this.grade = grade;
 	}
 	
-	
+	@JsonGetter("value")
 	public BigDecimal getvalue() {
 		return this.value;
 	}
 	
+	@JsonSetter("value")
 	public void setValue(BigDecimal value) {
 		this.value = value;
 	}
 	
-	
+	@JsonGetter("grade_weight")
 	public Integer getGradeWeight() {
 		return this.grade_weight;
 	}
 	
+	@JsonSetter("grade_weight")
 	public void setGradeWeight(Integer grade_weight) {
 		this.grade_weight = grade_weight;
 	}
 	
-	
+	@JsonGetter("comment")
 	public String getComment() {
 		return this.comment;
 	}
 	
+	@JsonSetter("comment")
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
 	
-	
+	@JsonGetter("subject")
 	public Subject getSubject() {
 		return this.subject;
 	}
 	
+	@JsonSetter("subject")
 	public void setClasses(Subject subject) {
 		this.subject = subject;
 	}

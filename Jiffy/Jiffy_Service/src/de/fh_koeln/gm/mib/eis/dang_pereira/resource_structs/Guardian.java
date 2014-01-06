@@ -1,7 +1,9 @@
 package de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 /* 
  * Eigenschaften, die im JSON-Dokuemnt existieren, aber nich in der Klasse, nicht ignorieren.
@@ -32,19 +34,22 @@ public class Guardian extends User {
 		this.contact_person = contact_person;
 	}
 	
-	
+	@JsonGetter("language")
 	public String getLanguage() {
 		return this.language;
 	}
 	
+	@JsonSetter("language")
 	public void setLanguage(String language) {
 		this.language = language;
 	}
 	
+	@JsonGetter("contact_person")
 	public Boolean getContactPerson() {
 		return this.contact_person;
 	}
 	
+	@JsonSetter("contact_person")
 	public void setContactPerson(Boolean contact_person) {
 		this.contact_person = contact_person;
 	}

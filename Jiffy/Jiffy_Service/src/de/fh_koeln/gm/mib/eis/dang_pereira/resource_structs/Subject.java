@@ -1,6 +1,8 @@
 package de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class Subject {
 
@@ -23,28 +25,32 @@ public class Subject {
 	}
 	
 	
+	@JsonGetter("subject")
 	public Id getSubject() {
 		return this.subject;
 	}
 	
+	@JsonSetter("subject")
 	public void setSubject(Id subject) {
 		this.subject = subject;
 	}
 	
-	
+	@JsonGetter("description")
 	public String getDescription() {
 		return this.description;
 	}
 	
+	@JsonSetter("description")
 	public void setDescription(String description) {
 		this.description = description;
 	}
 	
-	
+	@JsonGetter("teacher")
 	public Id getTeacher() {
 		return this.teacher;
 	}
 	
+	@JsonSetter("teacher")
 	public void setTeacher(Id teacher) {
 		this.teacher = teacher;
 	}

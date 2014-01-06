@@ -2,7 +2,9 @@ package de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class Users {
 
@@ -16,11 +18,12 @@ public class Users {
 		this.users = users;
 	}
 	
-	
+	@JsonGetter("users")
 	public ArrayList<User> getUsers() {
 		return this.users;
 	}
 	
+	@JsonSetter("users")
 	public void setUsers(ArrayList<User> users) {
 		this.users = users;
 	}

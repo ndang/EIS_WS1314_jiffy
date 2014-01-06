@@ -2,7 +2,9 @@ package de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class Subjects {
 
@@ -17,10 +19,12 @@ public class Subjects {
 	}
 	
 	
+	@JsonGetter("subjects")
 	public ArrayList<Subject> getSubjects() {
 		return this.subjects;
 	}
 	
+	@JsonSetter("subjects")
 	public void setSubjects(ArrayList<Subject> subjects) {
 		this.subjects = subjects;
 	}
