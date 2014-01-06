@@ -24,14 +24,10 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.sun.grizzly.http.algorithms.ContentLengthAlgorithm;
-
 import de.fh_koeln.gm.mib.eis.dang_pereira.data_access.DBLayer;
-import de.fh_koeln.gm.mib.eis.dang_pereira.utils.BasicAuthHelper;
-import de.fh_koeln.gm.mib.eis.dang_pereira.utils.UserDBAuth;
 
 @Path("/user")
-public class UserResource {
+public class UserResource extends Resource {
 
 	@GET
 	@Path("/{user_id}")
@@ -198,20 +194,4 @@ public class UserResource {
 		return Response.status(404).build();
 	}
 	
-	
-	private boolean userExists(HttpHeaders headers) {
-		
-		boolean status = false;
-		
-		try {
-			if(UserDBAuth.authUser(BasicAuthHelper.extractAuthCreds(headers))) {
-				status = true;
-			}
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-		}
-		
-		return status;
-	}
 }

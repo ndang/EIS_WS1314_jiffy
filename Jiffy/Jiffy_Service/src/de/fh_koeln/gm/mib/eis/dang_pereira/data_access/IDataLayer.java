@@ -15,7 +15,7 @@ public interface IDataLayer {
 	 * @param user_id ID des Users
 	 * @return JSON-Dokument als String
 	 */
-	public String getUser(Integer user_id);
+	public String getUser(Integer userId);
 	
 	
 	/**
@@ -25,4 +25,23 @@ public interface IDataLayer {
 	 */
 	public String getUsers();
 	
+	
+	/**
+	 * Daten über einen Schüler beziehen
+	 * 
+	 * @param userId ID des Schülers
+	 * @return JSON-Dokument als String
+	 */
+	public String getStudent(Integer userId);
+	
+	
+	/**
+	 * Neuen Schüler erzeugen
+	 * 
+	 * @param data Valides JSON-Dokument
+	 * @return Die vom System gegebene ID
+	 */
+	public Integer postStudent(String data, String givenPass);
+	
+
 }
