@@ -64,7 +64,7 @@ COLLATE = utf8_general_ci;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `jiffy`.`Student` (
   `user_id` INT NOT NULL ,
-  `guardian_user_id` INT NOT NULL ,
+  `guardian_user_id` INT NULL ,
   PRIMARY KEY (`user_id`) ,
   INDEX `fk_Student_User` (`user_id` ASC) ,
   INDEX `fk_Student_Guardian` (`guardian_user_id` ASC) ,
