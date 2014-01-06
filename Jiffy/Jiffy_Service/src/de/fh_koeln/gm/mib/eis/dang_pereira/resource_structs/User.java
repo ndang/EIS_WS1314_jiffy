@@ -13,6 +13,9 @@ public class User {
 	@JsonProperty("name")
 	String name;
 	
+	@JsonProperty("username")
+	String username;
+	
 	@JsonProperty("user_type")
 	String user_type;
 	
@@ -22,9 +25,10 @@ public class User {
 
 	public User() {}
 	
-	public User(Id user, String name, String user_type, String gender) {
+	public User(Id user, String name, String username, String user_type, String gender) {
 		this.user = user;
 		this.name = name;
+		this.username = username;
 		this.user_type = user_type;
 		this.gender = gender;
 	}
@@ -45,6 +49,15 @@ public class User {
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	
+	public String getUsername() {
+		return this.username;
+	}
+	
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 	
@@ -69,6 +82,7 @@ public class User {
 		
 		return  "\"user\": " + this.user + ",\r\n" +
 				"\"name\": " + this.name + ",\r\n" +
+				"\"username\": " + this.username + ",\r\n" +
 				"\"user_type\": " + this.user_type + ",\r\n" +
 				"\"gender\": " + this.gender;
 	}

@@ -21,12 +21,12 @@ public class Guardian extends User {
 		super();
 	}
 	
-	public Guardian(Id user, String name, String user_type, String gender) {
-		super(user, name, user_type, gender);
+	public Guardian(Id user, String name, String username, String user_type, String gender) {
+		super(user, name, username, user_type, gender);
 	}
 
-	public Guardian(Id user, String name, String user_type, String gender, String language, Boolean contact_person) {
-		super(user, name, user_type, gender);
+	public Guardian(Id user, String name, String username, String user_type, String gender, String language, Boolean contact_person) {
+		super(user, name, username, user_type, gender);
 		
 		this.language = language;
 		this.contact_person = contact_person;

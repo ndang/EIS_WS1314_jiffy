@@ -16,4 +16,13 @@ public interface IDataLayer {
 	 * @return JSON-Dokument als String
 	 */
 	public String getUser(Integer user_id);
+	
+	
+	/**
+	 * Alle User eines Systems zurückgeben 
+	 * 
+	 * @return JSON-Dokument mit allen Userdaten
+	 */
+	public String getUsers();
+	
 }

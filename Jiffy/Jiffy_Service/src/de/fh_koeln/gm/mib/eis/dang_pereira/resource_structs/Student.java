@@ -22,12 +22,12 @@ public class Student extends User {
 	
 	public Student() {}
 	
-	public Student(Id user, String name, String user_type, String gender) {
-		super(user, name, user_type, gender);
+	public Student(Id user, String name, String username, String user_type, String gender) {
+		super(user, name, username, user_type, gender);
 	}
 
-	public Student(Id user, String name, String user_type, String gender, Id guardian, String grades_uri, Id latest_class) {
-		super(user, name, user_type, gender);
+	public Student(Id user, String name, String username, String user_type, String gender, Id guardian, String grades_uri, Id latest_class) {
+		super(user, name, username, user_type, gender);
 		
 		this.guardian = guardian;
 		this.grades_uri = grades_uri;

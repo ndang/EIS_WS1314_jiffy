@@ -54,11 +54,11 @@ public class MainResourceJSON {
 		//Classes cs = m.readValue(new File("res/playdata/resource_structs/classes.json"), Classes.class);
 		//System.out.println(cs);
 		
-		//Subject s = m.readValue(new File("res/playdata/resource_structs/subject.json"), Subject.class);
-		//System.out.println(s);
+		//Subject su = m.readValue(new File("res/playdata/resource_structs/subject.json"), Subject.class);
+		//System.out.println(su);
 		
-		Subjects ss = m.readValue(new File("res/playdata/resource_structs/subjects.json"), Subjects.class);
-		System.out.println(ss);
+		//Subjects sus = m.readValue(new File("res/playdata/resource_structs/subjects.json"), Subjects.class);
+		//System.out.println(sus);
 		
 	}
 

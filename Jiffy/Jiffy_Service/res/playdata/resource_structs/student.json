@@ -4,17 +4,18 @@
         "uri": "/user/2"
     },
     
-    "name": "Tobias Humboldt",
-    "user_type": "STUDENT",
-    "gender": "male",
+    "name":         "Tobias Humboldt",
+    "username":     "tobiashumboldt",
+    "user_type":    "STUDENT",
+    "gender":       "male",
     
     "guardian": {
-        "id": 1,
-        "uri": "/guardian/1"
+        "id":   1,
+        "uri":  "/guardian/1"
     },
-    "grades_uri": "/student/2/grades",
+    "grades_uri":   "/student/2/grades",
     "latest_class": {
-        "id": 1,
-        "uri": "/class/1"
+        "id":   1,
+        "uri":  "/class/1"
     }
 }
