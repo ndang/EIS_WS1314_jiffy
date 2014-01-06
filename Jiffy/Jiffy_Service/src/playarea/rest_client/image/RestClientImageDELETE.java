@@ -1,9 +1,16 @@
-package playarea.rest_client;
+package playarea.rest_client.image;
+
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.ws.rs.core.MediaType;
+
+import playarea.rest_client.OwnSSLContext;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -16,7 +23,7 @@ import com.sun.jersey.client.urlconnection.HTTPSProperties;
 import de.fh_koeln.gm.mib.eis.dang_pereira.Config;
 
 
-public class RestClient {
+public class RestClientImageDELETE {
 
 	
 	public static void main(String[] args) throws Exception {
@@ -24,9 +31,7 @@ public class RestClient {
 		String user = "Peter";
 		String pass = "Christa";
 		
-		String uri = "/user/3";
-		
-		String mime = MediaType.APPLICATION_JSON;
+		String uri = "/user/3/image";
 		
 		Config cfg = Config.getInstance();
 		
@@ -51,12 +56,10 @@ public class RestClient {
 		WebResource wr = Client.create(config).resource(cfg.rest_endpoint.host + ":" + cfg.rest_endpoint.port);
 		wr.addFilter(new HTTPBasicAuthFilter(user, pass));
 		
-		ClientResponse cresp = wr.path(uri).accept(mime).get(ClientResponse.class);
+		ClientResponse cresp = wr.path(uri).delete(ClientResponse.class);
 		
-		if(cresp.getStatus() == 200) {
-			String entity = cresp.getEntity(String.class);
-			
-			System.out.println(entity);
+		if(cresp.getStatus() == 204) {
+			System.out.println("Die Ressource wurde erfolgreich gelöscht!");
 		}
 		else {
 			System.err.println("Statuscode: " + cresp.getStatus());

@@ -1,9 +1,16 @@
-package playarea.rest_client;
+package playarea.rest_client.image;
+
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.ws.rs.core.MediaType;
+
+import playarea.rest_client.OwnSSLContext;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -16,7 +23,7 @@ import com.sun.jersey.client.urlconnection.HTTPSProperties;
 import de.fh_koeln.gm.mib.eis.dang_pereira.Config;
 
 
-public class RestClient {
+public class RestClientImage {
 
 	
 	public static void main(String[] args) throws Exception {
@@ -24,9 +31,9 @@ public class RestClient {
 		String user = "Peter";
 		String pass = "Christa";
 		
-		String uri = "/user/3";
+		String uri = "/user/3/image";
 		
-		String mime = MediaType.APPLICATION_JSON;
+		String mime = "image/jpeg"; //MediaType.APPLICATION_JSON;
 		
 		Config cfg = Config.getInstance();
 		
@@ -51,12 +58,23 @@ public class RestClient {
 		WebResource wr = Client.create(config).resource(cfg.rest_endpoint.host + ":" + cfg.rest_endpoint.port);
 		wr.addFilter(new HTTPBasicAuthFilter(user, pass));
 		
-		ClientResponse cresp = wr.path(uri).accept(mime).get(ClientResponse.class);
+		/* Beispiel-Datum (man muss mit dem GMT aufpassen, da man in Deutschland bei GMT+1 liegt) */
+		ClientResponse cresp = wr.path(uri).accept(mime).header("If-Modified-Since", "Mon, 05 Jan 2014 23:16:00 GMT").get(ClientResponse.class);
 		
 		if(cresp.getStatus() == 200) {
-			String entity = cresp.getEntity(String.class);
+			InputStream entity = cresp.getEntityInputStream();
 			
-			System.out.println(entity);
+			byte[] data = new byte[(int)cresp.getLength()];
+			DataInputStream dataIs = new DataInputStream(entity);
+			dataIs.readFully(data);
+			
+			System.out.println(new String(data));
+			
+			//FileOutputStream fos = new FileOutputStream(new File("test.jpg"));
+			
+			//fos.write(data);
+			//fos.close();
+			
 		}
 		else {
 			System.err.println("Statuscode: " + cresp.getStatus());
