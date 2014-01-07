@@ -24,7 +24,10 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import de.fh_koeln.gm.mib.eis.dang_pereira.data_access.DBLayer;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.User;
 
 @Path("/user")
 public class UserResource extends Resource {
@@ -40,7 +43,16 @@ public class UserResource extends Resource {
 		
 		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
 		DBLayer dbl = DBLayer.getInstance();
-		String userStr = dbl.getUser(userId);
+		User user = dbl.getUser(userId);
+		
+		String userStr = null;
+		
+		try {
+			userStr = jmapper.writeValueAsString(user);
+		} catch (JsonProcessingException e) {
+			System.err.println("Konnte das Studenten-Objekt nicht serialisieren: " + e.getMessage());
+			e.printStackTrace();
+		}
 		
 		/* Wenn Daten zurückgegeben wurden, dann sollen sie ausgeliefert werden */
 		if(userStr != null){

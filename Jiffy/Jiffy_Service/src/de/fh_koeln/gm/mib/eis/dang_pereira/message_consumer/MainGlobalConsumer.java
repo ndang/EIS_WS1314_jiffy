@@ -45,7 +45,7 @@ public class MainGlobalConsumer {
 			mqttClient.connect(mqttOpts);
 			
 			/* Alle "offiziellen" Topics subscriben, die auch in der DB abgelegt werden sollen */
-			mqttClient.subscribe("*/official");
+			mqttClient.subscribe("official/*");
 			
 			/*
 			 * Callback-Objekt angeben, der diverse Methoden implementiert, die aufgerufen werden,

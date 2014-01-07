@@ -1,18 +1,11 @@
 package de.fh_koeln.gm.mib.eis.dang_pereira.data_access;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.fh_koeln.gm.mib.eis.dang_pereira.Config;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Id;
@@ -25,7 +18,6 @@ public class DBLayer implements IDataLayer {
 
 	private static DBLayer instance;
 	public static Connection con = null;
-	public static ObjectMapper jmapper = new ObjectMapper();
 	
 	
 	/* Die Klasse sollte nur über die Klassenfunktion "getInstance" instanziiert werden */
@@ -76,9 +68,9 @@ public class DBLayer implements IDataLayer {
 	
 	
 	@Override
-	public String getUser(Integer userId) {
+	public User getUser(Integer userId) {
 		
-		String data = null;
+		User user = null;
 		
 		try {
 			
@@ -97,27 +89,22 @@ public class DBLayer implements IDataLayer {
 			String gender = rs.getString(5);
 			
 			/* User-Objekt erzeugen und es mit zuvor bezogenen Daten befüllen */
-			User user = new User(new Id(id, uri), name, username, userType, gender);
+			user = new User(new Id(id, uri), name, username, userType, gender);
 			
-			data = jmapper.writeValueAsString(user);
-		
 		} catch (SQLException e) {
 			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
 			e.printStackTrace();
-		} catch (JsonProcessingException e) {
-			System.err.println("JSON-Dokument konnte nicht erzeugt werden: " + e.getMessage());
-			e.printStackTrace();
 		}
 		
-		return data;
+		return user;
 	}
 	
 	
 	
 	@Override
-	public String getUsers() {
+	public Users getUsers() {
 		
-		String data = null;
+		Users users = null;
 		
 		try {
 			
@@ -144,25 +131,20 @@ public class DBLayer implements IDataLayer {
 				userList.add(user);
 			}
 			
-			Users users = new Users(userList);
+			users = new Users(userList);
 			
-			data = jmapper.writeValueAsString(users);
-		
 		} catch (SQLException e) {
 			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
 			e.printStackTrace();
-		} catch (JsonProcessingException e) {
-			System.err.println("JSON-Dokument konnte nicht erzeugt werden: " + e.getMessage());
-			e.printStackTrace();
 		}
 		
-		return data;
+		return users;
 	}
 	
 	
 	@Override
-	public String getStudent(Integer userId) {
-		String data = null;
+	public Student getStudent(Integer userId) {
+		Student student = null;
 		
 		try {
 			
@@ -191,24 +173,22 @@ public class DBLayer implements IDataLayer {
 			}
 			
 			/* User-Objekt erzeugen und es mit zuvor bezogenen Daten befüllen */
-			Student student = new Student(new Id(id, uri), name, username, userType, gender, guardianRef, "/student/" + userId + "/grades", null);
+			student = new Student(new Id(id, uri), name, username, userType, gender, guardianRef, "/student/" + userId + "/grades", null);
 			
-			data = jmapper.writeValueAsString(student);
-		
 		} catch (SQLException e) {
 			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
 			e.printStackTrace();
-		} catch (JsonProcessingException e) {
-			System.err.println("JSON-Dokument konnte nicht erzeugt werden: " + e.getMessage());
-			e.printStackTrace();
 		}
 		
-		return data;
+		return student;
 	}
 	
 	
 	@Override
-	public Integer postStudent(String data, String givenPass) {
+	public Integer postStudent(Student student, String givenPass) {
+		
+		if(student == null)
+			return null;
 		
 		Integer newUserId = null;
 		
@@ -216,8 +196,6 @@ public class DBLayer implements IDataLayer {
 			
 			con.setAutoCommit(false);
 
-			Student student = jmapper.readValue(data, Student.class);
-			
 			String name = student.getName();
 			String username = student.getUsername();
 			String type = student.getUserType();
@@ -226,7 +204,8 @@ public class DBLayer implements IDataLayer {
 			Integer userId = putUser(name, username, givenPass, type, gender);
 			
 			if(userId != null) {
-			
+				// TODO: guardian_user_id setzen!
+				
 				/* Einen Datensatz mit der selben ID in die Student-Tabelle einfügen */
 				String stmtStr = "INSERT INTO Student (user_id, guardian_user_id) VALUES (?, NULL)";
 				PreparedStatement stmt = con.prepareStatement(stmtStr);
@@ -247,9 +226,6 @@ public class DBLayer implements IDataLayer {
 		
 		} catch (SQLException e) {
 			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
-			e.printStackTrace();
-		} catch (IOException e) {
-			System.err.println("Konnte JSON-Dokument nicht parsen: " + e.getMessage());
 			e.printStackTrace();
 		}
 		

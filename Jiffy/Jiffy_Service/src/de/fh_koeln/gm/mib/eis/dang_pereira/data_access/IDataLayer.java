@@ -1,5 +1,9 @@
 package de.fh_koeln.gm.mib.eis.dang_pereira.data_access;
 
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Student;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.User;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Users;
+
 
 /**
  * Schnittstelle, um den möglichen und unkomplizierten Austausch des Datenhandlers zu gewährleisten
@@ -13,35 +17,35 @@ public interface IDataLayer {
 	 * Daten eines Users anhand seiner ID zurückgeben
 	 * 
 	 * @param user_id ID des Users
-	 * @return JSON-Dokument als String
+	 * @return JSON-Dokument als User-Objekt
 	 */
-	public String getUser(Integer userId);
+	public User getUser(Integer userId);
 	
 	
 	/**
 	 * Alle User eines Systems zurückgeben 
 	 * 
-	 * @return JSON-Dokument mit allen Userdaten
+	 * @return JSON-Dokument als Users-Objekt
 	 */
-	public String getUsers();
+	public Users getUsers();
 	
 	
 	/**
 	 * Daten über einen Schüler beziehen
 	 * 
 	 * @param userId ID des Schülers
-	 * @return JSON-Dokument als String
+	 * @return Das JSON-Dokument als Student-Objekt
 	 */
-	public String getStudent(Integer userId);
+	public Student getStudent(Integer userId);
 	
 	
 	/**
 	 * Neuen Schüler erzeugen
 	 * 
-	 * @param data Valides JSON-Dokument
+	 * @param data Student-Objekt
 	 * @return Die vom System gegebene ID
 	 */
-	public Integer postStudent(String data, String givenPass);
+	public Integer postStudent(Student student, String givenPass);
 	
 
 }

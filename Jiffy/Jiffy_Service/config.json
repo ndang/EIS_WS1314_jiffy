@@ -23,9 +23,9 @@
         },
 
     "ssl": {
-        "path_ks": "res/broker.ks",
-        "pass_ks": "koelnerdom",
-        "path_ts": "res/client.ts",
-        "pass_ts": "koelnerdom"
+        "path_ks": "broker.ks",
+        "pass_ks": "passwort",
+        "path_ts": "client.ts",
+        "pass_ts": "passwort"
     }
 }

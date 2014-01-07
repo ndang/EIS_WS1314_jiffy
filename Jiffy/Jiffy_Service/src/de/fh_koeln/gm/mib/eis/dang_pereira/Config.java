@@ -96,13 +96,13 @@ public class Config {
      */
 	public class SSL {
 		@JsonProperty("path_ks")
-		public String path_ks = "res/broker.ks";
+		public String path_ks = "broker.ks";
 		
 		@JsonProperty("pass_ks")
 		public String pass_ks = "koelnerdom";
 		
 		@JsonProperty("path_ts")
-		public String path_ts = "res/client.ts";
+		public String path_ts = "client.ts";
 		
 		@JsonProperty("pass_ts")
 		public String pass_ts = "koelnerdom";
@@ -119,7 +119,7 @@ public class Config {
     		ObjectMapper m = new ObjectMapper();
     		try {
     			/* Externe Konfigurationsdatei einlesen und ein Konfigurationsobjekt mit diesen neuen Werten erzeugen */
-				instance = m.readValue(new File("config.json"), Config.class);
+				instance = m.readValue(new File(new File("."), "config.json"), Config.class);
 			} catch ( IOException e) {
 				
 				System.err.println("Konfigurationsdatei konnte nicht gelesen oder geparst werden: config.json");
