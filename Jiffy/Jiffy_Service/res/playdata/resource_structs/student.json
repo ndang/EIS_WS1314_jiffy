@@ -1,7 +1,11 @@
 {
     "user": {
         "id": 2,
-        "uri": "/user/2"
+        "uri": "/user/2",
+        "destination": {
+        	"private": "private/2",
+        	"official": "official/2"
+        }
     },
     
     "name":         "Tobias Humboldt",
@@ -11,11 +15,16 @@
     
     "guardian": {
         "id":   1,
-        "uri":  "/guardian/1"
+        "uri":  "/guardian/1",
+        "destination": {
+        	"private": "private/1",
+        	"official": "official/1"
+        }
     },
     "grades_uri":   "/student/2/grades",
     "latest_class": {
         "id":   1,
-        "uri":  "/class/1"
+        "uri":  "/class/1",
+        "destination": null
     }
 }

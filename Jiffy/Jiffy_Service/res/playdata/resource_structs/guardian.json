@@ -1,7 +1,11 @@
 {
     "user": {
         "id":   1,
-        "uri":  "/user/1"
+        "uri":  "/user/1",
+        "destination": {
+        	"private": "private/1",
+        	"official": "official/1"
+        }
     },
     
     "name":             "Petra Humboldt",

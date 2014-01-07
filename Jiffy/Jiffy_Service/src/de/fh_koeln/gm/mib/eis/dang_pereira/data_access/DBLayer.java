@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import de.fh_koeln.gm.mib.eis.dang_pereira.Config;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Destination;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Id;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Student;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Topics;
@@ -90,7 +91,8 @@ public class DBLayer implements IDataLayer {
 			String gender = rs.getString(5);
 			
 			/* User-Objekt erzeugen und es mit zuvor bezogenen Daten befüllen */
-			user = new User(new Id(id, uri), name, username, userType, gender);
+			Destination dest = new Destination("private/" + id, "official/" + id);
+			user = new User(new Id(id, uri, dest), name, username, userType, gender);
 			
 		} catch (SQLException e) {
 			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
@@ -165,9 +167,10 @@ public class DBLayer implements IDataLayer {
 						/* Alle Datensätze der eigenen Kinder durchgehen und die Topic-Namen zusammensetzen */
 						while(rsChildrenClass.next()) {
 							
-							/* Topic für das Kind; es besitzt kein privates Topic */
+							/* Topic für das Kind */
 							Integer studentId = rsChildrenClass.getInt(1);
 							topicsList.add("official/" + studentId);
+							topicsList.add("private/" + studentId);
 							
 							
 							Integer classId	= rsChildrenClass.getInt(2);
@@ -226,7 +229,8 @@ public class DBLayer implements IDataLayer {
 				String gender = rs.getString(5);
 				
 				/* User-Objekt erzeugen und es mit zuvor bezogenen Daten befüllen */
-				User user = new User(new Id(id, uri), name, username, user_type, gender);
+				Destination dest = new Destination("private/" + id, "official/" + id);
+				User user = new User(new Id(id, uri, dest), name, username, user_type, gender);
 				
 				/* Das soeben erzeugte User-Objekt der Liste hinzufügen */
 				userList.add(user);
@@ -270,11 +274,13 @@ public class DBLayer implements IDataLayer {
 			Id guardianRef = null;
 
 			if(guardianId > 0) {
-				guardianRef = new Id(guardianId, "/user/" + guardianId);
+				Destination dest = new Destination("private/" + guardianId, "official/" + guardianId);
+				guardianRef = new Id(guardianId, "/user/" + guardianId, dest);
 			}
 			
 			/* User-Objekt erzeugen und es mit zuvor bezogenen Daten befüllen */
-			student = new Student(new Id(id, uri), name, username, userType, gender, guardianRef, "/student/" + userId + "/grades", null);
+			Destination dest = new Destination("private/" + id, "official/" + id);
+			student = new Student(new Id(id, uri, dest), name, username, userType, gender, guardianRef, "/student/" + userId + "/grades", null);
 			
 		} catch (SQLException e) {
 			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());

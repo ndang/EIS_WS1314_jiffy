@@ -1,13 +1,18 @@
 {
     "class": {
         "id":   1,
-        "uri":  "/class/1"
+        "uri":  "/class/1",
+        "destination": null
     },
     
     "year":         2010,
     "description":  "9",
     "teacher":      {
         "id":   3,
-        "uri":  "/teacher/3"
+        "uri":  "/teacher/3",
+        "destination": {
+        	"private": "private/3",
+        	"official": "official/3"
+        }
     }
 }

@@ -1,12 +1,17 @@
 {
     "subject": {
         "id": 1,
-        "uri": null
+        "uri": null,
+        "destination": null
     },
     
     "description":  "Deutsch (Leistungskurs)",
     "teacher":      {
         "id": 3,
-        "uri": "/teacher/3"
+        "uri": "/teacher/3",
+        "destination": {
+        	"private": "private/3",
+        	"official": "official/3"
+        }
     }
 }

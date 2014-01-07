@@ -12,12 +12,16 @@ public class Id {
 	@JsonProperty("uri")
 	String uri;
 	
-
+	@JsonProperty("destination")
+	Destination destination;
+	
+	
 	public Id() {}
 	
-	public Id(Integer id, String uri) {
+	public Id(Integer id, String uri, Destination destination) {
 		this.id = id;
 		this.uri = uri;
+		this.destination = destination;
 	}
 	
 	@JsonGetter("id")
@@ -30,23 +34,22 @@ public class Id {
 		this.id = id;
 	}
 	
-	
-	@JsonGetter("uri")
-	public String getURI() {
-		return this.uri;
+	@JsonGetter("destination")
+	public Destination getDestination() {
+		return this.destination;
 	}
 	
-	@JsonSetter("uri")
-	public void setURI(String uri) {
-		this.uri = uri;
+	@JsonSetter("destination")
+	public void setPrivate(Destination destination) {
+		this.destination = destination;
 	}
-	
 	
 	public String toString() {
 		
 		return "{\r\n" +
 				"\"id\": " + this.id + ",\r\n" +
 				"\"uri\": " + this.uri + "\r\n" +
+				"\"destination\": " + this.destination + "\r\n" +
 				"}";
 	}
 }
