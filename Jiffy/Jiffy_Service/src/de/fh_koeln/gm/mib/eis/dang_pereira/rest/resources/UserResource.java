@@ -27,7 +27,9 @@ import javax.ws.rs.core.Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import de.fh_koeln.gm.mib.eis.dang_pereira.data_access.DBLayer;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Topics;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.User;
+import de.fh_koeln.gm.mib.eis.dang_pereira.utils.BasicAuthHelper;
 
 @Path("/user")
 public class UserResource extends Resource {
@@ -40,6 +42,7 @@ public class UserResource extends Resource {
 		if(!userExists(headers)) {
 			return Response.status(401).build();
 		}
+		
 		
 		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
 		DBLayer dbl = DBLayer.getInstance();
@@ -62,6 +65,47 @@ public class UserResource extends Resource {
 			return Response.status(404).build();
 		}
 	}
+	
+	
+	@GET
+	@Path("/{user_id}/topics")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUserTopics(@Context HttpHeaders headers, @PathParam("user_id") Integer userId) {
+		
+		if(!userExists(headers)) {
+			return Response.status(401).build();
+		}
+		
+
+		String username = BasicAuthHelper.extractAuthCreds(headers).get("user");
+		
+		if(!usernameBelongsToId(username, userId)) {
+			return Response.status(401).build();
+		}
+		
+		
+		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
+		DBLayer dbl = DBLayer.getInstance();
+		Topics topics = dbl.getUserTopics(userId);
+		
+		String topicsStr = null;
+		
+		try {
+			topicsStr = jmapper.writeValueAsString(topics);
+		} catch (JsonProcessingException e) {
+			System.err.println("Konnte das Studenten-Objekt nicht serialisieren: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		/* Wenn Daten zurückgegeben wurden, dann sollen sie ausgeliefert werden */
+		if(topicsStr != null){
+			return Response.ok().entity(topicsStr).type(MediaType.APPLICATION_JSON).build();
+		}
+		else {
+			return Response.status(404).build();
+		}
+	}
+	
 	
 	
 	@GET

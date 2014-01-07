@@ -1,6 +1,7 @@
 package de.fh_koeln.gm.mib.eis.dang_pereira.data_access;
 
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Student;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Topics;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.User;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Users;
 
@@ -20,6 +21,14 @@ public interface IDataLayer {
 	 * @return JSON-Dokument als User-Objekt
 	 */
 	public User getUser(Integer userId);
+	
+	/**
+	 * Alle für einen Benutzer relevanten Topics zurückgeben
+	 * 
+	 * @param userId Benutzer-Id
+	 * @return JSON-Dokuemnt als Topics-Objekt
+	 */
+	public Topics getUserTopics(Integer userId);
 	
 	
 	/**

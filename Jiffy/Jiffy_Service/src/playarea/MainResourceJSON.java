@@ -13,6 +13,7 @@ import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.SClass;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Student;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Subject;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Subjects;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Topics;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.User;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Users;
 
@@ -59,6 +60,9 @@ public class MainResourceJSON {
 		
 		//Subjects sus = m.readValue(new File("res/playdata/resource_structs/subjects.json"), Subjects.class);
 		//System.out.println(sus);
+		
+		//Topics ts = m.readValue(new File("res/playdata/resource_structs/topics.json"), Topics.class);
+		//System.out.println(ts);
 		
 	}
 

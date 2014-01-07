@@ -34,6 +34,27 @@ public abstract class Resource {
 		return status;
 	}
 	
-	
+	/**
+	 * 
+	 * 
+	 * @param userId ID die überprüft werden soll
+	 * @param username Benutzername des zu Überprüfenden Benutzers
+	 * @return Benutzername gehört zur ID (true) oder Benutzername gehört nicht zur ID (false)
+	 */
+	protected boolean usernameBelongsToId(String username, Integer userId) {
+		
+		boolean status = false;
+		
+		try {
+			if(UserDBAuth.usernameBelongsToId(username, userId)) {
+				status = true;
+			}
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return status;
+	}
 	
 }

@@ -21,10 +21,10 @@ public class RestClient {
 	
 	public static void main(String[] args) throws Exception {
 		
-		String user = "Peter";
+		String user = "petrahumboldt";
 		String pass = "Christa";
 		
-		String uri = "/student/11";
+		String uri = "/user/4/topics";
 		
 		String mime = MediaType.APPLICATION_JSON;
 		

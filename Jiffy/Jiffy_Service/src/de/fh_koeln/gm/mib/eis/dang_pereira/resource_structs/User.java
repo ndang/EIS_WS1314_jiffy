@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-/* Ignoriere Eigenschaften, die im JSON-Dokuemnt existieren, aber nich in der Klasse */
+/* Ignoriere Eigenschaften, die im JSON-Dokument existieren, aber nicht in der Klasse */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
 

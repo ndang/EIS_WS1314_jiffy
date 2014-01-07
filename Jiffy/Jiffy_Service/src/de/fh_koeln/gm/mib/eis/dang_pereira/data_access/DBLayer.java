@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import de.fh_koeln.gm.mib.eis.dang_pereira.Config;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Id;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Student;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Topics;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.User;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Users;
 import de.fh_koeln.gm.mib.eis.dang_pereira.utils.DigestHelper;
@@ -97,6 +98,106 @@ public class DBLayer implements IDataLayer {
 		}
 		
 		return user;
+	}
+	
+	
+	@Override
+	public Topics getUserTopics(Integer userId) {
+
+		Topics topics = new Topics();
+		
+		ArrayList<String> topicsList = new ArrayList<String>();
+		
+		/* Topic mit seiner eigenen ID */
+		topicsList.add("official/"+userId);
+		topicsList.add("private/"+userId);
+		
+		
+		/* Je nachdem was für ein User-Typ (Guardian, Teacher) der Benutzer ist, müssen andere Topics vergeben werden */
+		try {
+			
+			String stmtStr = "SELECT user_id, type FROM User WHERE user_id = ?";
+			PreparedStatement stmt = con.prepareStatement(stmtStr);
+			stmt.setInt(1, userId);
+			ResultSet rs = stmt.executeQuery();
+		
+			rs.next();
+		
+			String userType = rs.getString(2);
+			
+			switch(userType.toLowerCase()) {
+				case "guardian":
+					
+					/* Der Erziehungsberechtigte muss ebenfalls die Topics seiner Kinder abonnieren wie auch das Chat-Topic (sofern Kontaktperson)*/
+					
+					String stmtGuardianStr = "SELECT language, is_contactperson FROM Guardian WHERE user_id = ?";
+					
+					PreparedStatement stmtGuardian = con.prepareStatement(stmtGuardianStr);
+					stmtGuardian.setInt(1, userId);
+					ResultSet rsGuardian = stmtGuardian.executeQuery();
+				
+					if(rsGuardian.next()) {
+						String language			= rsGuardian.getString(1);
+						Boolean isContactperson	= rsGuardian.getBoolean(2);
+						
+						/* Wenn der Benutzer eine Kontaktperson ist, abonniert er auch das Chat-Topic für seine Sprache */
+						if(isContactperson.booleanValue() && language != null) {
+							topicsList.add("chat/" + language);
+						}
+						
+						/* Die Topics seiner Kinder und das ihrer aktuellen Klasse (nach Jahr) abonnieren, wenn Kinder existieren */
+						
+						String stmtChildrenClassStr = "SELECT s.user_id AS student_id, svc.class_id " +
+								"FROM Student AS s " + 
+									"LEFT OUTER JOIN Student_visits_Class AS svc ON s.user_id = svc.student_user_id " + 
+								"WHERE (svc.class_id = " +
+											"(SELECT svc2.class_id " +
+												"FROM Student_visits_Class AS svc2 " + 
+												"LEFT JOIN Class AS c ON svc2.class_id = c.class_id " + 
+												"WHERE svc2.student_user_id = s.user_id ORDER BY c.year ASC LIMIT 1) " +
+										"OR svc.class_id IS NULL) " + 
+										"AND s.guardian_user_id = ?";
+			
+						PreparedStatement stmtChildrenClass = con.prepareStatement(stmtChildrenClassStr);
+						stmtChildrenClass.setInt(1, userId);
+						ResultSet rsChildrenClass = stmtChildrenClass.executeQuery();
+						
+						/* Alle Datensätze der eigenen Kinder durchgehen und die Topic-Namen zusammensetzen */
+						while(rsChildrenClass.next()) {
+							
+							/* Topic für das Kind; es besitzt kein privates Topic */
+							Integer studentId = rsChildrenClass.getInt(1);
+							topicsList.add("official/" + studentId);
+							
+							
+							Integer classId	= rsChildrenClass.getInt(2);
+							
+							/* Topics für die Klasse, die das Kind als letztes besucht (hat) */
+							if(!rsChildrenClass.wasNull()) {
+								topicsList.add("official/class_" + classId);
+								topicsList.add("private/class_" + classId);
+							}
+								
+						}
+					}
+					
+					break;
+				case "teacher":
+					
+					/* Die Lehrkraft bisher kein weiteres Topic; man kann es aber an dieser Stelle erweitern */
+					
+					break;
+			}
+			
+		} catch (SQLException e) {
+			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		
+		topics.setTopics(topicsList);
+		
+		return topics;
 	}
 	
 	
@@ -284,5 +385,6 @@ public class DBLayer implements IDataLayer {
 			e.printStackTrace();
 		}
 	}
+
 
 }

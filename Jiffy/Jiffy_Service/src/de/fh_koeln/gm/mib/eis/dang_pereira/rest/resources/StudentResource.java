@@ -18,6 +18,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import de.fh_koeln.gm.mib.eis.dang_pereira.data_access.DBLayer;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Student;
+import de.fh_koeln.gm.mib.eis.dang_pereira.utils.BasicAuthHelper;
 
 @Path("/student")
 public class StudentResource extends Resource {
@@ -71,6 +72,7 @@ public class StudentResource extends Resource {
 			return Response.status(401).build();
 		}
 		
+
 		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
 		DBLayer dbl = DBLayer.getInstance();
 		Student student = dbl.getStudent(userId); //dbl.getStudent(userId);

@@ -34,7 +34,7 @@ public class RestClientImagePUT {
 		String user = "Peter";
 		String pass = "Christa";
 		
-		String uri = "/user/3/image";
+		String uri = "/user/11/image";
 		
 		String mime = "image/jpeg"; //MediaType.APPLICATION_JSON;
 		
