@@ -159,7 +159,7 @@ CREATE  TABLE IF NOT EXISTS `jiffy`.`Schoolmessage` (
   `subject` VARCHAR(100) NULL ,
   `message` TEXT NULL ,
   `send_date` DATETIME NULL ,
-  `type` ENUM('NOTENNACHRICHT', 'INFORMATIONSMITTEILUNG') NULL ,
+  `type` ENUM('GRADEMSG', 'INFOMSG') NULL ,
   PRIMARY KEY (`school_message_id`) )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
@@ -217,7 +217,7 @@ CREATE  TABLE IF NOT EXISTS `jiffy`.`Guardianmessage` (
   `subject` VARCHAR(100) NULL ,
   `message` TEXT NULL ,
   `send_date` DATETIME NULL ,
-  `type` ENUM('FRAGENACHRICHT', 'ENTSCHULDIGUNGSNACHRICHT') NULL ,
+  `type` ENUM('QUESTIONMSG', 'EXCUSEMSG') NULL ,
   `to_teacher_user_id` INT NOT NULL ,
   `from_guardian_user_id` INT NOT NULL ,
   PRIMARY KEY (`guardian_message_id`) ,
