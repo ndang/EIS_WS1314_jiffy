@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import de.fh_koeln.gm.mib.eis.dang_pereira.Config;
+import de.fh_koeln.gm.mib.eis.dang_pereira.message_consumer.msg_struct.Message;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Destination;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Id;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Student;
@@ -321,12 +322,10 @@ public class DBLayer implements IDataLayer {
 				if(stmt.executeUpdate() > 0) {
 					newUserId = userId;
 					con.commit();
-				}
-				else {
+				} else {
 					con.rollback();
 				}
-			}
-			else {
+			} else {
 				con.rollback();
 			}
 			
@@ -336,10 +335,319 @@ public class DBLayer implements IDataLayer {
 			e.printStackTrace();
 		}
 		
+		
+		if(newUserId == null) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				System.err.println("Konnte Transaktion nicht zurückrollen!" + e.getMessage());
+			}
+		}
+		
 		return newUserId;
 	}
 	
 	
+	
+	@Override
+	public boolean placeSchoolGradeMsg(Message msg) {
+		
+		if(msg == null)
+			return false;
+		
+		boolean status = false;
+		
+		try {
+			
+			con.setAutoCommit(false);
+			
+			String subject = msg.getMsgSubject();
+			String msgText = msg.getMsgText();
+			String sendDate = msg.getMsgSendDate();
+			String type = "GRADEMSG";
+			
+			Integer msgId = placeSchoolMsg(subject, msgText, sendDate, type);
+			
+			if(msgId != null) {
+				
+				Integer gradeId = msg.getSchool().getGrade().getID();
+				
+				/* Einen Datensatz mit der selben ID in die Student-Tabelle einfügen */
+				String gradeStmtStr = "INSERT INTO Grademessage (school_message_id, approved, grade_id) " + 
+										"VALUES (?, 0, ?)";
+				PreparedStatement gradeStmt = con.prepareStatement(gradeStmtStr);
+				gradeStmt.setInt(1, msgId);
+				gradeStmt.setInt(2, gradeId);
+				
+				if(gradeStmt.executeUpdate() > 0) {
+					
+					Integer fromTeacherId = msg.getFromUserId().getID();
+					Integer toGuardianId = msg.getToUserId().getID();
+					
+					/* Zuordnung der Nachricht zu der Kommunikationspartner-Kombination */
+					String relationStmtStr = "INSERT INTO Teacher_to_Guardian (school_message_id, from_teacher_user_id, to_guardian_user_id) " +
+												"VALUES (?, ?, ?)";
+					PreparedStatement relationStmt = con.prepareStatement(relationStmtStr);
+					relationStmt.setInt(1, msgId);
+					relationStmt.setInt(2, fromTeacherId);
+					relationStmt.setInt(3, toGuardianId);
+					
+					if(relationStmt.executeUpdate() > 0) {
+						/* Die Nachricht wurde erfolgreich hinzugefügt! */
+						con.commit();
+						status = true;
+					}
+				} else {
+					con.rollback();
+				}
+			} else {
+				con.rollback();
+			}
+			
+		
+		} catch (SQLException e) {
+			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		
+		if(!status) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				System.err.println("Konnte Transaktion nicht zurückrollen!" + e.getMessage());
+			}
+		}
+		
+		return status;
+	}
+	
+	
+	@Override
+	public boolean placeSchoolInfoMsg(Message msg) {
+		
+		if(msg == null)
+			return false;
+		
+		boolean status = false;
+		
+		try {
+			
+			con.setAutoCommit(false);
+			
+			String subject = msg.getMsgSubject();
+			String msgText = msg.getMsgText();
+			String sendDate = msg.getMsgSendDate();
+			String type = "INFOMSG";
+			
+			Integer msgId = placeSchoolMsg(subject, msgText, sendDate, type);
+			
+			if(msgId != null) {
+				
+				Boolean classBroadcast	= msg.getSchool().getInfo().getClassBroadcast();
+				String descDate			= msg.getSchool().getInfo().getDescDate();
+				
+				/* Einen Datensatz mit der selben ID in die Student-Tabelle einfügen */
+				String gradeStmtStr = "INSERT INTO Informationnote (school_message_id, description_date) " + 
+										"VALUES (?, ?)";
+				PreparedStatement gradeStmt = con.prepareStatement(gradeStmtStr);
+				gradeStmt.setInt(1, msgId);
+				gradeStmt.setString(2, descDate);
+				
+				if(gradeStmt.executeUpdate() > 0) {
+					
+					/* Überprüfen, ob es sich um ein Klassenbroadcast handelt, oder einer Nachricht an einen gezielten Guardian */
+					if(!classBroadcast.booleanValue()) {
+						
+						/* Gezielten Guardian */
+						Integer fromTeacherId = null;
+						if(msg.getFromUserId() != null){
+							fromTeacherId = msg.getFromUserId().getID();
+						}
+						
+						Integer toGuardianId = null;
+						if(msg.getToUserId() != null){
+							toGuardianId = msg.getToUserId().getID();
+						} else {
+							System.err.println("Kein Zielbenutzer angegeben!");
+							con.rollback();
+							return false;
+						}
+						
+						/* Zuordnung der Nachricht zu der Kommunikationspartner-Kombination */
+						String relationStmtStr = "INSERT INTO Teacher_to_Guardian (school_message_id, from_teacher_user_id, to_guardian_user_id) " +
+													"VALUES (?, ?, ?)";
+						PreparedStatement relationStmt = con.prepareStatement(relationStmtStr);
+						relationStmt.setInt(1, msgId);
+						relationStmt.setInt(2, fromTeacherId);
+						relationStmt.setInt(3, toGuardianId);
+						
+						if(relationStmt.executeUpdate() > 0) {
+							
+							/* Die Nachricht wurde erfolgreich hinzugefügt! */
+							con.commit();
+							status = true;
+						}
+					} else {
+						
+						/* Klassenbroadcast; einfachheitshalber kein Datensatz in der Beziehungstabelle; evtl. aber später mal nötig */
+						con.commit();
+						status = true;
+					}
+				} else {
+					con.rollback();
+				}
+			} else {
+				con.rollback();
+			}
+			
+		
+		} catch (SQLException e) {
+			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		
+		if(!status) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				System.err.println("Konnte Transaktion nicht zurückrollen!" + e.getMessage());
+			}
+		}
+		
+		return status;
+	}
+	
+	
+	@Override
+	public boolean placeGuardianMsg(Message msg) {
+		
+		if(msg == null)
+			return false;
+		
+		boolean status = false;
+		
+		try {
+			
+			con.setAutoCommit(false);
+			
+			String subject			= msg.getMsgSubject();
+			String msgText			= msg.getMsgText();
+			String sendDate			= msg.getMsgSendDate();
+			String type				= null;
+			Integer toTeacherId		= msg.getToUserId().getID();
+			Integer fromGuardianId	= msg.getFromUserId().getID();
+			
+			
+			Integer msgId = placeGuardianMsg(subject, msgText, sendDate, type, toTeacherId, fromGuardianId);
+			
+			if(msgId != null) {
+				
+				/* Normale Erziehungsberechtigtennachricht wurde erfolgreich eingefügt */
+				con.commit();
+				status = true;
+					
+			} else {
+				con.rollback();
+			}
+			
+		} catch (SQLException e) {
+			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		
+		if(!status) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				System.err.println("Konnte Transaktion nicht zurückrollen!" + e.getMessage());
+			}
+		}
+		
+		return status;
+		
+	}
+	
+	
+	
+	@Override
+	public boolean placeGuardianExcuseMsg(Message msg) {
+		
+		if(msg == null)
+			return false;
+		
+		boolean status = false;
+		
+		try {
+			
+			con.setAutoCommit(false);
+			
+			String subject			= msg.getMsgSubject();
+			String msgText			= msg.getMsgText();
+			String sendDate			= msg.getMsgSendDate();
+			String type				= "EXCUSEMSG";
+			Integer toTeacherId		= msg.getToUserId().getID();
+			Integer fromGuardianId	= msg.getFromUserId().getID();
+			
+			
+			Integer msgId = placeGuardianMsg(subject, msgText, sendDate, type, toTeacherId, fromGuardianId);
+			
+			if(msgId != null) {
+				
+				String dateFrom	= msg.getGuardian().getExcuse().getDateFrom();
+				String dateTo	= msg.getGuardian().getExcuse().getDateTo();
+				
+				/* Zuordnung der Nachricht zu der Kommunikationspartner-Kombination */
+				String relationStmtStr = "INSERT INTO Excusemessage (guardian_message_id, date_from, date_to, approved) " +
+											"VALUES (?, ?, ?, 0)";
+				PreparedStatement relationStmt = con.prepareStatement(relationStmtStr);
+				relationStmt.setInt(1, msgId);
+				relationStmt.setString(2, dateFrom);
+				relationStmt.setString(3, dateTo);
+				
+				if(relationStmt.executeUpdate() > 0) {
+					
+					/* Die Entschuldigungsnachricht wurde erfolgreich hinzugefügt! */
+					con.commit();
+					status = true;
+				}
+					
+			} else {
+				con.rollback();
+			}
+			
+		} catch (SQLException e) {
+			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		
+		if(!status) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				System.err.println("Konnte Transaktion nicht zurückrollen!" + e.getMessage());
+			}
+		}
+		
+		return status;
+		
+	}
+	
+	
+	
+	/**
+	 * User-Datensatz einfügen (in Obertabelle)
+	 * 
+	 * @param name Name des Users
+	 * @param username Benutezrname des Users
+	 * @param password Password des Users
+	 * @param type User-Type des Benutzers
+	 * @param gender Geschlecht des Users
+	 * @return Dem Benutzer vergebene ID
+	 */
 	private Integer putUser(String name, String username, String password, String type, String gender) {
 		
 		Integer userId = null;
@@ -380,6 +688,90 @@ public class DBLayer implements IDataLayer {
 		return userId;
 	}
 	
+	
+	/**
+	 * Schulnachrichtdatensatz einfügen (in Obertabelle)
+	 * 
+	 * @param subject Betreff
+	 * @param msgText Nachrichtentext
+	 * @param sendDate ABsendedatum
+	 * @param type Nachrichtentyp
+	 * @return Id, die dem neuen Nachrichtendatensatz vergeben wurde
+	 */
+	private Integer placeSchoolMsg(String subject, String msgText, String sendDate, String type) {
+		
+		Integer msgId = null;
+		
+		try {
+			
+			String stmtStr = "INSERT INTO Schoolmessage (subject, message, send_date, type) VALUES (?, ?, ?, ?)";
+			PreparedStatement stmt = con.prepareStatement(stmtStr, new String[]{"school_message_id"});
+			stmt.setString(1, subject);
+			stmt.setString(2, msgText);
+			stmt.setString(3, sendDate);
+			stmt.setString(4, type);
+			
+			if(stmt.executeUpdate() > 0) {
+				ResultSet gk = stmt.getGeneratedKeys();
+				
+				if(gk != null && gk.next()) {
+					msgId = gk.getInt(1);
+				}
+				
+			}
+			
+		
+		} catch (SQLException e) {
+			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return msgId;
+	}
+	
+	
+	/**
+	 * Erzeihungsberechtigtennachrichtdatensatz einfügen (in Obertabelle)
+	 * 
+	 * @param subject Betreff
+	 * @param msgText Nachrichtentext
+	 * @param sendDate Absendedatum
+	 * @param type Nachrichtentyp
+	 * @param to_t_user_id Id des Lehrers (Empfänger)
+	 * @param from_g_user_id Id des Erziehungsberechtigten (Absender)
+	 * @return Id, die dem neuen Nachrichtendatensatz vergeben wurde
+	 */
+	private Integer placeGuardianMsg(String subject, String msgText, String sendDate, String type, Integer toTUserId, Integer fromGUserId) {
+		
+		Integer msgId = null;
+		
+		try {
+			
+			String stmtStr = "INSERT INTO Guardianmessage (subject, message, send_date, type, to_teacher_user_id, from_guardian_user_id) VALUES (?, ?, ?, ?, ?, ?)";
+			PreparedStatement stmt = con.prepareStatement(stmtStr, new String[]{"guardian_message_id"});
+			stmt.setString(1, subject);
+			stmt.setString(2, msgText);
+			stmt.setString(3, sendDate);
+			stmt.setString(4, type);
+			stmt.setInt(5, toTUserId);
+			stmt.setInt(6, fromGUserId);
+			
+			if(stmt.executeUpdate() > 0) {
+				ResultSet gk = stmt.getGeneratedKeys();
+				
+				if(gk != null && gk.next()) {
+					msgId = gk.getInt(1);
+				}
+				
+			}
+		
+		} catch (SQLException e) {
+			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return msgId;
+	}
 	
 	
 	public void finalize() {

@@ -34,6 +34,13 @@ import de.fh_koeln.gm.mib.eis.dang_pereira.utils.BasicAuthHelper;
 @Path("/user")
 public class UserResource extends Resource {
 
+	public UserResource() {
+		/* 
+		 * Konstruktor der Vaterklasse aufrufen, um Zugriff auf das DataLayer-Objekt und den Jackson ObjectMapper zu erhalten
+		 */
+		super();
+	}
+	
 	@GET
 	@Path("/{user_id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -45,8 +52,7 @@ public class UserResource extends Resource {
 		
 		
 		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
-		DBLayer dbl = DBLayer.getInstance();
-		User user = dbl.getUser(userId);
+		User user = this.dbl.getUser(userId);
 		
 		String userStr = null;
 		
@@ -85,8 +91,7 @@ public class UserResource extends Resource {
 		
 		
 		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
-		DBLayer dbl = DBLayer.getInstance();
-		Topics topics = dbl.getUserTopics(userId);
+		Topics topics = this.dbl.getUserTopics(userId);
 		
 		String topicsStr = null;
 		

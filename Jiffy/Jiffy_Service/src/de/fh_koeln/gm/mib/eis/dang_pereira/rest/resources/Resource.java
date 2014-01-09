@@ -4,12 +4,21 @@ import javax.ws.rs.core.HttpHeaders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.fh_koeln.gm.mib.eis.dang_pereira.data_access.DBLayer;
+import de.fh_koeln.gm.mib.eis.dang_pereira.data_access.IDataLayer;
 import de.fh_koeln.gm.mib.eis.dang_pereira.utils.BasicAuthHelper;
 import de.fh_koeln.gm.mib.eis.dang_pereira.utils.UserDBAuth;
 
 public abstract class Resource {
 	
-	protected ObjectMapper jmapper = new ObjectMapper();
+	protected IDataLayer dbl;
+	protected ObjectMapper jmapper;
+	
+	
+	public Resource() {
+		this.dbl = DBLayer.getInstance();
+		this.jmapper = new ObjectMapper();
+	}
 	
 	
 	/**

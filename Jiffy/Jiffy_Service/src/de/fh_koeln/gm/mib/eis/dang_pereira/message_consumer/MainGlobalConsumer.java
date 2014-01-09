@@ -28,13 +28,18 @@ public class MainGlobalConsumer {
 		String	broker_user = cfg.broker.user;
 		String	broker_pass = cfg.broker.pass;
 
+		boolean connected = false;
 		
 		try {
+			
+			System.out.print("Consumer startet...  ");
+			
 			mqttClient = new MqttClient(broker_host + ":" + broker_port, "Jiffy Service Consumer", new MemoryPersistence());
 			
+			/* Alle MQTT relevanten Konfigurationseinstellungen vornehmen */
 			MqttConnectOptions mqttOpts = new MqttConnectOptions();
-			mqttOpts.setUserName(broker_user);
-			mqttOpts.setPassword(broker_pass.toCharArray());
+			mqttOpts.setUserName(broker_user); /* Standard: jiffy_service */
+			mqttOpts.setPassword(broker_pass.toCharArray()); /* Standard: 12345 */
 			mqttOpts.setCleanSession(false);
 			SocketFactory sf = OwnSSLSocketFactory.getSocketFactory(
 											new FileInputStream(cfg.ssl.path_ks), cfg.ssl.pass_ks,
@@ -53,11 +58,22 @@ public class MainGlobalConsumer {
 			 */
 			mqttClient.setCallback(new EventCallback());
 			
+			connected = true;
+			
 		} catch (MqttException e) {
-			System.err.println("Connection failed!");
-			System.err.println(e.getMessage());
-		} catch  (Exception e) {
-			System.err.println("SSLSocketFailure!");
+			System.out.println();
+			System.err.println("Verbindung konnte nicht aufgebaut werden: " + e.getMessage());
+		} catch (Exception e) {
+			System.out.println();
+			System.err.println("Fehler bei der Initialisierung des SSL-Kontextes: " + e.getMessage());
+		}
+		
+		if(connected) {
+			System.out.println("erfolgreich gestartet!");
+		}
+		else {
+			System.err.println("Consumer konnte nicht gestartet werden!");
+			System.exit(1);
 		}
 	}
 	

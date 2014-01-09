@@ -10,12 +10,20 @@ import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import de.fh_koeln.gm.mib.eis.dang_pereira.data_access.DBLayer;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Users;
 
 @Path("/users")
 public class UsersResource extends Resource {
-
+	
+	
+	public UsersResource() {
+		/* 
+		 * Konstruktor der Vaterklasse aufrufen, um Zugriff auf das DataLayer-Objekt und den Jackson ObjectMapper zu erhalten
+		 */
+		super();
+	}
+	
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUser(@Context HttpHeaders headers) {
@@ -25,8 +33,7 @@ public class UsersResource extends Resource {
 		}
 		
 		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
-		DBLayer dbl = DBLayer.getInstance();
-		Users users = dbl.getUsers();
+		Users users = this.dbl.getUsers();
 		
 		String usersStr = null;
 		

@@ -28,6 +28,10 @@
 		
         "info": {
             "class_broadcast": true,
+            "class": {
+                "id": 1,
+                "uri": "/class/1"
+            },
             "desc_date": "YYYY-MM-DD HH:MM:SS"
         }
     },

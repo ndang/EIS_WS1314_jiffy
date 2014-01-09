@@ -18,11 +18,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import de.fh_koeln.gm.mib.eis.dang_pereira.data_access.DBLayer;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Student;
-import de.fh_koeln.gm.mib.eis.dang_pereira.utils.BasicAuthHelper;
 
 @Path("/student")
 public class StudentResource extends Resource {
 
+	public StudentResource() {
+		/* 
+		 * Konstruktor der Vaterklasse aufrufen, um Zugriff auf das DataLayer-Objekt und den Jackson ObjectMapper zu erhalten
+		 */
+		super();
+	}
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response postStudent(@Context HttpHeaders headers, String body) {
@@ -50,8 +56,7 @@ public class StudentResource extends Resource {
 		
 		
 		/* Daten weiter an den DB-Layer geben, damit dieser sie in die DB schreibt */
-		DBLayer dbl = DBLayer.getInstance();
-		Integer userId = dbl.postStudent(student, givenPass);
+		Integer userId = this.dbl.postStudent(student, givenPass);
 		
 		/* Wenn Daten zurückgegeben wurden, dann sollen sie ausgeliefert werden */
 		if(userId != null){
@@ -74,8 +79,7 @@ public class StudentResource extends Resource {
 		
 
 		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
-		DBLayer dbl = DBLayer.getInstance();
-		Student student = dbl.getStudent(userId); //dbl.getStudent(userId);
+		Student student = this.dbl.getStudent(userId); //dbl.getStudent(userId);
 		
 		String studentStr = null;
 		

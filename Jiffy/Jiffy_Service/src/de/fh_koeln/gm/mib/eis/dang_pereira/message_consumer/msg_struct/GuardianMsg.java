@@ -12,6 +12,13 @@ public class GuardianMsg {
 	public ExcuseMsg excuse;
 	
 	
+	public GuardianMsg() {}
+	
+	public GuardianMsg(String msg_subtype, ExcuseMsg excuse) {
+		this.msg_subtype = msg_subtype;
+		this.excuse = excuse;
+	}
+	
 	
 	@JsonGetter("msg_subtype")
 	public String getMsgSubType() {

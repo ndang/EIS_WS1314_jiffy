@@ -12,6 +12,14 @@ public class ExcuseMsg {
 	public String date_to;
 	
 	
+	public ExcuseMsg() {}
+	
+	public ExcuseMsg(String date_from, String date_to) {
+		this.date_from = date_from;
+		this.date_to = date_to;
+	}
+	
+	
 	@JsonGetter("date_from")
 	public String getDateFrom() {
 		return this.date_from;

@@ -1,5 +1,6 @@
 package de.fh_koeln.gm.mib.eis.dang_pereira.data_access;
 
+import de.fh_koeln.gm.mib.eis.dang_pereira.message_consumer.msg_struct.Message;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Student;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Topics;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.User;
@@ -57,4 +58,44 @@ public interface IDataLayer {
 	public Integer postStudent(Student student, String givenPass);
 	
 
+	
+	
+	/*  #####   Messages   #####  */
+	
+	/**
+	 * Benotungsnachricht in die Datenbank einpflegen
+	 * 
+	 * @param msg JSON-Dokument als Objekt
+	 * @return Erolfreich eingepfleg oder nicht
+	 */
+	public boolean placeSchoolGradeMsg(Message msg);
+	
+	
+	/**
+	 * Infonachricht in die Datenbank einpflegen
+	 * 
+	 * @param msg JSON-Dokument als Objekt
+	 * @return Erolfreich eingepfleg oder nicht
+	 */
+	public boolean placeSchoolInfoMsg(Message msg);
+	
+	
+	/**
+	 * Normale Erziehungsberechtigtennachricht in die Datenbank einpflegen
+	 * 
+	 * @param msg JSON-Dokument als Objekt
+	 * @return Erolfreich eingepfleg oder nicht
+	 */
+	public boolean placeGuardianMsg(Message msg);
+	
+	
+	/**
+	 * Entschuldigungsnachricht in die Datenbank einpflegen
+	 * 
+	 * @param msg JSON-Dokument als Objekt
+	 * @return Erolfreich eingepfleg oder nicht
+	 */
+	public boolean placeGuardianExcuseMsg(Message msg);
+	
+	
 }

@@ -15,6 +15,15 @@ public class SchoolMsg {
 	public InfoMsg info;
 	
 	
+	public SchoolMsg() { }
+	
+	public SchoolMsg(String msg_subtype, Id grade, InfoMsg info) {
+		this.msg_subtype	= msg_subtype;
+		this.grade			= grade;
+		this.info			= info;
+	}
+	
+	
 	@JsonGetter("msg_subtype")
 	public String getMsgSubType() {
 		return this.msg_subtype;
@@ -26,13 +35,24 @@ public class SchoolMsg {
 	}
 	
 	
+	@JsonGetter("grade")
+	public Id getGrade() {
+		return this.grade;
+	}
+
+	@JsonSetter("grade")
+	public void setGrade(Id grade) {
+		this.grade = grade;
+	}
+	
+	
 	@JsonGetter("info")
 	public InfoMsg getInfo() {
 		return this.info;
 	}
 
 	@JsonSetter("info")
-	public void setinfo(InfoMsg info) {
+	public void setInfo(InfoMsg info) {
 		this.info = info;
 	}
 	
