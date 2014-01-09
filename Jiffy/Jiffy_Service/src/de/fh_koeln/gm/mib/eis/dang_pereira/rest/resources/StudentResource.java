@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.sun.jersey.core.util.Base64;
 
 import de.fh_koeln.gm.mib.eis.dang_pereira.data_access.DBLayer;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Student;
@@ -53,6 +54,9 @@ public class StudentResource extends Resource {
 		
 		if(list != null && list.size() == 1)
 			givenPass = list.get(0);
+		
+		/* Da das Passwort im Base64-Format vorliegt, muss es vorher dekodiert werden */
+		givenPass = Base64.base64Decode(givenPass);
 		
 		
 		/* Daten weiter an den DB-Layer geben, damit dieser sie in die DB schreibt */
