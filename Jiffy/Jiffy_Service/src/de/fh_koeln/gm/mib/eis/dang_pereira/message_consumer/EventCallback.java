@@ -90,9 +90,9 @@ public class EventCallback implements MqttCallback {
 				/* msgSubType in Kleinbuchstaben */
 				String lcMsgSubType = msgSubType.toLowerCase();
 				
-				if(lcMsgSubType == "grade") {
+				if(lcMsgSubType == "grade" || lcMsgSubType == "excuse_ack") {
 					
-					/* Nur TEACHER an GUARDIAN möglich, da sich auf eine Note bezogen wird */
+					/* Nur TEACHER an GUARDIAN möglich, da sich auf eine Note oder auf eine Enschuldigungsnachricht bezogen wird */
 					if(!UserDBAuth.comPartnersAreOfType(fromUserId.getID(), "TEACHER", toUserId.getID(), "GUARDIAN")) {
 						System.err.println("Absender/Empfänger-Kombination ist nicht erlaubt!");
 						return;
@@ -127,6 +127,7 @@ public class EventCallback implements MqttCallback {
 						}
 						
 						break;
+						
 					case "info":
 						/* Normale Infonachricht */
 						
@@ -145,6 +146,26 @@ public class EventCallback implements MqttCallback {
 						}
 						
 						break;
+					
+					case "excuse_ack":
+						/* Entschuldigung zur Kenntnis nehmen */
+						
+						if(msg.getSchool().getExcuseAck() == null) {
+							System.err.println("SchoolMsg/ExcuseAck-Body ist nicht gegeben!");
+							return;
+						}
+						
+						
+						dbl = DBLayer.getInstance();
+						
+						if(dbl.approveExcuseMsg(msg)){
+							System.out.println("Entschuldigungsnachricht wurde zur Kenntnis genommen!");
+						} else {
+							System.err.println("Entschuldigungsnachricht konnte nicht zur Kenntnis genommen werden!");
+						}
+						
+						break;
+						
 					default:
 						System.err.println("Unbekannter Unternachrichtentyp");
 					
@@ -210,6 +231,24 @@ public class EventCallback implements MqttCallback {
 							}
 							
 							break;
+						
+						case "grade_ack":
+							/* Benotungsnachricht zur Kenntnis nehmen */
+							
+							if(msg.getGuardian().getGradeAck() == null) {
+								System.err.println("GuardianMsg/GradeAck-Body ist nicht gegeben!");
+								return;
+							}
+							
+							dbl = DBLayer.getInstance();
+							
+							if(dbl.approveStudentGrade(msg)){
+								System.out.println("Benotungsnachricht wurde erfolgreich zur Kenntnis genommen!");
+							} else {
+								System.err.println("Benotungsnachricht konnte nicht zur Kenntnis genommen werden!");
+							}
+							break;
+						
 						default:
 							System.err.println("Unbekannter Unternachrichtentyp");
 					}

@@ -14,13 +14,17 @@ public class SchoolMsg {
 	@JsonProperty("info")
 	public InfoMsg info;
 	
+	@JsonProperty("excuse_ack")
+	public ExcuseMsg excuse_ack;
+	
 	
 	public SchoolMsg() { }
 	
-	public SchoolMsg(String msg_subtype, Id grade, InfoMsg info) {
+	public SchoolMsg(String msg_subtype, Id grade, InfoMsg info, ExcuseMsg excuse_ack) {
 		this.msg_subtype	= msg_subtype;
 		this.grade			= grade;
 		this.info			= info;
+		this.excuse_ack		= excuse_ack;
 	}
 	
 	
@@ -57,7 +61,18 @@ public class SchoolMsg {
 	}
 	
 	
+	@JsonGetter("excuse_ack")
+	public ExcuseMsg getExcuseAck() {
+		return this.excuse_ack;
+	}
+
+	@JsonSetter("excuse_ack")
+	public void setExcuseAck(ExcuseMsg excuse_ack) {
+		this.excuse_ack = excuse_ack;
+	}
+	
+	
 	public String toString() {
-		return "{ \"msg_subtype\": " + this.msg_subtype + ", \"grade\": " + this.grade + ", \"info\": " + this.info + " }";
+		return "{ \"msg_subtype\": " + this.msg_subtype + ", \"grade\": " + this.grade + ", \"info\": " + this.info + ", \"excuse_ack\": " + this.excuse_ack + " }";
 	}
 }

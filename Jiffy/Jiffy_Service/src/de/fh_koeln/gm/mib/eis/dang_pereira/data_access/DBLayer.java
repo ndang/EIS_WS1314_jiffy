@@ -638,6 +638,121 @@ public class DBLayer implements IDataLayer {
 	
 	
 	
+	@Override
+	public boolean approveStudentGrade(Message msg) {
+		
+		if(msg == null)
+			return false;
+		
+		boolean status = false;
+		
+		
+		try {
+			
+			con.setAutoCommit(false);
+			
+			Integer toTeacherId		= msg.getToUserId().getID();
+			Integer fromGuardianId	= msg.getFromUserId().getID();
+			Integer gradeId			= msg.getGuardian().getGradeAck().getID();
+			
+			/* Benotungsnachricht zur Kenntnis setzen (approved = true); mit zusätzlicher Überprüfung bestehender TEACHER zu GUARDIAN-Beziehung und Grade-ID */
+			String stmtStr = "UPDATE (Grademessage AS gm LEFT JOIN Schoolmessage AS sm ON gm.school_message_id = sm.school_message_id) " + 
+											"LEFT JOIN Teacher_to_Guardian AS ttg ON ttg.school_message_id = gm.school_message_id " +
+										"SET gm.approved = 1 " +
+										"WHERE ttg.from_teacher_user_id = ? AND ttg.to_guardian_user_id = ? AND gm.grade_id = ?";
+			
+			PreparedStatement stmt = con.prepareStatement(stmtStr);
+			stmt.setInt(1, toTeacherId);
+			stmt.setInt(2, fromGuardianId);
+			stmt.setInt(3, gradeId);
+			
+			if(stmt.executeUpdate() > 0) {
+				
+				/* Benotungsnachricht wurde zur Kenntnis genommen! */
+				con.commit();
+				status = true;
+			}
+					
+		} catch (SQLException e) {
+			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		
+		if(!status) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				System.err.println("Konnte Transaktion nicht zurückrollen!" + e.getMessage());
+			}
+		}
+		
+		
+		return status;
+	}
+	
+	
+	@Override
+	public boolean approveExcuseMsg(Message msg) {
+		
+		if(msg == null)
+			return false;
+		
+		boolean status = false;
+		
+		
+		try {
+			
+			con.setAutoCommit(false);
+			
+			Integer fromTeacherId	= msg.getFromUserId().getID();
+			Integer toGuardianId	= msg.getToUserId().getID();
+			String dateFrom			= msg.getSchool().getExcuseAck().getDateFrom();
+			String dateTo			= msg.getSchool().getExcuseAck().getDateTo();
+			
+			/* Akzeptieren einer Entschuldigung (approved = true); nur wenn die gegebenen Zeiten übereinstimmen */
+			String stmtStr = "UPDATE Excusemessage AS em LEFT JOIN Guardianmessage AS gm ON em.guardian_message_id = gm.guardian_message_id " +
+							"SET em.approved = 1 " +
+							"WHERE gm.to_teacher_user_id = ? AND gm.from_guardian_user_id = ? AND em.date_from = ? AND em.date_to = ?";
+		
+			PreparedStatement stmt = con.prepareStatement(stmtStr);
+			stmt.setInt(1, fromTeacherId);
+			stmt.setInt(2, toGuardianId);
+			stmt.setString(3, dateFrom);
+			stmt.setString(4, dateTo);
+				
+			
+			if(stmt.executeUpdate() > 0) {
+				
+				/* Entschuldigung wurde zur Kenntnis genommen und akzeptiert! */
+				con.commit();
+				status = true;
+			}
+					
+		} catch (SQLException e) {
+			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		
+		if(!status) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				System.err.println("Konnte Transaktion nicht zurückrollen!" + e.getMessage());
+			}
+		}
+		
+		
+		return status;
+	}
+	
+	
+	
+	/*  ##############  helper  ##############  */
+	
+	
+	
 	/**
 	 * User-Datensatz einfügen (in Obertabelle)
 	 * 

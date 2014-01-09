@@ -66,7 +66,7 @@ public interface IDataLayer {
 	 * Benotungsnachricht in die Datenbank einpflegen
 	 * 
 	 * @param msg JSON-Dokument als Objekt
-	 * @return Erolfreich eingepfleg oder nicht
+	 * @return Erolgreich eingepflegt oder nicht
 	 */
 	public boolean placeSchoolGradeMsg(Message msg);
 	
@@ -75,7 +75,7 @@ public interface IDataLayer {
 	 * Infonachricht in die Datenbank einpflegen
 	 * 
 	 * @param msg JSON-Dokument als Objekt
-	 * @return Erolfreich eingepfleg oder nicht
+	 * @return Erolgreich eingepflegt oder nicht
 	 */
 	public boolean placeSchoolInfoMsg(Message msg);
 	
@@ -84,7 +84,7 @@ public interface IDataLayer {
 	 * Normale Erziehungsberechtigtennachricht in die Datenbank einpflegen
 	 * 
 	 * @param msg JSON-Dokument als Objekt
-	 * @return Erolfreich eingepfleg oder nicht
+	 * @return Erolgreich eingepflegt oder nicht
 	 */
 	public boolean placeGuardianMsg(Message msg);
 	
@@ -93,9 +93,25 @@ public interface IDataLayer {
 	 * Entschuldigungsnachricht in die Datenbank einpflegen
 	 * 
 	 * @param msg JSON-Dokument als Objekt
-	 * @return Erolfreich eingepfleg oder nicht
+	 * @return Erolgreich eingepflegt oder nicht
 	 */
 	public boolean placeGuardianExcuseMsg(Message msg);
 	
+	
+	/**
+	 * Benotung akzeptieren
+	 * 
+	 * @param msg JSON-Dokument als Objekt
+	 * @return Erolgreich eingepflegt oder nicht
+	 */
+	public boolean approveStudentGrade(Message msg);
+	
+	
+	/**
+	 * 
+	 * @param msg
+	 * @return
+	 */
+	public boolean approveExcuseMsg(Message msg);
 	
 }

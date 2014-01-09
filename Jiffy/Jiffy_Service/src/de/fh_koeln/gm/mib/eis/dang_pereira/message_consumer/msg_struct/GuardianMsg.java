@@ -11,12 +11,16 @@ public class GuardianMsg {
 	@JsonProperty("excuse")
 	public ExcuseMsg excuse;
 	
+	@JsonProperty("grade_ack")
+	public Id grade_ack;
+	
 	
 	public GuardianMsg() {}
 	
-	public GuardianMsg(String msg_subtype, ExcuseMsg excuse) {
-		this.msg_subtype = msg_subtype;
-		this.excuse = excuse;
+	public GuardianMsg(String msg_subtype, ExcuseMsg excuse, Id grade_ack) {
+		this.msg_subtype	= msg_subtype;
+		this.excuse			= excuse;
+		this.grade_ack		= grade_ack;
 	}
 	
 	
@@ -42,7 +46,18 @@ public class GuardianMsg {
 	}
 	
 	
+	@JsonGetter("grade_ack")
+	public Id getGradeAck() {
+		return this.grade_ack;
+	}
+	
+	@JsonSetter("grade_ack")
+	public void setGradeAck(Id grade_ack) {
+		this.grade_ack = grade_ack;
+	}
+	
+	
 	public String toString() {
-		return "{ \"msg_subtype\": " + this.msg_subtype + ", \"excuse\": " + this.excuse + " }";
+		return "{ \"msg_subtype\": " + this.msg_subtype + ", \"excuse\": " + this.excuse + ", \"grade_ack\": " + this.grade_ack + " }";
 	}
 }
