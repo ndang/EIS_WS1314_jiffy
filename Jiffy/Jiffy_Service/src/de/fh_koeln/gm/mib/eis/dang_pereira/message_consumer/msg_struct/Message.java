@@ -15,11 +15,14 @@ public class Message {
 	@JsonProperty("msg_type")
 	public String msg_type;
 	
-	@JsonProperty("msg_id")
-	public Integer msg_id;
+	@JsonProperty("msg_uuid")
+	public String msg_uuid;
 	
-	@JsonProperty("msg_ref")
-	public Integer msg_ref;
+	@JsonProperty("msg_ref_uuid")
+	public String msg_ref_uuid;
+	
+	@JsonProperty("msg_relevance")
+	public Integer msg_relevance;
 	
 	@JsonProperty("msg_subject")
 	public String msg_subject;
@@ -49,14 +52,14 @@ public class Message {
 	public Message() {}
 	
 	
-	public Message(	String		msg_type,		Integer		msg_id,		Integer		msg_ref,
+	public Message(	String		msg_type,		String		msg_uuid,	String		msg_ref,
 					String		msg_subject,	String		msg_text,	String		msg_send_date,
 					Id			from_user_id,	Id			to_user_id, Id			student_id,
 					SchoolMsg	school,			GuardianMsg guardian) {
 		
 		this.msg_type		= msg_type;
-		this.msg_id			= msg_id;
-		this.msg_ref		= msg_ref;
+		this.msg_uuid		= msg_uuid;
+		this.msg_ref_uuid	= msg_ref;
 		this.msg_subject	= msg_subject;
 		this.msg_text		= msg_text;
 		this.msg_send_date	= msg_send_date;
@@ -67,16 +70,6 @@ public class Message {
 		this.guardian		= guardian;
 	}
 	
-	
-	@JsonGetter("msg_id")
-	public Integer getMsgID() {
-		return this.msg_id;
-	}
-
-	@JsonSetter("msg_id")
-	public void setMsgID(Integer msg_id) {
-		this.msg_id = msg_id;
-	}
 	
 	
 	@JsonGetter("msg_type")
@@ -90,14 +83,36 @@ public class Message {
 	}
 	
 	
-	@JsonGetter("msg_ref")
-	public Integer getMsgRef() {
-		return this.msg_ref;
+	@JsonGetter("msg_uuid")
+	public String getMsgUUID() {
+		return this.msg_uuid;
 	}
 
-	@JsonSetter("msg_ref")
-	public void setMsgRef(Integer msg_ref) {
-		this.msg_ref = msg_ref;
+	@JsonSetter("msg_uuid")
+	public void setMsgUUID(String msg_uuid) {
+		this.msg_uuid = msg_uuid;
+	}
+	
+	
+	@JsonGetter("msg_relevance")
+	public Integer getMsgRelevance() {
+		return this.msg_relevance;
+	}
+
+	@JsonSetter("msg_relevance")
+	public void setMsgRelevance(Integer msg_relevance) {
+		this.msg_relevance = msg_relevance;
+	}
+	
+	
+	@JsonGetter("msg_ref_uuid")
+	public String getMsgRefUUID() {
+		return this.msg_ref_uuid;
+	}
+
+	@JsonSetter("msg_ref_uuid")
+	public void setMsgRefUUID(String msg_ref_uuid) {
+		this.msg_ref_uuid = msg_ref_uuid;
 	}
 	
 	
@@ -191,8 +206,9 @@ public class Message {
 
 	public String toString() {
 		return "{\t\"msg_type\": " + this.msg_type + ",\n\t" +
-				"\"msg_id\": "+ this.msg_id + "\n\t" +
-				"\"msg_ref\": "+ this.msg_ref + "\n\t" +
+				"\"msg_id\": "+ this.msg_uuid + "\n\t" +
+				"\"msg_ref\": "+ this.msg_ref_uuid + "\n\t" +
+				"\"msg_ref\": "+ this.msg_relevance + "\n\t" +
 				"\"msg_subject\": "+ this.msg_subject + "\n\t" +
 				"\"msg_text\": "+ this.msg_text + "\n\t" +
 				"\"msg_send_date\": "+ this.msg_send_date + "\n\t" +

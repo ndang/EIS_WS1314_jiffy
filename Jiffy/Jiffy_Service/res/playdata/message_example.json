@@ -1,8 +1,9 @@
 
 {
     "msg_type": "school|guardian|null(kein String)",
-    "msg_id": 2,
-    "msg_ref": 1,
+    "msg_uuid": "<unique>",
+    "msg_ref_uuid": "<unique>",
+    "msg_relevance": 1,
     "msg_subject": "Betreff",
     "msg_text": "Nachrichtentext",
     "msg_send_date": "YYYY-MM-DD HH:MM:SS",
@@ -20,7 +21,7 @@
     },
     
     "school": {
-        "msg_subtype": "grade|info|null(kein_String)",
+        "msg_subtype": "grade|info|excuse_ack|null(kein_String)",
         "grade": {
             "id":  1,
             "uri": "/student/3/grade/1"
@@ -33,14 +34,25 @@
                 "uri": "/class/1"
             },
             "desc_date": "YYYY-MM-DD HH:MM:SS"
+        },
+        
+        "excuse_ack": {
+            "date_from": "YYYY-MM-DD HH:MM:SS",
+            "date_to": "YYYY-MM-DD HH:MM:SS"
         }
     },
     
     "guardian": {
-        "msg_subtype": "excuse|null(kein String)",
+        "msg_subtype": "excuse|grade_ack|null(kein String)",
         "excuse": {
             "date_from": "YYYY-MM-DD HH:MM:SS",
             "date_to": "YYYY-MM-DD HH:MM:SS"
+        },
+        
+        "grade_ack": {
+            "id":  1,
+            "uri": "/student/3/grade/1"
         }
     }
 }
+
