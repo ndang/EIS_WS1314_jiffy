@@ -286,7 +286,7 @@ COLLATE = utf8_general_ci;
 -- Table `jiffy`.`Teacher_to_Guardian`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `jiffy`.`Teacher_to_Guardian` (
-  `teacher_to_guardian_id` INT NOT NULL ,
+  `teacher_to_guardian_id` INT NOT NULL AUTO_INCREMENT ,
   `school_message_id` INT NOT NULL ,
   `from_teacher_user_id` INT NOT NULL ,
   `to_guardian_user_id` INT NOT NULL ,
