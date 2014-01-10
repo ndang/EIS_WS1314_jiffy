@@ -14,6 +14,9 @@ public class Grade {
 	@JsonProperty("value")
 	BigDecimal value;
 	
+	@JsonProperty("date_given")
+	String date_given;
+	
 	@JsonProperty("grade_weight")
 	Integer grade_weight;
 	
@@ -26,9 +29,10 @@ public class Grade {
 	
 	public Grade() {}
 	
-	public Grade(Id grade, BigDecimal value, Integer grade_weight, String comment, Subject subject) {
+	public Grade(Id grade, BigDecimal value, String date_given, Integer grade_weight, String comment, Subject subject) {
 		this.grade = grade;
 		this.value = value;
+		this.date_given = date_given;
 		this.grade_weight = grade_weight;
 		this.comment = comment;
 		this.subject = subject;
@@ -45,13 +49,23 @@ public class Grade {
 	}
 	
 	@JsonGetter("value")
-	public BigDecimal getvalue() {
+	public BigDecimal getValue() {
 		return this.value;
 	}
 	
 	@JsonSetter("value")
 	public void setValue(BigDecimal value) {
 		this.value = value;
+	}
+	
+	@JsonGetter("date_given")
+	public String getDateGiven() {
+		return this.date_given;
+	}
+	
+	@JsonSetter("date_given")
+	public void setDateGiven(String date_given) {
+		this.date_given = date_given;
 	}
 	
 	@JsonGetter("grade_weight")
@@ -89,6 +103,7 @@ public class Grade {
 		
 		return "{" +
 				"\"grade\": " + this.grade + ",\r\n" +
+				"\"date_given\": " + this.date_given + ",\r\n" +
 				"\"value\": " + this.value.toPlainString() + ",\r\n" +
 				"\"grade_weight\": " + this.grade_weight + ",\r\n" +
 				"\"comment\": " + this.comment + ",\r\n" +

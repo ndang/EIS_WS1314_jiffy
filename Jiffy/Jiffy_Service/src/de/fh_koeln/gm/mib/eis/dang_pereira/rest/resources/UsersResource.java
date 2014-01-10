@@ -35,6 +35,7 @@ public class UsersResource extends Resource {
 		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
 		Users users = this.dbl.getUsers();
 		
+		
 		String usersStr = null;
 		
 		try {
@@ -44,8 +45,9 @@ public class UsersResource extends Resource {
 			e.printStackTrace();
 		}
 		
+		
 		/* Wenn Daten zurückgegeben wurden, dann sollen sie ausgeliefert werden */
-		if(usersStr != null){
+		if(users != null){
 			return Response.ok().entity(usersStr).type(MediaType.APPLICATION_JSON).build();
 		}
 		else {

@@ -24,7 +24,7 @@ public class RestClient {
 		String user = "petrahumboldt";
 		String pass = "Christa";
 		
-		String uri = "/user/4";
+		String uri = "/student/14/grades";
 		
 		String mime = MediaType.APPLICATION_JSON;
 		

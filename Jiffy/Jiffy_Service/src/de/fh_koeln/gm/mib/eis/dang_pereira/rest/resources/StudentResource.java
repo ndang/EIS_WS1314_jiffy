@@ -17,7 +17,8 @@ import javax.ws.rs.core.Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sun.jersey.core.util.Base64;
 
-import de.fh_koeln.gm.mib.eis.dang_pereira.data_access.DBLayer;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Grade;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Grades;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Student;
 
 @Path("/student")
@@ -75,15 +76,15 @@ public class StudentResource extends Resource {
 	@GET
 	@Path("/{user_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getStudent(@Context HttpHeaders headers, @PathParam("user_id") Integer userId) {
+	public Response getStudent(	@Context HttpHeaders headers,
+								@PathParam("user_id") Integer userId) {
 		
 		if(!userExists(headers)) {
 			return Response.status(401).build();
 		}
 		
-
 		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
-		Student student = this.dbl.getStudent(userId); //dbl.getStudent(userId);
+		Student student = this.dbl.getStudent(userId);
 		
 		String studentStr = null;
 		
@@ -91,11 +92,10 @@ public class StudentResource extends Resource {
 			studentStr = jmapper.writeValueAsString(student);
 		} catch (JsonProcessingException e) {
 			System.err.println("Konnte das Studenten-Objekt nicht serialisieren: " + e.getMessage());
-			e.printStackTrace();
 		}
 		
 		/* Wenn Daten zurückgegeben wurden, dann sollen sie ausgeliefert werden */
-		if(studentStr != null){
+		if(student != null){
 			return Response.ok().entity(studentStr).type(MediaType.APPLICATION_JSON).build();
 		}
 		else {
@@ -104,5 +104,106 @@ public class StudentResource extends Resource {
 	}
 	
 
+	
+	/*  ######  /grade   ######  */
+	
+	@POST
+	@Path("/{user_id}/grade")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response postGrade(	@Context HttpHeaders headers,
+								@PathParam("user_id") Integer userId, String body) {
+		
+		if(!userExists(headers)) {
+			return Response.status(401).build();
+		}
+		
+		// TODO: Sichergehen, dass es ein Lehrer ist, der das Fach unterrichtet
+		
+		
+		Grade grade = null;
+		try {
+			grade = jmapper.readValue(body, Grade.class);
+		} catch (IOException e) {
+			System.err.println("Konnte das JSON-Dokument nicht abbilden: " + e.getMessage());
+		}
+		
+		
+		/* Daten weiter an den DB-Layer geben, damit dieser sie in die DB schreibt */
+		Integer gradeId = this.dbl.postStudentGrade(userId, grade);
+		
+		/* Wenn die Note eingefügt wurde, dann soll der Ressourcen-Ort zurückgegeben werden */
+		if(gradeId != null){
+			return Response.status(201).header("Location", "/user/" + userId + "/grade/" + gradeId).build();
+		}
+		else {
+			return Response.status(404).build();
+		}
+	}
+	
+	
+	@GET
+	@Path("/{user_id}/grade/{grade_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getStudentGrade(@Context HttpHeaders headers,
+									@PathParam("user_id") Integer userId,
+									@PathParam("grade_id") Integer gradeId) {
+		
+		if(!userExists(headers)) {
+			return Response.status(401).build();
+		}
+		
+		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
+		Grade grade = this.dbl.getStudentGrade(userId, gradeId);
+		
+		String gradeStr = null;
+		
+		try {
+			gradeStr = jmapper.writeValueAsString(grade);
+		} catch (JsonProcessingException e) {
+			System.err.println("Konnte das Grade-Objekt nicht serialisieren: " + e.getMessage());
+		}
+		
+		
+		/* Wenn Daten zurückgegeben wurden, dann sollen sie ausgeliefert werden */
+		if(grade != null){
+			return Response.ok().entity(gradeStr).type(MediaType.APPLICATION_JSON).build();
+		}
+		else {
+			return Response.status(404).build();
+		}
+	}
+	
+	
+	
+	@GET
+	@Path("/{user_id}/grades")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getStudentGrades(@Context HttpHeaders headers,
+									@PathParam("user_id") Integer userId) {
+		
+		if(!userExists(headers)) {
+			return Response.status(401).build();
+		}
+		
+		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
+		Grades grades = this.dbl.getStudentGrades(userId);
+		
+		String gradesStr = null;
+		
+		try {
+			gradesStr = jmapper.writeValueAsString(grades);
+		} catch (JsonProcessingException e) {
+			System.err.println("Konnte das Grades-Objekt nicht serialisieren: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		/* Wenn Daten zurückgegeben wurden, dann sollen sie ausgeliefert werden */
+		if(grades != null){
+			return Response.ok().entity(gradesStr).type(MediaType.APPLICATION_JSON).build();
+		}
+		else {
+			return Response.status(404).build();
+		}
+	}
 	
 }

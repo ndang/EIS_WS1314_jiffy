@@ -1,5 +1,7 @@
 package playarea.rest_client.post;
 
+import java.math.BigDecimal;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
@@ -15,10 +17,11 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 import com.sun.jersey.client.urlconnection.HTTPSProperties;
-import com.sun.jersey.core.util.Base64;
 
 import de.fh_koeln.gm.mib.eis.dang_pereira.Config;
-import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Student;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Grade;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Id;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Subject;
 
 
 public class RestClientPOST {
@@ -29,14 +32,15 @@ public class RestClientPOST {
 		String user = "horstblumen";
 		String pass = "Christa";
 		
-		String uri = "/student";
+		String uri = "/student/14/grade";
 		
 		String mime = MediaType.APPLICATION_JSON;
 		
-		/* Student-Objekt zum Versenden zusammenstellen */
+		/* Noten-Objekt zum Versenden zusammenstellen */
 		ObjectMapper jmapper = new ObjectMapper();
-		Student student = new Student(null, "Hans Peter2", "hanspeter2", "STUDENT", "male", null, null, null);
-		String data = jmapper.writeValueAsString(student);
+		Subject sub = new Subject(new Id(Integer.valueOf(1), null, null), null, null);
+		Grade grade = new Grade(null, BigDecimal.valueOf(2.0), null, Integer.valueOf(10), "Gut! Es schwächelt aber etwas!", sub);
+		String data = jmapper.writeValueAsString(grade);
 		
 		System.out.println(data);
 		
@@ -64,12 +68,7 @@ public class RestClientPOST {
 		WebResource wr = Client.create(config).resource(cfg.rest_endpoint.host + ":" + cfg.rest_endpoint.port);
 		wr.addFilter(new HTTPBasicAuthFilter(user, pass));
 		
-		/* Das gewählte Password */
-		String password = "Christa";
-		password = new String(Base64.encode(password.getBytes("utf-8")));
-		
-		/* Interessant hier: Das Password wird per Header mitgegeben, anstatt es im Payload mitzugeben -> Struktur sieht nämlich keine Password-Eigenschaft vor */
-		ClientResponse cresp = wr.path(uri).type(mime).header("given-user-password", password).entity(data).post(ClientResponse.class);
+		ClientResponse cresp = wr.path(uri).type(mime).entity(data).post(ClientResponse.class);
 		
 		if(cresp.getStatus() == 201) {
 

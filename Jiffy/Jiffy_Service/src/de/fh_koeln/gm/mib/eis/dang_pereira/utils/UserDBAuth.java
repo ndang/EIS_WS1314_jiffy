@@ -132,6 +132,7 @@ public class UserDBAuth {
 		return false;
 	}
 	
+	
 	/**
 	 * Überprüfen, ob zwei Datensätze mit den jeweiligen ID/Type-Kombinationen existieren
 	 * 

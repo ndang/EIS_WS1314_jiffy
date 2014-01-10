@@ -26,7 +26,6 @@ import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import de.fh_koeln.gm.mib.eis.dang_pereira.data_access.DBLayer;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Topics;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.User;
 import de.fh_koeln.gm.mib.eis.dang_pereira.utils.BasicAuthHelper;
@@ -54,6 +53,7 @@ public class UserResource extends Resource {
 		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
 		User user = this.dbl.getUser(userId);
 		
+		
 		String userStr = null;
 		
 		try {
@@ -63,8 +63,9 @@ public class UserResource extends Resource {
 			e.printStackTrace();
 		}
 		
+		
 		/* Wenn Daten zurückgegeben wurden, dann sollen sie ausgeliefert werden */
-		if(userStr != null){
+		if(user != null){
 			return Response.ok().entity(userStr).type(MediaType.APPLICATION_JSON).build();
 		}
 		else {
@@ -93,6 +94,7 @@ public class UserResource extends Resource {
 		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
 		Topics topics = this.dbl.getUserTopics(userId);
 		
+		
 		String topicsStr = null;
 		
 		try {
@@ -102,8 +104,9 @@ public class UserResource extends Resource {
 			e.printStackTrace();
 		}
 		
+		
 		/* Wenn Daten zurückgegeben wurden, dann sollen sie ausgeliefert werden */
-		if(topicsStr != null){
+		if(topics != null){
 			return Response.ok().entity(topicsStr).type(MediaType.APPLICATION_JSON).build();
 		}
 		else {

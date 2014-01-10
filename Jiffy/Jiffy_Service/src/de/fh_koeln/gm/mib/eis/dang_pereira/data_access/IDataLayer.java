@@ -1,6 +1,8 @@
 package de.fh_koeln.gm.mib.eis.dang_pereira.data_access;
 
 import de.fh_koeln.gm.mib.eis.dang_pereira.message_consumer.msg_struct.Message;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Grade;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Grades;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Student;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Topics;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.User;
@@ -57,7 +59,34 @@ public interface IDataLayer {
 	 */
 	public Integer postStudent(Student student, String givenPass);
 	
-
+	
+	/**
+	 * Schüler eine neue Note geben
+	 * 
+	 * @param userId Id des Schülers
+	 * @param grade JSON-Dokument als Grade-Objekt
+	 * @return Die vom System gegebenen ID
+	 */
+	public Integer postStudentGrade(Integer userId, Grade grade);
+	
+	
+	/**
+	 * Notendetails zurückgeben
+	 * 
+	 * @param userId Id des Schülers dessen Note zurückgegeben werden soll
+	 * @param gradeId Id der Note, deren Details zurückgegeben werden soll
+	 * @return JSON-Dokument als Grade-Objekt
+	 */
+	public Grade getStudentGrade(Integer userId, Integer gradeId);
+	
+	
+	/**
+	 * Liste aller Noten, samt allen ihren Details, zurückgeben 
+	 * 
+	 * @param userId Id des Schülers dessen Noten zurückgegeben werden soll
+	 * @return JSON-Dokument als Grades-Objekt
+	 */
+	public Grades getStudentGrades(Integer userId);
 	
 	
 	/*  #####   Messages   #####  */

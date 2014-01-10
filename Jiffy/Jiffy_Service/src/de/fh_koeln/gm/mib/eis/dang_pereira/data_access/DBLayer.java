@@ -1,5 +1,6 @@
 package de.fh_koeln.gm.mib.eis.dang_pereira.data_access;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,8 +11,12 @@ import java.util.ArrayList;
 import de.fh_koeln.gm.mib.eis.dang_pereira.Config;
 import de.fh_koeln.gm.mib.eis.dang_pereira.message_consumer.msg_struct.Message;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Destination;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Grade;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Grades;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Id;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Student;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Subject;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Teacher;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Topics;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.User;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Users;
@@ -73,6 +78,9 @@ public class DBLayer implements IDataLayer {
 	@Override
 	public User getUser(Integer userId) {
 		
+		if(userId == null)
+			return null;
+		
 		User user = null;
 		
 		try {
@@ -107,6 +115,9 @@ public class DBLayer implements IDataLayer {
 	@Override
 	public Topics getUserTopics(Integer userId) {
 
+		if(userId == null)
+			return null;
+		
 		Topics topics = new Topics();
 		
 		ArrayList<String> topicsList = new ArrayList<String>();
@@ -250,6 +261,10 @@ public class DBLayer implements IDataLayer {
 	
 	@Override
 	public Student getStudent(Integer userId) {
+		
+		if(userId == null)
+			return null;
+		
 		Student student = null;
 		
 		try {
@@ -347,6 +362,167 @@ public class DBLayer implements IDataLayer {
 		return newUserId;
 	}
 	
+	
+	@Override
+	public Integer postStudentGrade(Integer userId, Grade grade) {
+		
+		if(userId == null || grade == null)
+			return null;
+		
+		Integer newGradeId = null;
+		
+		try {
+			
+			BigDecimal gradeValue	= grade.getValue();
+			Integer gradeWeight		= grade.getGradeWeight();
+			String comment			= grade.getComment();
+			Integer subjectId		= null;
+			
+			/* Sicher gehen, dass man an die ID des Schulfaches kommt */
+			if(grade.getSubject() != null && grade.getSubject().getSubject() != null) {
+				subjectId = grade.getSubject().getSubject().getID();
+			}
+			
+			/* Note in die DB einfügen */
+			String stmtStr = "INSERT INTO Grade (grade, date_given, grade_weight, comment, schoolsubject_id, student_user_id) "+ 
+								"VALUES (?, NOW() , ?, ?, ?, ?)";
+			
+			PreparedStatement stmt = con.prepareStatement(stmtStr, new String[]{"grade_id"});
+			stmt.setBigDecimal(1, gradeValue);
+			stmt.setInt(2, gradeWeight);
+			stmt.setString(3, comment);
+			stmt.setInt(4, subjectId);
+			stmt.setInt(5, userId);
+			
+			/* Vergebene Id beziehen und als Rückgabewert setzen */
+			if(stmt.executeUpdate() > 0) {
+				ResultSet gk = stmt.getGeneratedKeys();
+				
+				if(gk != null && gk.next()) {
+					newGradeId = gk.getInt(1);
+				}
+				
+			}
+		
+		} catch (SQLException e) {
+			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return newGradeId;
+	}
+	
+	
+	@Override
+	public Grade getStudentGrade(Integer userId, Integer gradeId) {
+		
+		if(userId == null || gradeId == null)
+			return null;
+		
+		Grade grade = null;
+		
+		try {
+			
+			/* Alle Notendetails (plus Fach und in dem unterrichtender Lehrer) beziehen */
+			String stmtStr = "SELECT g.grade, g.date_given, g.grade_weight, g.comment, " +
+										"ss.schoolsubject_id, ss.description, ss.teacher_user_id " + 
+								"FROM Grade AS g LEFT JOIN Schoolsubject AS ss ON g.schoolsubject_id = ss.schoolsubject_id " +
+								"WHERE g.student_user_id = ? AND g.grade_id = ?";
+			PreparedStatement stmt = con.prepareStatement(stmtStr);
+			stmt.setInt(1, userId);
+			stmt.setInt(2, gradeId);
+			ResultSet rs = stmt.executeQuery();
+		
+			if(rs.next()) {
+
+				BigDecimal value	= rs.getBigDecimal(1);
+				String dateGiven	= rs.getString(2); 
+				Integer gradeWeight	= rs.getInt(3);
+				String comment		= rs.getString(4);
+				Integer	subjectId	= rs.getInt(5);
+				String description	= rs.getString(6);
+				Integer teacherId	= rs.getInt(7);
+				
+				/* Zusammenstellen der Teil-Dokumente / -Objekte */
+				Id gradeIdObj = new Id(gradeId, "/student/"+ userId + "/" +gradeId, null);
+				Id subjectIdObj = new Id(subjectId, null, null);
+				Id teacherIdObj = new Id(teacherId, "/teacher/"+ teacherId, new Destination("private/" + teacherId, "official/" + teacherId));
+				
+				Subject subject = new Subject(subjectIdObj, description, teacherIdObj);
+				
+				/* Grade-Objekt erzeugen und es mit zuvor bezogenen Daten befüllen */
+				grade = new Grade(gradeIdObj, value, dateGiven, gradeWeight, comment, subject);
+			}
+			
+		} catch (SQLException e) {
+			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return grade;
+		
+	}
+	
+	
+	@Override
+	public Grades getStudentGrades(Integer userId) {
+		
+		if(userId == null)
+			return null;
+		
+		Grades userGrades = null;
+		
+
+		try {
+			
+			/* Alle Notendetails (plus Fach und in dem unterrichtender Lehrer) beziehen */
+			String stmtStr = "SELECT g.grade_id, g.grade, g.date_given, g.grade_weight, g.comment, " +
+										"ss.schoolsubject_id, ss.description, ss.teacher_user_id " + 
+								"FROM Grade AS g LEFT JOIN Schoolsubject AS ss ON g.schoolsubject_id = ss.schoolsubject_id " +
+								"WHERE g.student_user_id = ?";
+			PreparedStatement stmt = con.prepareStatement(stmtStr);
+			stmt.setInt(1, userId);
+			ResultSet rs = stmt.executeQuery();
+		
+			ArrayList<Grade> gradesList = new ArrayList<Grade>();
+			
+			while(rs.next()) {
+				
+				Integer gradeId		= rs.getInt(1);
+				BigDecimal value	= rs.getBigDecimal(2);
+				String dateGiven	= rs.getString(3); 
+				Integer gradeWeight	= rs.getInt(4);
+				String comment		= rs.getString(5);
+				Integer	subjectId	= rs.getInt(6);
+				String description	= rs.getString(7);
+				Integer teacherId	= rs.getInt(8);
+				
+				/* Zusammenstellen der Teil-Dokumente / -Objekte */
+				Id gradeIdObj = new Id(gradeId, "/student/"+ userId + "/" +gradeId, null);
+				Id subjectIdObj = new Id(subjectId, null, null);
+				Id teacherIdObj = new Id(teacherId, "/teacher/"+ teacherId, new Destination("private/" + teacherId, "official/" + teacherId));
+				
+				Subject subject = new Subject(subjectIdObj, description, teacherIdObj);
+				
+				/* Grade-Objekt erzeugen und es mit zuvor bezogenen Daten befüllen */
+				Grade grade = new Grade(gradeIdObj, value, dateGiven, gradeWeight, comment, subject);
+				
+				gradesList.add(grade);
+			}
+			
+			userGrades = new Grades();
+			userGrades.setGrades(gradesList);
+			
+		} catch (SQLException e) {
+			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return userGrades;
+	}
+	
+	
+	/* ######  messages  ###### */
 	
 	
 	@Override
@@ -532,7 +708,7 @@ public class DBLayer implements IDataLayer {
 			
 			con.setAutoCommit(false);
 			
-			String subject			= msg.getMsgSubject();
+			String subject			= msg.getMsgSubject(); /* Betreff */
 			String msgText			= msg.getMsgText();
 			String sendDate			= msg.getMsgSendDate();
 			String type				= null;

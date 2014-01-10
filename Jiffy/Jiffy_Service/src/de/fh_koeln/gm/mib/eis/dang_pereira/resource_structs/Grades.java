@@ -24,7 +24,7 @@ public class Grades {
 	}
 	
 	@JsonSetter("grades")
-	public void setClasses(ArrayList<Grade> grades) {
+	public void setGrades(ArrayList<Grade> grades) {
 		this.grades = grades;
 	}
 	
