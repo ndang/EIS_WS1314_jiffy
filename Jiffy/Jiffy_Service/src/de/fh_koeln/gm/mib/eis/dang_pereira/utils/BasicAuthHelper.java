@@ -21,6 +21,9 @@ public class BasicAuthHelper {
 	
 	public static HashMap<String, String> extractAuthCreds(HttpHeaders headers) {
 		
+		if(headers == null)
+			return null;
+			
 		List<String> list = headers.getRequestHeader("authorization");
 		
 		/* Wenn keine Autohization-Headereigenschaftgefunden wurde, dann gebe null zurück */

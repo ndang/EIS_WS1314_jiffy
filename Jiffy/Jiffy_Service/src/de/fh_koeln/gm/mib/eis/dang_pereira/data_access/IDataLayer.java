@@ -55,9 +55,21 @@ public interface IDataLayer {
 	 * Neuen Schüler erzeugen
 	 * 
 	 * @param data Student-Objekt
+	 * @param givenPass Das zu verwendende Passwort
 	 * @return Die vom System gegebene ID
 	 */
 	public Integer postStudent(Student student, String givenPass);
+	
+	
+	/**
+	 * Daten des Schülers aktualisieren
+	 * 
+	 * @param userId Id des User-Datensatzes, welches aktualisiert werden soll
+	 * @param student Student-Objekt
+	 * @param givenPass Das zu verwendende Passwort
+	 * @return Aktualisieren war erfolgreich (true) / nicht erfolgreich (false)
+	 */
+	public boolean putStudent(Integer userId, Student student, String givenPass);
 	
 	
 	/**
@@ -87,6 +99,16 @@ public interface IDataLayer {
 	 * @return JSON-Dokument als Grades-Objekt
 	 */
 	public Grades getStudentGrades(Integer userId);
+	
+	
+	/**
+	 * Alle dem Erziehungsberechtigten zugeordneten Kinder zurückgeben
+	 * 
+	 * @param guardianId ID des Erziehungsberechtigten
+	 * @return JSON-Dokument als Users-Objekt
+	 */
+	public Users getGuardianChildren(Integer guardianId);
+	
 	
 	
 	/*  #####   Messages   #####  */

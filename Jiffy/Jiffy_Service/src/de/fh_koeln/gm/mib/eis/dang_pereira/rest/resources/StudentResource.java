@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -66,6 +67,49 @@ public class StudentResource extends Resource {
 		/* Wenn Daten zurückgegeben wurden, dann sollen sie ausgeliefert werden */
 		if(userId != null){
 			return Response.status(201).header("Location", "/user/" + userId).build();
+		}
+		else {
+			return Response.status(404).build();
+		}
+	}
+	
+	
+	@PUT
+	@Path("/{user_id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response putStudent(@Context HttpHeaders headers, @PathParam("user_id") Integer userId, String body) {
+		
+		if(!userExists(headers)) {
+			return Response.status(401).build();
+		}
+		
+		
+		Student student = null;
+		try {
+			student = jmapper.readValue(body, Student.class);
+		} catch (IOException e) {
+			System.err.println("Konnte das JSON-Dokument nicht abbilden: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		
+		/* Um das Passwort nicht mit im Dokument zu versenden, wird es per HTTP-Feld überreicht */
+		String givenPass = null;
+		List<String> list = headers.getRequestHeader("given-user-password");
+		
+		if(list != null && list.size() == 1)
+			givenPass = list.get(0);
+		
+		/* Da das Passwort im Base64-Format vorliegt, muss es vorher dekodiert werden */
+		givenPass = Base64.base64Decode(givenPass);
+		
+		
+		/* Daten weiter an den DB-Layer geben, damit dieser sie in die DB schreibt */
+		boolean success = this.dbl.putStudent(userId, student, givenPass);
+		
+		/* Wenn Aktualisierung erfolgreich war, dann soll das per Statuscode bekannt gegeben werden */
+		if(success){
+			return Response.status(204).build();
 		}
 		else {
 			return Response.status(404).build();

@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import de.fh_koeln.gm.mib.eis.dang_pereira.Config;
 import de.fh_koeln.gm.mib.eis.dang_pereira.message_consumer.msg_struct.Message;
@@ -319,22 +320,35 @@ public class DBLayer implements IDataLayer {
 			
 			con.setAutoCommit(false);
 
-			String name = student.getName();
-			String username = student.getUsername();
-			String type = student.getUserType();
-			String gender = student.getGender();
+			String name		= student.getName();
+			String username	= student.getUsername();
+			String gender	= student.getGender();
+			Id guardian		= student.getGuardian(); 
 			
-			Integer userId = putUser(name, username, givenPass, type, gender);
+			Integer userId = postUser(name, username, givenPass, "STUDENT", gender);
 			
 			if(userId != null) {
 				// TODO: guardian_user_id setzen!
+
+				String stmtStr = "";
+				PreparedStatement stmt = null;
 				
 				/* Einen Datensatz mit der selben ID in die Student-Tabelle einfügen */
-				String stmtStr = "INSERT INTO Student (user_id, guardian_user_id) VALUES (?, NULL)";
-				PreparedStatement stmt = con.prepareStatement(stmtStr);
+				stmtStr = "INSERT INTO Student (user_id, guardian_user_id) VALUES (?, ?)";
+				stmt = con.prepareStatement(stmtStr);
 				stmt.setInt(1, userId);
 				
-				if(stmt.executeUpdate() > 0) {
+				/* Je nachdem ob die Id der Erziehungsberechtigten mitgegeben wurde, wird sie mit eingefügt oder nicht */
+				if(guardian != null && guardian.getID() != null) {
+					Integer guardianId = guardian.getID();
+					stmt.setInt(2, guardianId);
+				}
+				else {
+					stmt.setNull(2, 0);
+				}
+				
+				
+				if(stmt != null && stmt.executeUpdate() > 0) {
 					newUserId = userId;
 					con.commit();
 				} else {
@@ -360,6 +374,67 @@ public class DBLayer implements IDataLayer {
 		}
 		
 		return newUserId;
+	}
+	
+	
+	@Override
+	public boolean putStudent(Integer userId, Student student, String givenPass) {
+		
+		if(student == null)
+			return false;
+		
+		boolean status = false;
+		
+		try {
+			
+			con.setAutoCommit(false);
+			
+			String name		= student.getName();
+			String username	= student.getUsername();
+			String gender	= student.getGender();
+			Id guardian		= student.getGuardian(); 
+			
+			boolean subStatus = putUser(userId, name, username, givenPass, gender);
+			
+			if(subStatus) {
+
+				if(guardian != null && guardian.getID() != null) {
+				
+					/* Erziehungsberechtigten setzen */
+					String stmtStr = "UPDATE Student SET guardian_user_id = ? WHERE user_id = ?";
+					
+					PreparedStatement stmt = con.prepareStatement(stmtStr);
+					stmt.setInt(1, guardian.getID());
+					stmt.setInt(2, userId);
+					
+					
+					if(stmt != null && stmt.executeUpdate() > 0) {
+						status = true;
+						con.commit();
+					}
+				} else {
+					status = true;
+					con.commit();
+				}
+			}
+			
+		
+		} catch (SQLException e) {
+			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		
+		if(!status) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				System.err.println("Konnte Transaktion nicht zurückrollen!" + e.getMessage());
+			}
+		}
+		
+		
+		return status;
 	}
 	
 	
@@ -520,6 +595,57 @@ public class DBLayer implements IDataLayer {
 		
 		return userGrades;
 	}
+	
+	
+	@Override
+	public Users getGuardianChildren(Integer guardianId) {
+		
+		if(guardianId == null)
+			return null;
+		
+		Users children = null;
+		
+		
+		try {
+			
+			String stmtStr = "SELECT u.user_id, u.name, u.username, u.type, u.gender " +
+								"FROM Student AS s LEFT OUTER JOIN User AS u ON s.user_id = u.user_id " + 
+								"WHERE s.guardian_user_id = ? AND u.type = ?";
+			PreparedStatement stmt = con.prepareStatement(stmtStr);
+			stmt.setInt(1, guardianId);
+			stmt.setString(2, "STUDENT");
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			ArrayList<User> childrenList = new ArrayList<User>();
+			
+			while(rs.next()) {
+
+				Integer id = Integer.valueOf(rs.getString(1));
+				String uri = "/user/" + id;
+				String name = rs.getString(2);
+				String username = rs.getString(3);
+				String user_type = rs.getString(4);
+				String gender = rs.getString(5);
+				
+				/* User-Objekt erzeugen und es mit zuvor bezogenen Daten befüllen */
+				Destination dest = new Destination("private/" + id, "official/" + id);
+				User user = new User(new Id(id, uri, dest), name, username, user_type, gender);
+				
+				/* Das soeben erzeugte User-Objekt der Liste hinzufügen */
+				childrenList.add(user);
+			}
+			
+			children = new Users(childrenList);
+			
+		} catch (SQLException e) {
+			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return children;
+	}
+	
 	
 	
 	/* ######  messages  ###### */
@@ -939,7 +1065,7 @@ public class DBLayer implements IDataLayer {
 	 * @param gender Geschlecht des Users
 	 * @return Dem Benutzer vergebene ID
 	 */
-	private Integer putUser(String name, String username, String password, String type, String gender) {
+	private Integer postUser(String name, String username, String password, String type, String gender) {
 		
 		Integer userId = null;
 		
@@ -949,7 +1075,7 @@ public class DBLayer implements IDataLayer {
 		}
 		
 		/* Den Hash berechnen lassen */
-		String pass_hash = DigestHelper.getHash(password, null);
+		String passHash = DigestHelper.getHash(password, null);
 		
 		try {
 			
@@ -957,7 +1083,7 @@ public class DBLayer implements IDataLayer {
 			PreparedStatement stmt = con.prepareStatement(stmtStr, new String[]{"user_id"});
 			stmt.setString(1, name);
 			stmt.setString(2, username);
-			stmt.setString(3, pass_hash);
+			stmt.setString(3, passHash);
 			stmt.setString(4, type);
 			stmt.setString(5, gender);
 			
@@ -977,6 +1103,65 @@ public class DBLayer implements IDataLayer {
 		}
 		
 		return userId;
+	}
+	
+	
+	/**
+	 * User-Datensatz aktualisieren (in Obertabelle)
+	 * 
+	 * @param name Name des Users
+	 * @param username Benutezrname des Users
+	 * @param password Password des Users
+	 * @param type User-Type des Benutzers
+	 * @param gender Geschlecht des Users
+	 */
+	private boolean putUser(Integer userId, String name, String username, String password, String gender) {
+		
+		if(userId == null)
+			return false;
+		
+		boolean status = false;
+		
+		
+		/* Den Hash berechnen lassen */
+		String passHash = DigestHelper.getHash(password, null);
+		
+		try {
+			
+			/* Zuweisungs-Anteil */
+			ArrayList<Object[]> fields = new ArrayList<Object[]>();
+			
+			if(name != null)
+				fields.add(new Object[]{"name", name, "string"});
+			
+			if(username != null)
+				fields.add(new Object[]{"username", username, "string"});
+			
+			if(passHash != null)
+				fields.add(new Object[]{"pass_hash", passHash, "string"});
+			
+			if(gender != null)
+			fields.add(new Object[]{"gender", gender, "string"});
+			
+			/* Where-Klausel-Anteil */
+			ArrayList<Object[]> where = new ArrayList<Object[]>();
+			
+			where.add(new Object[]{"user_id", userId, "int"});
+			
+			/* SQL-Statement dynamisch zusammenbauen lassen */
+			PreparedStatement stmt = buildDynUpdateStmt("User", fields, where);
+			
+			if(stmt != null && stmt.executeUpdate() > 0) {
+				status = true;
+			}
+			
+		
+		} catch (SQLException e) {
+			System.err.println("Fehler beim Absetzen des SQL-Statements: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return status;
 	}
 	
 	
@@ -1062,6 +1247,107 @@ public class DBLayer implements IDataLayer {
 		}
 		
 		return msgId;
+	}
+	
+	
+	/**
+	 * Ein dynamisches SQL-Insert-Statement bauen
+	 * 
+	 * @param table Tabellenname
+	 * @param fields List von Feldern/Wert/Datentyp-Angaben
+	 * @return Vorbereitetes Statement
+	 */
+	private PreparedStatement buildDynUpdateStmt(String table, ArrayList<Object[]> values, ArrayList<Object[]> wheres) {
+		
+		String stmtStr = "UPDATE " + table + " SET ";
+		
+		Iterator<Object[]> iter = values.iterator();
+		int counter;
+		for(counter = 0; iter.hasNext(); counter++) {
+			if(counter == 0)
+				stmtStr += (String)iter.next()[0] + " = ?";
+			else
+				stmtStr += ", " + (String)iter.next()[0] + " = ?";
+		}
+		stmtStr += " WHERE ";
+		
+		System.out.println(stmtStr);
+		
+		iter = wheres.iterator();
+		for(counter = 0; iter.hasNext(); counter++) {
+			if(counter == 0)
+				stmtStr += (String)iter.next()[0] + " = ?";
+			else
+				stmtStr += "AND " + (String)iter.next()[0] + " = ?";
+		}
+		
+		
+		System.out.println(stmtStr);
+		
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = con.prepareStatement(stmtStr);
+		} catch (SQLException e) {
+			System.err.println("Konnte Statement nicht vorbereiten: " + e.getMessage());
+		}
+		
+		int index = 1;
+		for(Object[] field: values) {
+			setSQLFieldVal(stmt, field[1], index);
+			index++;
+		}
+		
+		for(Object[] where: wheres) {
+			setSQLFieldVal(stmt, where[1], index);
+			System.out.println(index + " - " + where[1]);
+			index++;
+		}
+		
+		
+		System.out.println(stmt);
+		
+		return stmt;
+	}
+	
+	
+	private boolean setSQLFieldVal(PreparedStatement stmt, Object val, int index) {
+		
+		if(stmt == null || val == null)
+			return false;
+		
+		boolean status = false;
+		
+		boolean isNull = (val == null) ? true: false;
+		
+		try {
+			
+			if(isNull) {
+				stmt.setNull(index, 0);
+			}
+			else {	
+				if(val instanceof String) {
+					stmt.setString(index, (String)val);
+				}
+				
+				if(val instanceof Integer) {
+					stmt.setInt(index, (Integer)val);
+				}
+				
+				if(val instanceof Boolean) {
+					stmt.setBoolean(index, (Boolean)val);
+				}
+				
+				if(val instanceof BigDecimal) {
+					stmt.setBigDecimal(index, (BigDecimal)val);
+				}
+			}
+		}
+		catch(SQLException e) {
+			System.err.println("Konnte Feldwert nicht setzen: " + e.getMessage());
+		}
+		
+		return status;
 	}
 	
 	

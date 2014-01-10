@@ -1,4 +1,4 @@
-package playarea.rest_client.post;
+package playarea.rest_client.misc;
 
 import java.math.BigDecimal;
 
@@ -17,14 +17,16 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 import com.sun.jersey.client.urlconnection.HTTPSProperties;
+import com.sun.jersey.core.util.Base64;
 
 import de.fh_koeln.gm.mib.eis.dang_pereira.Config;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Grade;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Id;
+import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Student;
 import de.fh_koeln.gm.mib.eis.dang_pereira.resource_structs.Subject;
 
 
-public class RestClientPOST {
+public class RestClientPUT {
 
 	
 	public static void main(String[] args) throws Exception {
@@ -32,17 +34,19 @@ public class RestClientPOST {
 		String user = "horstblumen";
 		String pass = "Christa";
 		
-		String uri = "/student/14/grade";
+		String uri = "/student/25";
 		
 		String mime = MediaType.APPLICATION_JSON;
 		
 		/* Noten-Objekt zum Versenden zusammenstellen */
 		ObjectMapper jmapper = new ObjectMapper();
-		Subject sub = new Subject(new Id(Integer.valueOf(1), null, null), null, null);
-		Grade grade = new Grade(null, BigDecimal.valueOf(2.0), null, Integer.valueOf(10), "Gut! Es schwächelt aber etwas!", sub);
-		String data = jmapper.writeValueAsString(grade);
+		Student student = new Student(null, "Christina Wiesen", "christinawiesen", null, "female", new Id(4, "/user/4", null), null, null);
+		String data = jmapper.writeValueAsString(student);
 		
 		System.out.println(data);
+		
+		
+		String passB64 = new String(Base64.encode("Christa".getBytes("utf-8")));
 		
 		
 		Config cfg = Config.getInstance();
@@ -68,7 +72,7 @@ public class RestClientPOST {
 		WebResource wr = Client.create(config).resource(cfg.rest_endpoint.host + ":" + cfg.rest_endpoint.port);
 		wr.addFilter(new HTTPBasicAuthFilter(user, pass));
 		
-		ClientResponse cresp = wr.path(uri).type(mime).entity(data).post(ClientResponse.class);
+		ClientResponse cresp = wr.path(uri).type(mime).entity(data).header("given-user-password", passB64).put(ClientResponse.class);
 		
 		if(cresp.getStatus() == 201) {
 

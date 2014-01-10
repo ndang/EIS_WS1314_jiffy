@@ -37,14 +37,37 @@ public abstract class Resource {
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
-			e.printStackTrace();
 		}
 		
 		return status;
 	}
 	
+	
 	/**
+	 * Überprüfen, ob die der User mit der Id dem angegebenen Typ entspricht
 	 * 
+	 * @param userId Id des Users
+	 * @param userType User-Type
+	 * @return Ist vom Typ (true) / ist nicht vom Typ (false)
+	 */
+	protected boolean idIsOfUserType(Integer userId, String userType) {
+		
+		boolean status = false;
+		
+		try {
+			if(UserDBAuth.idIsOfUserType(userId, userType)) {
+				status = true;
+			}
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+		
+		return status;
+	}
+	
+	
+	/**
+	 * Überprüfen, ob in der Datenbank ein Datensatz mit Kombination aus username und Id existiert
 	 * 
 	 * @param userId ID die überprüft werden soll
 	 * @param username Benutzername des zu Überprüfenden Benutzers
@@ -60,7 +83,6 @@ public abstract class Resource {
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
-			e.printStackTrace();
 		}
 		
 		return status;
