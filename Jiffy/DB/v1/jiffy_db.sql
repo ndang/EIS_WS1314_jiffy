@@ -128,7 +128,7 @@ COLLATE = utf8_general_ci;
 CREATE  TABLE IF NOT EXISTS `jiffy`.`Grade` (
   `grade_id` INT NOT NULL AUTO_INCREMENT ,
   `grade` DECIMAL(3,2) NULL ,
-  `zeitpunkt` DATETIME NULL ,
+  `date_given` DATETIME NULL ,
   `grade_weight` TINYINT NULL ,
   `comment` TEXT NULL ,
   `schoolsubject_id` INT NOT NULL ,
