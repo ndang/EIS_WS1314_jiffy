@@ -127,6 +127,11 @@ public class StudentResource extends Resource {
 			return Response.status(401).build();
 		}
 		
+		/* Nur Schüler können zurückgegeben werden */
+		if(!idIsOfUserType(userId, "STUDENT")) {
+			return Response.status(404).build();
+		}
+		
 		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
 		Student student = this.dbl.getStudent(userId);
 		
@@ -196,6 +201,13 @@ public class StudentResource extends Resource {
 			return Response.status(401).build();
 		}
 		
+		
+		/* Nur die Note eines Schüler kann zurückgegeben werden */
+		if(!idIsOfUserType(userId, "STUDENT")) {
+			return Response.status(404).build();
+		}
+		
+		
 		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
 		Grade grade = this.dbl.getStudentGrade(userId, gradeId);
 		
@@ -228,6 +240,12 @@ public class StudentResource extends Resource {
 		if(!userExists(headers)) {
 			return Response.status(401).build();
 		}
+		
+		/* Nur die Noten eines Schüler können zurückgegeben werden */
+		if(!idIsOfUserType(userId, "STUDENT")) {
+			return Response.status(404).build();
+		}
+		
 		
 		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
 		Grades grades = this.dbl.getStudentGrades(userId);
