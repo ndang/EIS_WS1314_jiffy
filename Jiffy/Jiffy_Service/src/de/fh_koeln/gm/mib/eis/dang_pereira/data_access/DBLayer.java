@@ -219,14 +219,23 @@ public class DBLayer implements IDataLayer {
 	
 	
 	@Override
-	public Users getUsers() {
+	public Users getUsers(String usernameFilter) {
 		
 		Users users = null;
 		
 		try {
 			
-			String stmtStr = "SELECT user_id, name, username, type, gender FROM User";
-			PreparedStatement stmt = con.prepareStatement(stmtStr);
+			PreparedStatement stmt;
+			
+			if(usernameFilter == null) {
+				String stmtStr = "SELECT user_id, name, username, type, gender FROM User";
+				stmt = con.prepareStatement(stmtStr);
+			}
+			else {
+				String stmtStr = "SELECT user_id, name, username, type, gender FROM User WHERE username = ?";
+				stmt = con.prepareStatement(stmtStr);
+				stmt.setString(1, usernameFilter);
+			}
 			
 			ResultSet rs = stmt.executeQuery();
 			

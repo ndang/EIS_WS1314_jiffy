@@ -1,12 +1,15 @@
 package de.fh_koeln.gm.mib.eis.dang_pereira.rest.resources;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -26,14 +29,17 @@ public class UsersResource extends Resource {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getUser(@Context HttpHeaders headers) {
+	public Response getUsers(@Context HttpHeaders headers, @DefaultValue("") @QueryParam("username") String usernameFilter) {
 		
 		if(!userExists(headers)) {
 			return Response.status(401).build();
 		}
 		
+		if(usernameFilter.isEmpty())
+			usernameFilter = null;
+		
 		/* Daten per DB-Layer beziehen und sie in ein JSON-Dokument umbetten */
-		Users users = this.dbl.getUsers();
+		Users users = this.dbl.getUsers(usernameFilter);
 		
 		
 		String usersStr = null;

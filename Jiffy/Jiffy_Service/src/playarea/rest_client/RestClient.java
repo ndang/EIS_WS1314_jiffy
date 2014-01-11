@@ -24,7 +24,7 @@ public class RestClient {
 		String user = "petrahumboldt";
 		String pass = "Christa";
 		
-		String uri = "/guardian/4/children";
+		String uri = "/users";
 		
 		String mime = MediaType.APPLICATION_JSON;
 		
@@ -51,7 +51,7 @@ public class RestClient {
 		WebResource wr = Client.create(config).resource(cfg.rest_endpoint.host + ":" + cfg.rest_endpoint.port);
 		wr.addFilter(new HTTPBasicAuthFilter(user, pass));
 		
-		ClientResponse cresp = wr.path(uri).accept(mime).get(ClientResponse.class);
+		ClientResponse cresp = wr.path(uri).queryParam("username", user).accept(mime).get(ClientResponse.class);
 		
 		if(cresp.getStatus() == 200) {
 			String entity = cresp.getEntity(String.class);

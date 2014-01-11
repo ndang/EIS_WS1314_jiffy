@@ -37,9 +37,10 @@ public interface IDataLayer {
 	/**
 	 * Alle User eines Systems zurückgeben 
 	 * 
+	 * * @param usernameFilter Anhand des Usernamen die Liste filtern (optional, ansonsten null übergeben)
 	 * @return JSON-Dokument als Users-Objekt
 	 */
-	public Users getUsers();
+	public Users getUsers(String usernameFilter);
 	
 	
 	/**
