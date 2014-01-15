@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="UI.JiffyController">
+  <children>
+    <TabPane layoutX="0.0" layoutY="0.0" prefHeight="400.0" prefWidth="600.0" side="RIGHT" tabClosingPolicy="UNAVAILABLE">
+      <tabs>
+        <Tab fx:id="tab_start" text="Startseite">
+          <content>
+            <AnchorPane id="Content" fx:id="apane_start" minHeight="0.0" minWidth="0.0" prefHeight="364.0" prefWidth="600.0">
+              <children>
+                <ToolBar fx:id="tbar_start" layoutY="0.0" prefWidth="564.0" AnchorPane.rightAnchor="0.0">
+                  <items>
+                    <ComboBox fx:id="combo_start_subject" promptText="Fach">
+                      <items>
+                        <FXCollections fx:factory="observableArrayList">
+                          <String fx:value="Alle" />
+                          <String fx:value="Mathematik" />
+                          <String fx:value="Englisch" />
+                          <String fx:value="Bildende Kunst" />
+                        </FXCollections>
+                      </items>
+                    </ComboBox>
+                    <ComboBox fx:id="combo_start_class" focusTraversable="true" prefHeight="23.0" prefWidth="100.0" promptText="Klasse">
+                      <items>
+                        <FXCollections fx:factory="observableArrayList">
+                          <String fx:value="Alle" />
+                          <String fx:value="7a" />
+                          <String fx:value="7b" />
+                          <String fx:value="7c" />
+                        </FXCollections>
+                      </items>
+                    </ComboBox>
+                    <ToggleButton id="toggle_" fx:id="toggle_standin" mnemonicParsing="false" text="Vertretung" />
+                    <Slider fx:id="slider_zoom" blockIncrement="1.0" majorTickUnit="5.0" max="5.0" min="0.0" minorTickCount="1" prefWidth="100.0" showTickMarks="false" value="0.0" />
+                  </items>
+                </ToolBar>
+                <Label fx:id="lbl_start_msg" layoutX="14.0" layoutY="48.0" text="Keine Neuigkeiten" />
+                <VBox fx:id="vbox_start" layoutX="14.0" layoutY="89.0" prefHeight="297.0" prefWidth="536.0" />
+                <Button fx:id="btn_start_delete" cancelButton="false" defaultButton="true" layoutX="481.0" layoutY="45.0" mnemonicParsing="false" onAction="#clear" text="Löschen" />
+              </children>
+            </AnchorPane>
+          </content>
+        </Tab>
+        <Tab fx:id="tab_msg" text="Verfassen">
+          <content>
+            <AnchorPane id="Content" fx:id="apane_msg" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <children>
+                <ToolBar fx:id="tbar_msg" layoutX="0.0" layoutY="0.0" prefWidth="564.0">
+                  <items>
+                    <ComboBox fx:id="combobox_msg_receivers" disable="true" prefHeight="23.0" prefWidth="273.0" promptText="Empfänger">
+                      <items>
+                        <FXCollections fx:factory="observableArrayList">
+                          <String fx:value="7a" />
+                          <String fx:value="7b" />
+                          <String fx:value="7c" />
+                          <String fx:value="Schulleiterin (Frau Valentin)" />
+                        </FXCollections>
+                      </items>
+                    </ComboBox>
+                    <Button fx:id="btn_msg_add" disable="true" mnemonicParsing="false" onAction="#addReceiver" text="+" />
+                    <ToggleButton fx:id="toggle_msg_relevance" mnemonicParsing="false" text="Eilmeldung" />
+                  </items>
+                </ToolBar>
+                <TextArea fx:id="textarea_msg" layoutX="14.0" layoutY="78.0" prefHeight="284.0" prefWidth="536.0" wrapText="true" />
+                <Label fx:id="lbl_msg_received" layoutX="53.0" layoutY="48.0" text="Hier steht die Nachricht, auf welche geantwortet wird." />
+                <Button fx:id="btn_msg_send" defaultButton="true" layoutX="485.0" layoutY="369.0" mnemonicParsing="false" onAction="#send" text="Senden" />
+                <Button fx:id="btn_icon_1" layoutX="14.0" layoutY="369.0" mnemonicParsing="false" onAction="#addIcon1" text="Icon1" />
+                <Button id="btn_icon_1" fx:id="btn_msg_icon2" layoutX="68.0" layoutY="369.0" mnemonicParsing="false" onAction="#addIcon2" text="Icon2" />
+                <Button id="btn_icon_1" fx:id="btn_msg_icon3" layoutX="122.0" layoutY="369.0" mnemonicParsing="false" onAction="#addIcon3" text="Icon3" />
+                <Button id="btn_icon_1" fx:id="btn_msg_icon4" layoutX="176.0" layoutY="369.0" mnemonicParsing="false" onAction="#addIcon4" text="Icon4" />
+                <Button id="btn_icon_1" fx:id="btn_msg_icon5" layoutX="230.0" layoutY="369.0" mnemonicParsing="false" onAction="#addIcon5" text="Icon5" />
+                <ImageView fx:id="img_msg_avatar" fitHeight="33.50000011293511" fitWidth="44.66666793823242" layoutX="15.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                    <Image url="@../../img/template.jpg" />
+                  </image>
+                </ImageView>
+              </children>
+            </AnchorPane>
+          </content>
+        </Tab>
+        <Tab fx:id="tab_search" text="Suchen">
+          <content>
+            <AnchorPane id="Content" fx:id="apane_search" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+          </content>
+        </Tab>
+        <Tab fx:id="tab_statistics" text="Statistiken">
+          <content>
+            <AnchorPane id="Content" fx:id="apane_statistics" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+          </content>
+        </Tab>
+        <Tab fx:id="tab_settings" text="Einstellungen">
+          <content>
+            <AnchorPane id="Content" fx:id="apane_settings" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <children>
+                <Accordion layoutX="0.0" layoutY="0.0" prefHeight="400.0" prefWidth="564.0">
+                  <expandedPane>
+                    <TitledPane fx:id="x1" animated="false" text="untitled">
+                      <content>
+                        <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      </content>
+                    </TitledPane>
+                  </expandedPane>
+                  <panes>
+                    <TitledPane animated="false" text="untitled">
+                      <content>
+                        <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      </content>
+                    </TitledPane>
+                    <fx:reference source="x1" />
+                  </panes>
+                </Accordion>
+              </children>
+            </AnchorPane>
+          </content>
+        </Tab>
+      </tabs>
+    </TabPane>
+  </children>
+</AnchorPane>
