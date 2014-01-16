@@ -4,12 +4,11 @@
     <string name="app_name">jiffy</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">jiffy</string>
-    
+
     <!-- Login -->
     <string name="login">Anmelden</string>
     <string name="hint_id">Benutzername</string>
     <string name="hint_pw">Passwort</string>
-    
 
     <!-- Main -->
     <string name="btn_education">Kinder und Noten</string>
@@ -18,22 +17,24 @@
     <string name="lbl_newMsg">x</string>
     <string name="lbl_countMsg">0</string>
     <string name="img_newMsg">Neue Nachricht</string>
-    
-	<!-- Education -->
-	<string name="tab_kind1">Elisabeth</string>
-	<string name="tab_kind2">Naomi</string>
-	<string name="lbl_subj_ma">Mathematik: 2,4</string>
-	<string name="lbl_subj_en">Englisch: 3,1</string>
-	<string name="lbl_subj_de">Deutsch: 3,1</string>
-	<string name="lbl_subj_inf">Informatik: 1,0</string>
-	<string name="lbl_subj_rel">Religion: 2,2</string>
-	<string name="lbl_subj_bk">Kunst: 1,7</string>
-	
-	<!-- Messages -->
-	<string name="btn_send">Senden</string>
-	<string name="list_name">Empfänger</string>
-	<string name="listitem_receiver_name">Frau O. Felgendreher</string>
-	<string name="listitem_receiver_role">Mathematik-Lehrerin</string>
+
+    <!-- Education -->
+    <string name="tab_kind1">Elisabeth</string>
+    <string name="tab_kind2">Naomi</string>
+    <string name="lbl_subj_ma">Mathematik: 2,4</string>
+    <string name="lbl_subj_en">Englisch: 3,1</string>
+    <string name="lbl_subj_de">Deutsch: 3,1</string>
+    <string name="lbl_subj_inf">Informatik: 1,0</string>
+    <string name="lbl_subj_rel">Religion: 2,2</string>
+    <string name="lbl_subj_bk">Kunst: 1,7</string>
+
+    <!-- Messages -->
+    <string name="btn_send">Senden</string>
+    <string name="list_name">Empfänger</string>
+    <string name="listitem_receiver_name">Frau O. Felgendreher</string>
+    <string name="listitem_receiver_role">Mathematik-Lehrerin</string>
     <string name="keyb_verbal">ABC</string>
     <string name="keyb_imaginal">Icons</string>
+    <string name="addReceiver">Empfänger hinzufügen</string>
+
 </resources>

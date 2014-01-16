@@ -1,6 +1,5 @@
 package de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.activities;
 
-
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.R;
 
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.helpers.Group;
@@ -13,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -34,7 +34,7 @@ public class MsgWrite extends Activity {
 		MyExpandableListAdapter adapter = new MyExpandableListAdapter(this,
 				groups);
 		listView.setAdapter(adapter);
-		
+
 		this.msg = (EditText) findViewById(R.id.editText_msg);
 	}
 
@@ -48,23 +48,31 @@ public class MsgWrite extends Activity {
 
 	public void send(View view) {
 		String text = msg.getText().toString();
-		
+
 		Message newMsg = new Message();
-		
-//		newMsg.from_user_id= Integer.valueOf(new Id() );
-		
-		Log.d("mylog",text);
+
+		// newMsg.from_user_id= Integer.valueOf(new Id() );
+
+		Log.d("mylog", text);
 		msg.setText("");
 
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}
+
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.writemsg, menu);
+		return true;
 	}
 }

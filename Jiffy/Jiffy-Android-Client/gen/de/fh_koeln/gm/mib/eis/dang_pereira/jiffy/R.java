@@ -46,6 +46,7 @@ public final class R {
         public static final int template_100x100=0x7f020010;
     }
     public static final class id {
+        public static final int action_addReceiver=0x7f0a001a;
         public static final int action_settings=0x7f0a0019;
         public static final int btn_education=0x7f0a0000;
         public static final int btn_readMsg=0x7f0a0005;
@@ -96,6 +97,7 @@ public final class R {
     }
     public static final class string {
         public static final int action_settings=0x7f080001;
+        public static final int addReceiver=0x7f08001a;
         public static final int app_name=0x7f080000;
         /**  Main 
          */
