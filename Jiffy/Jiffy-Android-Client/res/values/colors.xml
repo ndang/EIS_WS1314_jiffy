@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <color name="jiffyColor_blue">#ff3084a7</color>
+   <color name="jiffyColor_blue_light">#773084a7</color>
+   <color name="jiffyColor_white">#ffffffff</color>
+   <color name="jiffyColor_gray">#ffa4a4a4</color>
+</resources>

@@ -11,7 +11,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/jiffy_logo_unoutlined"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -27,23 +27,23 @@
         </activity>
         <activity
             android:name="de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.activities.MainActivity"
-            android:theme="@style/Jiffy" >
+            android:theme="@style/jiffyTheme">
         </activity>
         
         <activity 
             android:name="de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.activities.EducationOverview"
             android:parentActivityName="de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.activities.MainActivity" 
-            android:theme="@style/Jiffy" />
+            android:theme="@style/jiffyTheme" />
             
         <activity 
             android:name="de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.activities.MsgRead"
             android:parentActivityName="de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.activities.MainActivity"
-            android:theme="@style/Jiffy" />
+            android:theme="@style/jiffyTheme" />
             
         <activity 
             android:name="de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.activities.MsgWrite"
             android:parentActivityName="de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.activities.MainActivity"
-            android:theme="@style/Jiffy" />
+            android:theme="@style/jiffyTheme" />
             
         <service android:name="de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.service.MQTTService" />
     </application>

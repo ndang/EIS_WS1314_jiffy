@@ -6,10 +6,11 @@
     <string name="title_activity_main">Jiffy</string>
 
     <!-- Main -->
-    <string name="btn_education">Leistungen ansehen</string>
-    <string name="btn_writeMsg">Nachricht schreiben</string>
-    <string name="btn_readMsg">Nachricht lesen</string>
-    <string name="lbl_newMsg">Keine neuen Nachrichten.</string>
+    <string name="btn_education">Kinder und Noten</string>
+    <string name="btn_writeMsg">Schreiben</string>
+    <string name="btn_readMsg">Lesen</string>
+    <string name="lbl_newMsg">0 x</string>
+    <string name="img_newMsg">Neue Nachricht</string>
     
 	<!-- Education -->
 	<string name="tab_kind1">Elisabeth</string>
