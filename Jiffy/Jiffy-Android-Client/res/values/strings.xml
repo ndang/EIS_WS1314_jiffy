@@ -15,7 +15,8 @@
     <string name="btn_education">Kinder und Noten</string>
     <string name="btn_writeMsg">Schreiben</string>
     <string name="btn_readMsg">Lesen</string>
-    <string name="lbl_newMsg">0 x</string>
+    <string name="lbl_newMsg">x</string>
+    <string name="lbl_countMsg">0</string>
     <string name="img_newMsg">Neue Nachricht</string>
     
 	<!-- Education -->
@@ -33,5 +34,6 @@
 	<string name="list_name">Empfänger</string>
 	<string name="listitem_receiver_name">Frau O. Felgendreher</string>
 	<string name="listitem_receiver_role">Mathematik-Lehrerin</string>
-    
+    <string name="keyb_verbal">ABC</string>
+    <string name="keyb_imaginal">Icons</string>
 </resources>
