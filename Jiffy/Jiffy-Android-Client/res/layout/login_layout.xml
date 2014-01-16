@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/loginTxtName"
         android:layout_centerHorizontal="true"
-        android:hint="Passwort"
+        android:hint="@string/hint_pw"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:text="Christa"
@@ -43,7 +43,7 @@
         android:layout_marginTop="180dp"
         android:ems="10"
         android:text="petrahumboldt"
-        android:hint="Benutzername"
+        android:hint="@string/hint_id"
         android:singleLine="true" />
 
     <ImageView
@@ -52,6 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:contentDescription="@string/app_name"
         android:src="@drawable/jiffy_logo" />
 
 </RelativeLayout>

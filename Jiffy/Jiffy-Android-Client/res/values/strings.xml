@@ -7,6 +7,9 @@
     
     <!-- Login -->
     <string name="login">Anmelden</string>
+    <string name="hint_id">Benutzername</string>
+    <string name="hint_pw">Passwort</string>
+    
 
     <!-- Main -->
     <string name="btn_education">Kinder und Noten</string>
