@@ -6,6 +6,7 @@ import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.Config;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.msg_structs.InfoMsg;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.msg_structs.Message;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.rest_res_structs.User;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -74,26 +75,26 @@ public class DBHandler {
 		int from_user_id = msg.getFromUserId().getID().intValue();
 		String msg_text = msg.getMsgText();
 		String msg_type = msg.getMsgType();
-		String msg_subtype = msg.getMsgType();
+		String msg_subtype = "";
 		String msg_subtext = "";
 		String date = msg.getMsgSendDate();
 		
 		
 		
 		if(msg_type.equalsIgnoreCase("school")) {
-			String subtype = msg.getSchool().getMsgSubType();
+			msg_subtype = msg.getSchool().getMsgSubType();
 			
-			if(subtype.equalsIgnoreCase("info") && msg.getSchool().getInfo() != null) {
+			if(msg_subtype.equalsIgnoreCase("info") && msg.getSchool().getInfo() != null) {
 				InfoMsg iMsg = msg.getSchool().getInfo();
 				
 				if(iMsg.getClassBroadcast() == true) {
 					msg_subtext = "Klassennachricht!";
 				}
 			}
-			else if(subtype.equalsIgnoreCase("grade")) {
+			else if(msg_subtype.equalsIgnoreCase("grade")) {
 				msg_subtext = "Neue Note!";
 			}
-			else if(subtype.equalsIgnoreCase("excuse_ack")) {
+			else if(msg_subtype.equalsIgnoreCase("excuse_ack")) {
 				msg_subtext = "Entschuldigung bestätigt!";
 			}
 			else
@@ -104,12 +105,21 @@ public class DBHandler {
 
 		
 		
+		ContentValues values = new ContentValues();
+		values.put("msg_uuid", msg_uuid);
+		values.put("user_id", from_user_id);
+		values.put("msg", msg_text);
+		values.put("msg_type", msg_type);
+		values.put("msg_subtype", msg_subtype);
+		
 		String stmt = "INSERT INTO Message (msg_uuid, user_id, msg, msg_type, msg_subtype, msg_subtext, received_date, read) " +
 				"VALUES " + 
 				"( " + msg_uuid + ", " + from_user_id + ", '" + msg_text + "', '" + msg_type + "', '" + msg_subtype + "', '" + msg_subtext + "', " + date + ", 0)";
 				
 		
 		db.execSQL(stmt);
+		
+		
 		return true;
 	}
 	
@@ -123,11 +133,11 @@ public class DBHandler {
 		
 		Cursor c = db.rawQuery(stmt, null);
 		
-		c.moveToFirst();
-		
-		while(!c.isAfterLast()) {
-			LocalMessage lm = cursorToMessage(c);
-			mList.add(lm);
+		if(c.moveToFirst()) {
+			do {
+				LocalMessage lm = cursorToMessage(c);
+				mList.add(lm);
+			} while(c.moveToNext());
 		}
 		
 		return mList;

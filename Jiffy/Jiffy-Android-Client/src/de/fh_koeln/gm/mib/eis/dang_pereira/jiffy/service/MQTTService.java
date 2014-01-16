@@ -29,7 +29,7 @@ import android.widget.Toast;
 
 public class MQTTService extends Service {
 	
-	private Queue<Message> msgStore = new LinkedList<Message>();
+	private Queue<ServiceMessage> msgStore = new LinkedList<ServiceMessage>();
 	private MqttClient mqttClient;
 	private boolean activityIsActive = true;
 	private TopicsSubscribeBroadCastReceiver mTopicsSubscribeReceiver = new TopicsSubscribeBroadCastReceiver();
@@ -133,7 +133,7 @@ public class MQTTService extends Service {
 			PrivateBroadcast.broadcastMsg(this, topic, msg);
 		}
 		else {
-			this.msgStore.offer(new Message(topic, msg));
+			this.msgStore.offer(new ServiceMessage(topic, msg));
 		}
 		
 		Log.d(Config.TAG, "New Message: " + topic + ":" + msg + "\n");
@@ -170,7 +170,7 @@ public class MQTTService extends Service {
 			if(activityIsActive) {
 				Log.d(Config.TAG, "Activity is active!");
 				
-				for(Message msg: msgStore) {
+				for(ServiceMessage msg: msgStore) {
 					handleMsg(msg.getTopic(), msg.getMsg());
 				}
 			}
