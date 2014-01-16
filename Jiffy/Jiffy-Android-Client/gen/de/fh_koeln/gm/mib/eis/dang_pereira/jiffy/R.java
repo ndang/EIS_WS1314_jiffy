@@ -42,31 +42,36 @@ public final class R {
         public static final int jiffy_android_bg=0x7f02000c;
         public static final int jiffy_logo=0x7f02000d;
         public static final int jiffy_logo_unoutlined=0x7f02000e;
+        public static final int template=0x7f02000f;
+        public static final int template_100x100=0x7f020010;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a0016;
+        public static final int action_settings=0x7f0a0019;
         public static final int btn_education=0x7f0a0000;
-        public static final int btn_readMsg=0x7f0a0004;
-        public static final int btn_send=0x7f0a0015;
-        public static final int btn_writeMsg=0x7f0a0003;
-        public static final int editText_msg=0x7f0a0014;
-        public static final int expandableListView_receivers=0x7f0a0013;
-        public static final int icon=0x7f0a0011;
-        public static final int imageView1=0x7f0a0002;
-        public static final int lbl_newMsg=0x7f0a0001;
-        public static final int lbl_subj_bk=0x7f0a0006;
-        public static final int lbl_subj_de=0x7f0a000a;
-        public static final int lbl_subj_en=0x7f0a0009;
-        public static final int lbl_subj_inf=0x7f0a0008;
-        public static final int lbl_subj_ma=0x7f0a000b;
-        public static final int lbl_subj_rel=0x7f0a0007;
-        public static final int loginBtnLogin=0x7f0a0010;
+        public static final int btn_readMsg=0x7f0a0005;
+        public static final int btn_send=0x7f0a0018;
+        public static final int btn_writeMsg=0x7f0a0004;
+        public static final int editText_msg=0x7f0a0015;
+        public static final int expandableListView_receivers=0x7f0a0014;
+        public static final int icon=0x7f0a0012;
+        public static final int imageView1=0x7f0a0003;
+        public static final int keyboard_imaginal=0x7f0a0017;
+        public static final int keyboard_verbal=0x7f0a0016;
+        public static final int lbl_countMsg=0x7f0a0001;
+        public static final int lbl_newMsg=0x7f0a0002;
+        public static final int lbl_subj_bk=0x7f0a0007;
+        public static final int lbl_subj_de=0x7f0a000b;
+        public static final int lbl_subj_en=0x7f0a000a;
+        public static final int lbl_subj_inf=0x7f0a0009;
+        public static final int lbl_subj_ma=0x7f0a000c;
+        public static final int lbl_subj_rel=0x7f0a0008;
+        public static final int loginBtnLogin=0x7f0a0011;
         public static final int loginTxtName=0x7f0a000f;
-        public static final int loginTxtPass=0x7f0a000e;
-        public static final int secondLine=0x7f0a0012;
-        public static final int tab_kind1=0x7f0a0005;
-        public static final int tab_kind2=0x7f0a000c;
-        public static final int textView1=0x7f0a000d;
+        public static final int loginTxtPass=0x7f0a0010;
+        public static final int secondLine=0x7f0a0013;
+        public static final int tab_kind1=0x7f0a0006;
+        public static final int tab_kind2=0x7f0a000d;
+        public static final int textView1=0x7f0a000e;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -97,28 +102,31 @@ public final class R {
         public static final int btn_readMsg=0x7f080008;
         /**  Messages 
          */
-        public static final int btn_send=0x7f080013;
+        public static final int btn_send=0x7f080014;
         public static final int btn_writeMsg=0x7f080007;
         public static final int hint_id=0x7f080004;
         public static final int hint_pw=0x7f080005;
-        public static final int img_newMsg=0x7f08000a;
+        public static final int img_newMsg=0x7f08000b;
+        public static final int keyb_imaginal=0x7f080019;
+        public static final int keyb_verbal=0x7f080018;
+        public static final int lbl_countMsg=0x7f08000a;
         public static final int lbl_newMsg=0x7f080009;
-        public static final int lbl_subj_bk=0x7f080012;
-        public static final int lbl_subj_de=0x7f08000f;
-        public static final int lbl_subj_en=0x7f08000e;
-        public static final int lbl_subj_inf=0x7f080010;
-        public static final int lbl_subj_ma=0x7f08000d;
-        public static final int lbl_subj_rel=0x7f080011;
-        public static final int list_name=0x7f080014;
-        public static final int listitem_receiver_name=0x7f080015;
-        public static final int listitem_receiver_role=0x7f080016;
+        public static final int lbl_subj_bk=0x7f080013;
+        public static final int lbl_subj_de=0x7f080010;
+        public static final int lbl_subj_en=0x7f08000f;
+        public static final int lbl_subj_inf=0x7f080011;
+        public static final int lbl_subj_ma=0x7f08000e;
+        public static final int lbl_subj_rel=0x7f080012;
+        public static final int list_name=0x7f080015;
+        public static final int listitem_receiver_name=0x7f080016;
+        public static final int listitem_receiver_role=0x7f080017;
         /**  Login 
          */
         public static final int login=0x7f080003;
         /**  Education 
          */
-        public static final int tab_kind1=0x7f08000b;
-        public static final int tab_kind2=0x7f08000c;
+        public static final int tab_kind1=0x7f08000c;
+        public static final int tab_kind2=0x7f08000d;
         public static final int title_activity_main=0x7f080002;
     }
     public static final class style {

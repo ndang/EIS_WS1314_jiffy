@@ -12,17 +12,13 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_launcher"
+        android:drawableLeft="@drawable/template_100x100"
         android:drawablePadding="5dp"
+        android:layout_margin="2dp"
         android:gravity="center_vertical"
         android:text="@string/listitem_receiver_role"
-        android:textSize="14sp"
-        android:textStyle="bold" >
+        android:textSize="14sp">
     </TextView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/black" />
 
 </LinearLayout> 
