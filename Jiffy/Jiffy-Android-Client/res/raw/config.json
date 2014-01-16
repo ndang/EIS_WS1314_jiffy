@@ -1,0 +1,16 @@
+{
+    "rest_endpoint": {
+        "host": "https://192.168.43.166",
+        "port": 8080
+        },
+
+    "broker": {
+        "host": "ssl://192.168.43.166",
+        "port": 8883
+        },
+
+    "ssl": {
+        "pass_ks": "koelnerdom",
+        "pass_ts": "koelnerdom"
+    }
+}
