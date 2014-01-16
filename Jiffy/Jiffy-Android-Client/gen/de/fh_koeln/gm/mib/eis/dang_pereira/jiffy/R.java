@@ -93,27 +93,30 @@ public final class R {
         public static final int app_name=0x7f080000;
         /**  Main 
          */
-        public static final int btn_education=0x7f080003;
-        public static final int btn_readMsg=0x7f080005;
+        public static final int btn_education=0x7f080004;
+        public static final int btn_readMsg=0x7f080006;
         /**  Messages 
          */
-        public static final int btn_send=0x7f080010;
-        public static final int btn_writeMsg=0x7f080004;
-        public static final int img_newMsg=0x7f080007;
-        public static final int lbl_newMsg=0x7f080006;
-        public static final int lbl_subj_bk=0x7f08000f;
-        public static final int lbl_subj_de=0x7f08000c;
-        public static final int lbl_subj_en=0x7f08000b;
-        public static final int lbl_subj_inf=0x7f08000d;
-        public static final int lbl_subj_ma=0x7f08000a;
-        public static final int lbl_subj_rel=0x7f08000e;
-        public static final int list_name=0x7f080011;
-        public static final int listitem_receiver_name=0x7f080012;
-        public static final int listitem_receiver_role=0x7f080013;
+        public static final int btn_send=0x7f080011;
+        public static final int btn_writeMsg=0x7f080005;
+        public static final int img_newMsg=0x7f080008;
+        public static final int lbl_newMsg=0x7f080007;
+        public static final int lbl_subj_bk=0x7f080010;
+        public static final int lbl_subj_de=0x7f08000d;
+        public static final int lbl_subj_en=0x7f08000c;
+        public static final int lbl_subj_inf=0x7f08000e;
+        public static final int lbl_subj_ma=0x7f08000b;
+        public static final int lbl_subj_rel=0x7f08000f;
+        public static final int list_name=0x7f080012;
+        public static final int listitem_receiver_name=0x7f080013;
+        public static final int listitem_receiver_role=0x7f080014;
+        /**  Login 
+         */
+        public static final int login=0x7f080003;
         /**  Education 
          */
-        public static final int tab_kind1=0x7f080008;
-        public static final int tab_kind2=0x7f080009;
+        public static final int tab_kind1=0x7f080009;
+        public static final int tab_kind2=0x7f08000a;
         public static final int title_activity_main=0x7f080002;
     }
     public static final class style {
@@ -138,15 +141,14 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f070002;
+        public static final int AppBaseTheme=0x7f070001;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f070003;
-        public static final int Jiffy=0x7f070001;
+        public static final int AppTheme=0x7f070002;
         public static final int JiffyInit=0x7f070000;
-        public static final int LoginFormContainer=0x7f070004;
-        public static final int jiffyButton=0x7f070006;
-        public static final int jiffyTheme=0x7f070005;
+        public static final int LoginFormContainer=0x7f070003;
+        public static final int jiffyButton=0x7f070005;
+        public static final int jiffyTheme=0x7f070004;
     }
 }

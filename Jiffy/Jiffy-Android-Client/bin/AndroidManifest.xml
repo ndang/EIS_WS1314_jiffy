@@ -17,7 +17,7 @@
         <activity
             android:name="de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.InitActivity"
             android:label="@string/app_name"
-            android:theme="@style/JiffyInit"
+            android:theme="@style/jiffyTheme"
             android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
