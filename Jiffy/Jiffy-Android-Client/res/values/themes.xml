@@ -3,13 +3,8 @@
 
     <style name="jiffyTheme" parent="android:style/Theme.Holo.Light">
         <item name="android:textColorPrimary">#ff333333</item>
-        <item name="android:windowBackground">@color/jiffyColor_white</item>
-        <item name="android:buttonStyle">@style/jiffyButton</item>
-    </style>
-    
-    <style name="jiffyTheme" parent="android:style/Theme.Holo.Light">
-        <item name="android:textColorPrimary">#ff333333</item>
-        <item name="android:windowBackground">@drawable/btn_selector</item>
+        <!-- <item name="android:windowBackground">@color/jiffyColor_white</item> -->
+        <!-- <item name="android:windowBackground">@drawable/btn_selector</item>-->
         <item name="android:buttonStyle">@style/jiffyButton</item>
     </style>
 

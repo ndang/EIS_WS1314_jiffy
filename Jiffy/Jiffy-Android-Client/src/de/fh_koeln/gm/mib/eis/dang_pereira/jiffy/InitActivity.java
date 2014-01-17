@@ -69,10 +69,10 @@ public class InitActivity extends Activity {
 				
 				@Override
 				public void onClick(View v) {
-					//TODO: rückgängig machen
-					Intent i = new Intent(self, MainActivity.class);
-					startActivity(i);
-					finish();
+					//TODO: rÃ¼ckgÃ¤ngig machen
+					//Intent i = new Intent(self, MainActivity.class);
+					//startActivity(i);
+					//finish();
 					
 					String username = txtName.getText().toString();
 					String password = txtPass.getText().toString();

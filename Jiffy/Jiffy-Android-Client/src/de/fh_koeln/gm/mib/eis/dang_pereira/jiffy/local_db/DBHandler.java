@@ -23,7 +23,6 @@ public class DBHandler {
 	}
 	
 	public void open() {
-
 		db = sqlHelper.getWritableDatabase();
 	}
 	
@@ -33,19 +32,24 @@ public class DBHandler {
 		Integer userId = user.getUser().getID();
 		String name = user.getName();
 		String username = user.getUsername();
-		String user_type = user.getUserType();
+		String userType = user.getUserType();
 	
-		String stmt = "INSERT INTO User (user_id, name, username, type) " +
-				"VALUES " + 
-				"(" + userId + ", '" + name +"', '" + username + "', '" + user_type + "')";
 		
-		Log.d(Config.TAG, "before!");
+		ContentValues values = new ContentValues();
+		values.put("user_id", userId);
+		values.put("name", name);
+		values.put("username", username);
+		values.put("type", userType);
 		
-		db.execSQL(stmt);
-		
-		Log.d(Config.TAG, "after!");
-		
-		return true;
+		try{
+			db.insertOrThrow("User", null, values);
+			return true;
+		}
+		catch(Exception e) {
+			Log.e(Config.TAG, "INSERT-EXCEPTION: " + e.getMessage());
+		}
+			
+		return false;
 	}
 	
 	
@@ -54,15 +58,23 @@ public class DBHandler {
 	
 		String stmt = "SELECT user_id, name, username, type FROM  User ";
 		
-		Cursor c = db.rawQuery(stmt, null);
+		Cursor c = null;
 		
-		c.moveToFirst();
-		
-		while(!c.isAfterLast()) {
-			LocalUser lu = cursorToUser(c);
-			uList.add(lu);
+		try{
+			c = db.rawQuery(stmt, null);
 		}
-	
+		catch(Exception e) {
+			Log.e(Config.TAG, "SELECT-EXCEPTION: " + e.getMessage());
+		}
+		
+		
+		if(c != null && c.moveToFirst()) {
+			do {
+				LocalUser lu = cursorToUser(c);
+				uList.add(lu);
+			} while(c.moveToNext());
+		}
+		
 		return uList;
 	}
 	
@@ -71,31 +83,31 @@ public class DBHandler {
 	public boolean createMsg(Message msg) {
 		
 		
-		String msg_uuid = msg.getMsgUUID();
-		int from_user_id = msg.getFromUserId().getID().intValue();
-		String msg_text = msg.getMsgText();
-		String msg_type = msg.getMsgType();
-		String msg_subtype = "";
-		String msg_subtext = "";
+		String msgUuid = msg.getMsgUUID();
+		int fromUserId = msg.getFromUserId().getID().intValue();
+		String msgText = msg.getMsgText();
+		String msgSubject = msg.getMsgSubject();
+		String msgType = msg.getMsgType();
+		String msgSubtype = "";
+		String msgSubtext = "";
 		String date = msg.getMsgSendDate();
 		
 		
-		
-		if(msg_type.equalsIgnoreCase("school")) {
-			msg_subtype = msg.getSchool().getMsgSubType();
+		if(msgType.equalsIgnoreCase("school")) {
+			msgSubtype = msg.getSchool().getMsgSubType();
 			
-			if(msg_subtype.equalsIgnoreCase("info") && msg.getSchool().getInfo() != null) {
+			if(msgSubtype.equalsIgnoreCase("info") && msg.getSchool().getInfo() != null) {
 				InfoMsg iMsg = msg.getSchool().getInfo();
 				
 				if(iMsg.getClassBroadcast() == true) {
-					msg_subtext = "Klassennachricht!";
+					msgSubtext = "Klassennachricht!";
 				}
 			}
-			else if(msg_subtype.equalsIgnoreCase("grade")) {
-				msg_subtext = "Neue Note!";
+			else if(msgSubtype.equalsIgnoreCase("grade")) {
+				msgSubtext = "Neue Note!";
 			}
-			else if(msg_subtype.equalsIgnoreCase("excuse_ack")) {
-				msg_subtext = "Entschuldigung bestätigt!";
+			else if(msgSubtype.equalsIgnoreCase("excuse_ack")) {
+				msgSubtext = "Entschuldigung bestätigt!";
 			}
 			else
 				return false;
@@ -104,23 +116,28 @@ public class DBHandler {
 			return false;
 
 		
-		
 		ContentValues values = new ContentValues();
-		values.put("msg_uuid", msg_uuid);
-		values.put("user_id", from_user_id);
-		values.put("msg", msg_text);
-		values.put("msg_type", msg_type);
-		values.put("msg_subtype", msg_subtype);
+		values.put("msg_uuid", msgUuid);
+		values.put("user_id", fromUserId);
+		values.put("msg", msgText);
+		values.put("msg_subject", msgSubject);
+		values.put("msg_type", msgType);
+		values.put("msg_subtype", msgSubtype);
+		values.put("msg_subtext", msgSubtext);
+		values.put("received_date", date);
+		values.put("unread", 0);
 		
-		String stmt = "INSERT INTO Message (msg_uuid, user_id, msg, msg_type, msg_subtype, msg_subtext, received_date, read) " +
-				"VALUES " + 
-				"( " + msg_uuid + ", " + from_user_id + ", '" + msg_text + "', '" + msg_type + "', '" + msg_subtype + "', '" + msg_subtext + "', " + date + ", 0)";
-				
+		Log.d(Config.TAG, msgUuid + " - " + fromUserId);
 		
-		db.execSQL(stmt);
+		try{
+			db.insertOrThrow("Message", null, values);
+			return true;
+		}
+		catch(Exception e) {
+			Log.e(Config.TAG, "INSERT-EXCEPTION: " + e.getMessage());
+		}
 		
-		
-		return true;
+		return false;
 	}
 	
 	
@@ -128,12 +145,20 @@ public class DBHandler {
 		
 		ArrayList<LocalMessage> mList = new ArrayList<LocalMessage>();
 		
-		String stmt = "SELECT m.msg, m.msg_type, m.msg_subtype, m.msg_subtext, m.received_date, m.user_id, m.read, u.name FROM Message m LEFT JOIN User u ON m.user_id = u.user_id " + 
-				"ORDER BY date(m.received_date) DESC";
+		String stmt = "SELECT m.msg, m.msg_subject, m.msg_type, m.msg_subtype, m.msg_subtext, m.received_date, m.user_id, m.unread, u.name FROM Message m LEFT JOIN User u ON m.user_id = u.user_id " + 
+				"ORDER BY datetime(m.received_date) DESC";
 		
-		Cursor c = db.rawQuery(stmt, null);
+		Cursor c = null;
 		
-		if(c.moveToFirst()) {
+		try{
+			c = db.rawQuery(stmt, null);
+		}
+		catch(Exception e) {
+			Log.e(Config.TAG, "SELECT-EXCEPTION: " + e.getMessage());
+		}
+		
+		
+		if(c != null && c.moveToFirst()) {
 			do {
 				LocalMessage lm = cursorToMessage(c);
 				mList.add(lm);
@@ -145,17 +170,74 @@ public class DBHandler {
 	
 	
 	
+	public ArrayList<LocalMessage> getUnreadMessages() {
+		
+		ArrayList<LocalMessage> mList = new ArrayList<LocalMessage>();
+		
+		String stmt = "SELECT m.msg, m.msg_subject, m.msg_type, m.msg_subtype, m.msg_subtext, m.received_date, m.user_id, m.unread, u.name FROM Message m LEFT JOIN User u ON m.user_id = u.user_id " + 
+				"ORDER BY datetime(m.received_date) DESC " +
+				"WHERE m.unread = 0";
+		
+		Cursor c = null;
+		
+		try{
+			c = db.rawQuery(stmt, null);
+		}
+		catch(Exception e) {
+			Log.e(Config.TAG, "SELECT-EXCEPTION: " + e.getMessage());
+		}
+		
+		
+		if(c != null && c.moveToFirst()) {
+			do {
+				LocalMessage lm = cursorToMessage(c);
+				mList.add(lm);
+			} while(c.moveToNext());
+		}
+		
+		return mList;
+	}
+	
+	
+	
+	public int getNumUnreadMsgs() {
+		int num = 0;
+		
+		String stmt = "SELECT COUNT(*) FROM Message WHERE unread = 0";
+		
+		Cursor c = null;
+		
+		try{
+			c = db.rawQuery(stmt, null);
+		}
+		catch(Exception e) {
+			Log.e(Config.TAG, "SELECT-EXCEPTION: " + e.getMessage());
+		}
+		
+		
+		if(c != null && c.moveToFirst()) {
+			
+		}
+		
+		return num;
+	}
+	
+	
+	
 	private LocalMessage cursorToMessage(Cursor c) {
 		LocalMessage lm = new LocalMessage();
 		
 		lm.setMsg(c.getString(0));
-		lm.setType(c.getString(1));
-		lm.setSubType(c.getString(2));
-		lm.setSubtext(c.getString(3));
-		lm.setDate(c.getString(4));
-		lm.setUserId(c.getInt(5));
-		lm.setRead(c.getInt(6));
-		lm.setName(c.getString(7));
+		lm.setSubject(c.getString(1));
+		lm.setType(c.getString(2));
+		lm.setSubType(c.getString(3));
+		lm.setSubtext(c.getString(4));
+		lm.setDate(c.getString(5));
+		lm.setUserId(c.getInt(6));
+		lm.setRead(c.getInt(7));
+		lm.setName(c.getString(8));
+		
+		Log.d(Config.TAG, "sub: " + lm.getSubject());
 		
 		return lm;
 	}
