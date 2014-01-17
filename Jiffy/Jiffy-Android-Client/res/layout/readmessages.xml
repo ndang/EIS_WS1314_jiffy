@@ -21,7 +21,7 @@
             android:layout_width="0dip"
             android:layout_height="60dp"
             android:layout_weight="0.1"
-            android:src="@drawable/template_100x100" />
+            android:src="@drawable/template" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -54,12 +54,14 @@
         android:textSize="50sp"
         android:text="▲"
         android:layout_marginBottom="-32dp"
+        android:layout_marginTop="-32dp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dip"
         android:layout_weight="0.81"
+        android:gravity="center_horizontal"
         android:orientation="horizontal" >
 
         <Button
@@ -70,18 +72,18 @@
             android:text="◀" />
 
         <LinearLayout
-            android:layout_width="160dp"
+            android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.45"
             android:background="@color/jiffyColor_blue"
             android:padding="5dp"
+            android:gravity="center_horizontal"
             android:layout_margin="5dp"
             android:orientation="vertical" >
 
             <ImageView
                 android:id="@+id/msg_relevance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:contentDescription="Relevanz der Meldung"
                 android:src="@drawable/icon_newmsg" />
 
@@ -89,7 +91,7 @@
                 android:id="@+id/msgdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="07.07.07"
+                android:text="⌚ 07.07.07 - 07:07 "
                 android:textColor="#FFffffff"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -97,34 +99,34 @@
                 android:id="@+id/subject"
                 android:textColor="#FFffffff"
                 android:layout_width="wrap_content"
-                android:layout_height="0dip"
-                android:layout_marginBottom="5dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
                 android:layout_marginTop="2dp"
-                android:layout_weight="1"
                 android:text="Note Klassenarbeit Mathematik"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal">
 
                 <ImageView
                     android:id="@+id/msg_icon_subj"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/child_alice" />
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/template" />
 
                 <ImageView
                     android:id="@+id/msg_icon_praed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/maths" />
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/icon_subj_ma" />
 
                 <ImageView
                     android:id="@+id/msg_icon_obj"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/grade_1" />
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/icon_grade_1" />
 
             </LinearLayout>
 
@@ -134,15 +136,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Alice hat eine 1 in Mathe."
+                android:layout_marginBottom="10dp"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <Button
                 android:id="@+id/btn_readack"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:drawableTop="@drawable/icon_readmsg_glass"
-                android:text="Lesebestätigung" />
+                android:layout_margin="10dp"
+                android:drawableTop="@drawable/icon_readed"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:layout_gravity="bottom"
+                android:text="Fertig gelesen" />
 
         </LinearLayout>
 
