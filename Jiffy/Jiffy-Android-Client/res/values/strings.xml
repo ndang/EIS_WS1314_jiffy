@@ -45,7 +45,7 @@
     <string name="read_prevteacher">◀</string>
     <string name="read_relevance">Relevanz der Meldung</string>
     <string name="read_time">⌚ 07.07.07 - 07:07</string>
-    <string name="read_subject">Note Klassenarbeit Mathematik</string>
+    <string name="read_subject">Note Mathematik</string>
     <string name="read_msgtext">Alice hat eine 1 in Mathe.</string>
     <string name="read_ack">Fertig gelesen</string>
     <string name="read_nextteacher">▶</string>
