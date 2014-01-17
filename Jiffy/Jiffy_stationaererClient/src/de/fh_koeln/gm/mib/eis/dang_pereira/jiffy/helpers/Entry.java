@@ -19,6 +19,8 @@ public class Entry extends HBox{
 	JiffyController jc;
 	Entry self;
 	
+	LocalMessage lm = null;
+	
 	Label lbl_text;
 	ImageView ava;
 	Button btn_answer;
@@ -26,10 +28,13 @@ public class Entry extends HBox{
 	
 	
 	
-	public Entry( JiffyController jc, String sender, String ava_location, String text ){
+	public Entry( JiffyController jc, final LocalMessage lm, String sender, String ava_location, final String text ){
 		
 		// allgemeines
 		super (10);
+		
+		this.lm = lm;
+		
 		this.sender = sender;
 		this.computeMinHeight(200);
 		this.jc = jc;
@@ -54,10 +59,14 @@ public class Entry extends HBox{
 	    
 	    final JiffyController jc1 = jc; 
 	    
-	    // Funktionalitäten
+	    // FunktionalitÃ¤ten
 	    btn_answer.setOnAction(new EventHandler<ActionEvent>() {
 	        @Override public void handle(ActionEvent e) {
 	        	jc1.switchtab(null, 1);
+	        	
+	        	jc1.lbl_msg_received.setText(text);
+	        	jc1.setAsUnread(lm);
+	        	jc1.setMsgSelected(lm);
 	        }
 	    });
 	    
@@ -67,7 +76,7 @@ public class Entry extends HBox{
 	        }
 	    });
 	    
-	    // Nodes hinzufügen
+	    // Nodes hinzufÃ¼gen
 	    this.getChildren().add(ava);
 	    this.getChildren().add(lbl_text);
 	    this.getChildren().add(btn_answer);

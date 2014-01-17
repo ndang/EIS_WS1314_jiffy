@@ -5,6 +5,7 @@ import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.msg_structs.Message;
 public class LocalMessage {
 
 	private Integer userId;
+	private boolean unread;
 	private String name;
 	private String text;
 	private Message msgStruct;
@@ -16,6 +17,15 @@ public class LocalMessage {
 	
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+	
+	
+	public boolean getUnread() {
+		return this.unread;
+	}
+	
+	public void setUnread(boolean unread) {
+		this.unread = unread;
 	}
 	
 	

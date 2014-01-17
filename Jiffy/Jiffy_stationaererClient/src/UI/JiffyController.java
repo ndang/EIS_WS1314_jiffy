@@ -6,23 +6,27 @@
 
 package UI;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.Config;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.broker_client.BrokerClient;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.broker_client.EventCallback;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.data_access.RESTDataHandler;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.helpers.Entry;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.helpers.LocalMessage;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.msg_structs.Id;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.msg_structs.InfoMsg;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.msg_structs.Message;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.msg_structs.SchoolMsg;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.resource_structs.Topics;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.resource_structs.User;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -49,6 +53,8 @@ public class JiffyController implements Initializable {
 	
 	private final JiffyController self = this;
 	private ObjectMapper jmapper = new ObjectMapper();
+	
+	private LocalMessage msgSelected;
 	
 	public JiffyController() {
 		
@@ -77,30 +83,30 @@ public class JiffyController implements Initializable {
 	// allgemein
 	private int entryCount;
 	@FXML
-	TabPane tabpane;
+	public TabPane tabpane;
 
 	// start-tab
 	@FXML
-	Label lbl_start_msg;
+	public Label lbl_start_msg;
 	@FXML
-	VBox vbox_start;
+	public VBox vbox_start;
 	@FXML
-	ToggleButton toggle_msg_relevance;
+	public ToggleButton toggle_msg_relevance;
 
 	@FXML
-	Label lbl_start_msg1;
+	public Label lbl_start_msg1;
 	@FXML
-	Label lbl_start_msg2;
+	public Label lbl_start_msg2;
 	@FXML
-	Label lbl_start_msg3;
+	public Label lbl_start_msg3;
 
 	// send-tab
 	@FXML
-	Button btn_msg_send;
+	public Button btn_msg_send;
 	@FXML
-	TextArea textarea_msg;
+	public TextArea textarea_msg;
 	@FXML
-	Label lbl_msg_received;
+	public Label lbl_msg_received;
 
 	@FXML
 	private void clear(ActionEvent event) {
@@ -115,13 +121,50 @@ public class JiffyController implements Initializable {
 
 	@FXML
 	private void send(ActionEvent event) {
+
+		if(msgSelected == null)
+			return;
+		
 		String text = textarea_msg.getText();
+		
+		int relevance = 0;
+		
 		if (text.length() != 0) {
 			if (toggle_msg_relevance.isSelected()) {
 				System.out.println("Dies ist eine Eilmeldung.");
+				relevance = 1;
 			}
-			System.out.println(text + " wird versendet.");
-			textarea_msg.setText("");
+			//System.out.println(text + " wird versendet.");
+			
+			
+			Config cfg = Config.getInstance();
+			
+			
+			/* Nachricht konstruieren */
+			
+			Message msg = new Message();
+			msg.setMsgType("school");
+			msg.setFromUserId(new Id(cfg.userId, "/user/" + cfg.userId));
+			msg.setToUserId(new Id(msgSelected.getUserId(), "/user/" + msgSelected.getUserId()));
+			msg.setMsgText(text);
+			
+			SchoolMsg s = new SchoolMsg("info", null, new InfoMsg(true, "2014-01-17 22:11:30"), null);
+			
+			msg.setSchool(s);
+			msg.setMsgRelevance(relevance);
+			msg.setMsgSubject("Nachricht");
+			msg.setMsgUUID(UUID.randomUUID().toString());
+			
+			/* Nachricht marshallen und veröffentlichen */
+			String payload;
+			try {
+				payload = jmapper.writeValueAsString(msg);
+				bc.publishToTopic("private/" + msgSelected.getUserId(), payload);
+				textarea_msg.setText("");
+			} catch (JsonProcessingException e) {
+				System.err.println("Konnte Nachricht nicht verschicken: " + e.getMessage());
+			}
+			
 		} else {
 			new Popup("Nachricht ist leer!");
 		}
@@ -190,6 +233,7 @@ public class JiffyController implements Initializable {
 		entryCount = 0;
 		vbox_start.setSpacing(10);
 
+		/*
 		ArrayList<Object> listmsg = new ArrayList<Object>();
 		listmsg.add("hey");
 		listmsg.add("I");
@@ -200,11 +244,22 @@ public class JiffyController implements Initializable {
 			vbox_start.getChildren().add(
 					new Entry(this, "ich", "du", msg.toString()));
 		}
+		*/
 
 		updateStart();
 	}
 
 	private void updateStart() {
+		
+		int count = 0;
+		
+		for(LocalMessage lm: msgList) {
+			if(lm.getUnread())
+				count ++;
+		}
+		
+		this.entryCount = count;
+		
 		lbl_start_msg.setText(entryCount + " neue Nachricht(en).");
 	}
 
@@ -221,9 +276,24 @@ public class JiffyController implements Initializable {
 
 	
 	
+	public void setAsUnread(LocalMessage lm) {
+		for(LocalMessage lmEntry: msgList) {
+			if(lmEntry.equals(lm))
+				lmEntry.setUnread(false);
+		}
+		
+		updateStart();
+	}
+	
+	
+	public void setMsgSelected(LocalMessage lm) {
+		this.msgSelected = lm;
+	}
+	
+	
 	public void handleMessage(String topic, String payload) {
 		
-		LocalMessage lm = new LocalMessage();
+		final LocalMessage lm = new LocalMessage();
 		
 		Message msg;
 		try {
@@ -235,11 +305,23 @@ public class JiffyController implements Initializable {
 			User u = rdh.getUser(userId);
 			
 			lm.setUserId(userId);
+			lm.setUnread(true);
 			lm.setName(u.getName());
 			lm.setText(msg.getMsgText());
 			
 			msgList.add(lm);
+			
+			entryCount++;
+			
 			System.out.println("Message added!");
+			
+			Platform.runLater(new Runnable() {
+		      @Override public void run() {
+		    	  vbox_start.getChildren().add(0, new Entry(self, lm, "ich", lm.getName(), lm.getText()));
+		    	  updateStart();
+		      }
+		    });
+			
 			
 		} catch (Exception e) {
 			System.err.println("Fehler beim Marshalling: " + e.getMessage());
