@@ -7,7 +7,12 @@
 package UI;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.Config;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.broker_client.BrokerClient;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.data_access.RESTDataHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -33,17 +38,28 @@ public class LoginController implements Initializable {
         String name = lbl_name.getText();
         String pw = lbl_pw.getText();
         
-        boolean loginValid = true; // TODO: Benutzername + Passwort überprüfen
-        if ( loginValid ){
-            new Jiffy();
-            //new Popup("Login successed");
-            System.out.println("You're logged in, "+ name +" !");
-            Stage stage = (Stage) lbl_name.getScene().getWindow();
-            stage.close();
-        }
-        else{
-            new Popup("Login Failed");
-            //System.err.println("Login failed!");
+        boolean loginValid = false;
+        
+        /* Überprüfen, ob der REST-Endpoint und der Broker überhaupt erreichbar sind */
+        final RESTDataHandler rdh = RESTDataHandler.getInstance();
+        final BrokerClient bc = BrokerClient.getInstance();
+        if(rdh.available() && bc.connect(name, pw)) {
+        	
+        	Config cfg = Config.getInstance();
+        	cfg.username = name;
+        	cfg.password = pw;
+        	loginValid = true;
+        	
+            if ( loginValid ){
+                new Jiffy();
+                System.out.println("You're logged in as, "+ name +" !");
+                Stage stage = (Stage) lbl_name.getScene().getWindow();
+                stage.close();
+            }
+            else{
+            	new Popup("Login Failed");
+            }
+        	
         }
     }
     

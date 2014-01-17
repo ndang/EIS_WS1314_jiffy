@@ -10,8 +10,8 @@
   <children>
     <AnchorPane layoutX="0.0" layoutY="0.0" prefHeight="203.0" prefWidth="350.0">
       <children>
-        <Label fx:id="lbl_text" layoutX="151.0" layoutY="84.0" text="any text" />
-        <Button fx:id="btn_fine" cancelButton="true" contentDisplay="CENTER" defaultButton="true" layoutX="151.0" layoutY="136.0" mnemonicParsing="false" onAction="#close" text="Fine." />
+        <Label fx:id="lbl_text" layoutX="43.0" layoutY="75.0" prefHeight="31.0" text="Kann leider keine Verbindung aufbauen!" />
+        <Button fx:id="btn_fine" cancelButton="true" contentDisplay="CENTER" defaultButton="true" layoutX="151.0" layoutY="136.0" mnemonicParsing="false" onAction="#close" text="Ok" />
       </children>
     </AnchorPane>
   </children>

@@ -1,0 +1,18 @@
+{
+    "rest_endpoint": {
+        "host": "https://localhost",
+        "port": 8080
+        },
+
+    "broker": {
+        "host": "ssl://localhost",
+        "port": 8883
+        },
+
+    "ssl": {
+        "path_ks": "broker.ks",
+        "pass_ks": "koelnerdom",
+        "path_ts": "client.ts",
+        "pass_ts": "koelnerdom"
+    }
+}

@@ -1,0 +1,40 @@
+package de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.helpers;
+
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+
+import javax.net.SocketFactory;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+
+public class OwnSSLSocketFactory {
+
+	private OwnSSLSocketFactory() {}
+	
+	public static SocketFactory getSocketFactory(InputStream ksStream, String passKS, InputStream tsStream, String passTS) throws Exception {
+		
+	    KeyManagerFactory kmf;
+	    KeyStore ks;
+	    
+		kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+	    ks = KeyStore.getInstance("JKS");
+	    ks.load(ksStream, passKS.toCharArray());
+
+	    kmf.init(ks, passKS.toCharArray());
+	    
+	    
+	    KeyStore ts;
+	    ts = KeyStore.getInstance("JKS");
+	    ts.load(tsStream, passTS.toCharArray());
+	    TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+	    tmf.init(ts);
+	    
+	    SSLContext ctx = SSLContext.getInstance("TLS");
+	    ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
+		
+	    return ctx.getSocketFactory();
+	}
+	
+}

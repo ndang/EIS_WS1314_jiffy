@@ -6,12 +6,23 @@
 
 package UI;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.helpers.Entry;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.broker_client.BrokerClient;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.broker_client.EventCallback;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.data_access.RESTDataHandler;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.helpers.Entry;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.helpers.LocalMessage;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.msg_structs.Message;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.resource_structs.Topics;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.resource_structs.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,7 +41,39 @@ import javafx.scene.layout.VBox;
  * @author dang_pereira
  */
 public class JiffyController implements Initializable {
-
+	
+	private ArrayList<LocalMessage> msgList = new ArrayList<LocalMessage>();
+	
+	final RESTDataHandler rdh = RESTDataHandler.getInstance();
+	final BrokerClient bc = BrokerClient.getInstance();
+	
+	private final JiffyController self = this;
+	private ObjectMapper jmapper = new ObjectMapper();
+	
+	public JiffyController() {
+		
+		/* Erstmal alle nÃ¶tigen Topics abonnieren;
+    	 * muss in einem eigenen Thread laufen, um den UI-Thread nicht zu blockieren */
+    	new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+	        	//ArrayList<String> topics = rdh.getTopicsToSubscribe().getTopics();
+	        	
+				
+				Topics topics = rdh.getTopicsToSubscribe();
+				if(topics != null) {
+		        	for(String topic: topics.getTopics()) {
+		        		bc.subscribeTopic(topic);
+		        	}
+				}
+	        	
+	        	bc.setCallback(new EventCallback(self));
+			}
+		}).start();
+    	
+	}
+	
 	// allgemein
 	private int entryCount;
 	@FXML
@@ -67,7 +110,7 @@ public class JiffyController implements Initializable {
 
 	@FXML
 	private void delete(ActionEvent event) {
-		System.out.println("Nachricht wird gelöscht.");
+		System.out.println("Nachricht wird gelï¿½scht.");
 	}
 
 	@FXML
@@ -176,4 +219,31 @@ public class JiffyController implements Initializable {
 		updateStart();
 	}
 
+	
+	
+	public void handleMessage(String topic, String payload) {
+		
+		LocalMessage lm = new LocalMessage();
+		
+		Message msg;
+		try {
+			msg = jmapper.readValue(payload, Message.class);
+			
+			lm.setMsgStruct(msg);
+			
+			Integer userId = msg.getFromUserId().getID();
+			User u = rdh.getUser(userId);
+			
+			lm.setUserId(userId);
+			lm.setName(u.getName());
+			lm.setText(msg.getMsgText());
+			
+			msgList.add(lm);
+			System.out.println("Message added!");
+			
+		} catch (Exception e) {
+			System.err.println("Fehler beim Marshalling: " + e.getMessage());
+		}
+	}
+	
 }
