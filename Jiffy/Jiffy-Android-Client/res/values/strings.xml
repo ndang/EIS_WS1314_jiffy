@@ -28,7 +28,7 @@
     <string name="lbl_subj_rel">Religion: 2,2</string>
     <string name="lbl_subj_bk">Kunst: 1,7</string>
 
-    <!-- Messages -->
+    <!-- Write Messages -->
     <string name="btn_send">Senden</string>
     <string name="list_name">Empfänger</string>
     <string name="listitem_receiver_name">Frau O. Felgendreher</string>
@@ -36,5 +36,19 @@
     <string name="keyb_verbal">ABC</string>
     <string name="keyb_imaginal">Icons</string>
     <string name="addReceiver">Empfänger hinzufügen</string>
+    
+    <!-- Write Messages -->
+    <string name="read_msgicon">Nachricht Icon</string>
+    <string name="read_rolesender">Mathematik Lehrerin von Alice</string>
+    <string name="read_namesender">Frau Felgendreher</string>
+    <string name="read_up">▲</string>
+    <string name="read_prevteacher">◀</string>
+    <string name="read_relevance">Relevanz der Meldung</string>
+    <string name="read_time">⌚ 07.07.07 - 07:07</string>
+    <string name="read_subject">Note Klassenarbeit Mathematik</string>
+    <string name="read_msgtext">Alice hat eine 1 in Mathe.</string>
+    <string name="read_ack">Fertig gelesen</string>
+    <string name="read_nextteacher">▶</string>
+    <string name="read_nextmsg">▼</string>
 
 </resources>

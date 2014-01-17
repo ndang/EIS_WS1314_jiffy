@@ -10,7 +10,7 @@
         android:id="@+id/btn_previousmsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="▲" />
+        android:text="@string/read_up" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,14 +34,14 @@
                 android:id="@+id/sender_role"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mathematik Lehrerin von Alice"
+                android:text="@string/read_rolesender"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
                 android:id="@+id/sender_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Frau Felgendreher"
+                android:text="@string/read_namesender"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
     </LinearLayout>
@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/jiffyColor_blue"
         android:textSize="50sp"
-        android:text="▲"
+        android:text="@string/read_up"
         android:layout_marginBottom="-32dp"
         android:layout_marginTop="-32dp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="◀" />
+            android:text="@string/read_prevteacher" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -84,14 +84,14 @@
                 android:id="@+id/msg_relevance"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:contentDescription="Relevanz der Meldung"
+                android:contentDescription="@string/read_relevance"
                 android:src="@drawable/icon_newmsg" />
 
             <TextView
                 android:id="@+id/msgdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="⌚ 07.07.07 - 07:07 "
+                android:text="@string/read_time"
                 android:textColor="#FFffffff"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -102,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="2dp"
-                android:text="Note Klassenarbeit Mathematik"
+                android:text="@string/read_subject"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <LinearLayout
@@ -114,18 +114,21 @@
                     android:id="@+id/msg_icon_subj"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
+                    android:contentDescription="@string/read_msgicon"
                     android:src="@drawable/template" />
 
                 <ImageView
                     android:id="@+id/msg_icon_praed"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
+                    android:contentDescription="@string/read_msgicon"
                     android:src="@drawable/icon_subj_ma" />
 
                 <ImageView
                     android:id="@+id/msg_icon_obj"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
+                    android:contentDescription="@string/read_msgicon"
                     android:src="@drawable/icon_grade_1" />
 
             </LinearLayout>
@@ -135,7 +138,7 @@
                 android:textColor="#FFffffff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Alice hat eine 1 in Mathe."
+                android:text="@string/read_msgtext"
                 android:layout_marginBottom="10dp"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -144,11 +147,11 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:drawableTop="@drawable/icon_readed"
+                android:drawableTop="@drawable/icon_readed_btnsize"
                 android:scaleType="fitCenter"
                 android:adjustViewBounds="true"
                 android:layout_gravity="bottom"
-                android:text="Fertig gelesen" />
+                android:text="@string/read_ack" />
 
         </LinearLayout>
 
@@ -157,7 +160,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="▶" />
+            android:text="@string/read_nextteacher" />
 
     </LinearLayout>
 
@@ -165,6 +168,6 @@
         android:id="@+id/btn_nextmsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="▼" />
+        android:text="@string/read_nextmsg" />
 
 </LinearLayout>

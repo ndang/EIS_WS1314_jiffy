@@ -16,7 +16,7 @@
         android:layout_height="0dp"
         android:layout_margin="5dp"
         android:layout_weight="0.2"
-        android:drawableTop="@drawable/icon_education"
+        android:drawableTop="@drawable/icon_education_btnsize"
         android:onClick="seeEducation"
         android:text="@string/btn_education" />
 
@@ -67,7 +67,7 @@
             android:layout_width="130dp"
             android:layout_height="fill_parent"
             android:layout_margin="5dp"
-            android:drawableTop="@drawable/icon_writemsg"
+            android:drawableTop="@drawable/icon_writemsg_btnsize"
             android:onClick="sendMsg"
             android:text="@string/btn_writeMsg" />
 
@@ -76,7 +76,7 @@
             android:layout_width="130dp"
             android:layout_height="fill_parent"
             android:layout_margin="5dp"
-            android:drawableTop="@drawable/icon_readmsg_glass"
+            android:drawableTop="@drawable/icon_readmsg_glass_btnsize"
             android:onClick="readMsg"
             android:text="@string/btn_readMsg" />
     </LinearLayout>
