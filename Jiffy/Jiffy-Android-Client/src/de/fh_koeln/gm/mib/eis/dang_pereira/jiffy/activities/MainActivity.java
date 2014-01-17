@@ -45,16 +45,16 @@ public class MainActivity extends Activity {
 		
 		/* Überprüfen, ob der Service läuft;
 		 * wenn nicht, dann lösche das loggedIn-Feld und gehe zurück zum Login-Formular */
-		if(!this.checkIfServiceIsRunning()) {
-			SharedPreferences spref = getSharedPreferences("account", Context.MODE_PRIVATE);
-			spref.edit()
-				.remove("loggedIn")
-			.commit();
-			
-			Intent i = new Intent(this, InitActivity.class);
-			startActivity(i);
-			finish();
-		}
+//		if(!this.checkIfServiceIsRunning()) {
+//			SharedPreferences spref = getSharedPreferences("account", Context.MODE_PRIVATE);
+//			spref.edit()
+//				.remove("loggedIn")
+//			.commit();
+//			
+//			Intent i = new Intent(this, InitActivity.class);
+//			startActivity(i);
+//			finish();
+//		}
 		
 		
 		dbh = new DBHandler(getApplicationContext());

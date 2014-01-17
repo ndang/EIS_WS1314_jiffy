@@ -43,7 +43,8 @@ public class InitActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
+		
 		this.self = this;
 		boolean loggedIn = false;
 		
@@ -55,6 +56,7 @@ public class InitActivity extends Activity {
 		}
 		
 		Log.d(Config.TAG, "loggedIn: " +loggedIn);
+
 		
 		if(loggedIn == true) {
 			// Sofern bereits angemeldet, gehe zur MainActivity
@@ -70,6 +72,17 @@ public class InitActivity extends Activity {
 			txtPass = (EditText) findViewById(R.id.loginTxtPass);
 			
 			
+			Button btnLogin1 = (Button)findViewById(R.id.button1);
+			btnLogin1.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent i = new Intent(self, MainActivity.class);
+					startActivity(i);
+					finish();
+					
+				}
+			});
 			/* Konfiguration initialisieren */
 			Config cfg = Config.getInstance(getApplicationContext());
 			
