@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,14 +7,14 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".InitActivity" >
+    tools:context=".InitActivity"
+    android:orientation="vertical"
+    android:gravity="center">
 
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_height="150dp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/jiffy_logo" />
 
@@ -22,10 +22,8 @@
         android:id="@+id/loginTxtName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/loginTxtPass"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="200dp"
         android:ems="10"
+        android:layout_marginTop="50dp"
         android:hint="@string/hint_id"
         android:singleLine="true"
         android:text="petrahumboldt" />
@@ -34,25 +32,17 @@
         android:id="@+id/loginTxtPass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/loginTxtName"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="@string/hint_pw"
         android:inputType="textPassword"
         android:singleLine="true"
-        android:text="Christa" >
-
-        <requestFocus />
-    </EditText>
+        android:text="Christa" />
 
     <Button
         android:id="@+id/loginBtnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/loginTxtPass"
-        android:layout_alignRight="@+id/loginTxtPass"
-        android:layout_below="@+id/loginTxtPass"
         android:layout_marginTop="40dp"
         android:text="@string/login" />
 
@@ -61,9 +51,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/loginBtnLogin"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="Button" />
 
-</RelativeLayout>
+</LinearLayout>
