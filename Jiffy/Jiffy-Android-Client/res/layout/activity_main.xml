@@ -13,9 +13,8 @@
     <Button
         android:id="@+id/btn_education"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:layout_weight="0.2"
         android:drawableTop="@drawable/icon_education_btnsize"
         android:onClick="seeEducation"
         android:text="@string/btn_education" />
@@ -23,13 +22,14 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.6"
-        android:orientation="horizontal" >
+        android:layout_weight="1"
+        android:orientation="horizontal" 
+        android:gravity="center">
 
         <TextView
             android:id="@+id/lbl_countMsg"
-            android:layout_width="80dp"
-            android:layout_height="210dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:gravity="right"
             android:text="@string/lbl_countMsg"
@@ -38,9 +38,8 @@
 
         <TextView
             android:id="@+id/lbl_newMsg"
-            android:layout_margin="5dp"
-            android:layout_width="40dp"
-            android:layout_height="210dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="fill_vertical"
             android:text="@string/lbl_newMsg"
             android:textStyle="bold"
@@ -48,9 +47,9 @@
 
         <ImageView
             android:id="@+id/imageView1"
-            android:layout_margin="5dp"
-            android:layout_width="130dp"
-            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/img_newMsg"
             android:src="@drawable/icon_newmsg" />
     </LinearLayout>
@@ -65,7 +64,7 @@
         <Button
             android:id="@+id/btn_writeMsg"
             android:layout_width="130dp"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:drawableTop="@drawable/icon_writemsg_btnsize"
             android:onClick="sendMsg"
@@ -74,7 +73,7 @@
         <Button
             android:id="@+id/btn_readMsg"
             android:layout_width="130dp"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:drawableTop="@drawable/icon_readmsg_glass_btnsize"
             android:onClick="readMsg"
