@@ -32,6 +32,8 @@ public class EventCallback implements MqttCallback {
 	@Override
 	public void connectionLost(Throwable t) {
 		Log.d(Config.TAG, "Connection lost!");
+		
+		((MQTTService)this.cw).restartIfNotConnected();
 	}
 
 	@Override
@@ -47,11 +49,8 @@ public class EventCallback implements MqttCallback {
 		MQTTService mqttService = ((MQTTService)cw);
 		mqttService.handleMsg(topic, payload);
 		
-		if(mqttService.getActivityStatus()) {
-			inboxStyle = new NotificationCompat.InboxStyle();
-			numMessages = 0;
+		if(mqttService.getActivityStatus())
 			return;
-		}
 		
 		NotificationManager mNotificationManager =
 				(NotificationManager) cw.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -60,8 +59,8 @@ public class EventCallback implements MqttCallback {
         final PendingIntent activity = PendingIntent.getActivity(cw, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		
 		NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(cw)
-			.setContentTitle("New Message")
-			.setContentText("You've received new messages.")
+			.setContentTitle("Neue Nachrichten")
+			.setContentText("Sie haben neue Nachrichten erhalten!")
 			.setSmallIcon(R.drawable.ic_launcher)
 			.setContentIntent(activity)
 			.setOnlyAlertOnce(false)
@@ -81,4 +80,10 @@ public class EventCallback implements MqttCallback {
 										mNotifyBuilder.build());
 	}
 
+	
+	public void resetNotifcation() {
+		numMessages = 0;
+		inboxStyle = new NotificationCompat.InboxStyle();
+	}
+	
 }

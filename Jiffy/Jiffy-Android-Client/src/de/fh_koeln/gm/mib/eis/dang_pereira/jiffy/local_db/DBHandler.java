@@ -9,6 +9,7 @@ import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.rest_res_structs.User;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -28,6 +29,9 @@ public class DBHandler {
 	
 
 	public boolean createUser(User user) {
+		
+		if(user == null)
+			return false;
 		
 		Integer userId = user.getUser().getID();
 		String name = user.getName();
@@ -56,7 +60,7 @@ public class DBHandler {
 	public ArrayList<LocalUser> getUsers() {
 		ArrayList<LocalUser> uList = new ArrayList<LocalUser>();
 	
-		String stmt = "SELECT user_id, name, username, type FROM  User ";
+		String stmt = "SELECT user_id, name, username, type FROM User ";
 		
 		Cursor c = null;
 		
@@ -82,6 +86,8 @@ public class DBHandler {
 	
 	public boolean createMsg(Message msg) {
 		
+		if(msg == null)
+			return false;
 		
 		String msgUuid = msg.getMsgUUID();
 		int fromUserId = msg.getFromUserId().getID().intValue();
@@ -125,13 +131,16 @@ public class DBHandler {
 		values.put("msg_subtype", msgSubtype);
 		values.put("msg_subtext", msgSubtext);
 		values.put("received_date", date);
-		values.put("unread", 0);
+		values.put("unread", 1);
 		
-		Log.d(Config.TAG, msgUuid + " - " + fromUserId);
+		Log.d(Config.TAG, values.toString());
 		
 		try{
 			db.insertOrThrow("Message", null, values);
 			return true;
+		}
+		catch(SQLiteConstraintException e) {
+			Log.e(Config.TAG, "INSERT-EXCEPTIONConst: " + e.getMessage());
 		}
 		catch(Exception e) {
 			Log.e(Config.TAG, "INSERT-EXCEPTION: " + e.getMessage());
@@ -200,10 +209,10 @@ public class DBHandler {
 	
 	
 	
-	public int getNumUnreadMsgs() {
+	public Integer getNumUnreadMsgs() {
 		int num = 0;
 		
-		String stmt = "SELECT COUNT(*) FROM Message WHERE unread = 0";
+		String stmt = "SELECT COUNT(*) FROM Message WHERE unread = 1";
 		
 		Cursor c = null;
 		
@@ -216,12 +225,61 @@ public class DBHandler {
 		
 		
 		if(c != null && c.moveToFirst()) {
-			
+			num = c.getInt(0);
 		}
 		
 		return num;
 	}
 	
+	
+	public boolean setMsgAsUnread(String uuid) {
+		
+		if(uuid == null)
+			return false;
+		
+		ContentValues values = new ContentValues();
+		values.put("unread", 0);
+		
+		try{
+			int numRows = db.update("Message", values, "msg_uuid = ?", new String[]{uuid});
+			
+			if(numRows > 0)
+				return true;
+		}
+		catch(Exception e) {
+			Log.e(Config.TAG, "UPDATE-EXCEPTION: " + e.getMessage());
+		}
+		
+		return false;
+	}
+	
+	
+	public ArrayList<LocalUser> getChildren() {
+		ArrayList<LocalUser> uList = new ArrayList<LocalUser>();
+		
+		String stmt = "SELECT user_id, name, username, type " + 
+				"FROM User " + 
+				"WHERE type = 'STUDENT'";
+		
+		Cursor c = null;
+		
+		try{
+			c = db.rawQuery(stmt, null);
+		}
+		catch(Exception e) {
+			Log.e(Config.TAG, "SELECT-EXCEPTION: " + e.getMessage());
+		}
+		
+		
+		if(c != null && c.moveToFirst()) {
+			do {
+				LocalUser lu = cursorToUser(c);
+				uList.add(lu);
+			} while(c.moveToNext());
+		}
+		
+		return uList;
+	}
 	
 	
 	private LocalMessage cursorToMessage(Cursor c) {
@@ -236,8 +294,6 @@ public class DBHandler {
 		lm.setUserId(c.getInt(6));
 		lm.setRead(c.getInt(7));
 		lm.setName(c.getString(8));
-		
-		Log.d(Config.TAG, "sub: " + lm.getSubject());
 		
 		return lm;
 	}

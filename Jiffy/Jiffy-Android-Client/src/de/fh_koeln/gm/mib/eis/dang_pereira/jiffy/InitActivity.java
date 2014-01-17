@@ -1,9 +1,14 @@
 package de.fh_koeln.gm.mib.eis.dang_pereira.jiffy;
 
+import java.util.HashMap;
+
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.Config;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.R;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.activities.MainActivity;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.service.MQTTService;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.utils.PrivateBroadcast;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.utils.ResourceCallback;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.utils.ResourceGetter;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -13,6 +18,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -52,6 +58,7 @@ public class InitActivity extends Activity {
 			// Sofern bereits angemeldet, gehe zur MainActivity
 			Intent i = new Intent(this, MainActivity.class);
 			startActivity(i);
+			finish();
 		}
 		else {
 			// wenn nicht, dann zeige das Login-Layout
@@ -87,8 +94,6 @@ public class InitActivity extends Activity {
 							.putString("username", username)
 							.putString("password", password)
 						.commit();
-						
-						Log.d(Config.TAG, "vor!");
 						
 						pd = ProgressDialog.show(self, "Anmeldung", "Bitte warten...");
 						
@@ -144,7 +149,8 @@ public class InitActivity extends Activity {
 			
 			Log.d(Config.TAG, "Verbindung zum Broker: " + status);
 			
-			pd.dismiss();
+			if(pd != null)
+				pd.dismiss();
 			
 			/* Je nachdem ob sich zum System verbunden werden konnte,
 			 * wird entweder das Login-Layout gezeigt oder weiter zum MainActivity gegangen */
@@ -175,8 +181,38 @@ public class InitActivity extends Activity {
 				if(username.isEmpty() || password.isEmpty()) {
 					Log.e(Config.TAG, "Keine Benutzerdaten gegeben! Zu voreilig? ;)");
 				} else {
+					
+					// TODO: Verfügbarkeit des REST-Endpoints prüfen!
+					
+					/* Zu abonnierende Topics vom REST-Endpoint liefern lassen */
+					
+					HashMap<String, String> headers = new HashMap<String, String>();
+					headers.put("Authorization", "Basic " + Base64.encodeToString((username + ":" + password).getBytes(), Base64.NO_WRAP));
+					
+					ResourceGetter rg = new ResourceGetter(getApplication(), headers);
+					
+					/* Eine schmutziger schmutziger Art das zu lösen; AAALL THE CALLBACKS!!! */
+					rg.getTopicsToSubscribe(username, new ResourceCallback() {
+						
+						@Override
+						public void receive(boolean status, Bundle bdl) {
+							
+							if(status && bdl.containsKey("topicsToSubscribe")) {
+								String[] topicsToSubscribe = bdl.getStringArray("topicsToSubscribe");
+								PrivateBroadcast.broadcastTopicsToSubscribe(self, topicsToSubscribe);
+							}
+							else {
+								Log.d(Config.TAG, "Whoooppsss!");
+							}
+						}
+					});
+					
+					Log.d(Config.TAG, "OnStatus");
+					
+					/* ActivityMain aufrufen! */
 					Intent i = new Intent(self, MainActivity.class);
 					startActivity(i);
+					finish();
 				}
 				
 			}

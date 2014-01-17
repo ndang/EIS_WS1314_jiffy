@@ -1,8 +1,6 @@
 package de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.service;
 
 import java.util.ArrayList;
-import java.util.Queue;
-import java.util.LinkedList;
 
 import javax.net.SocketFactory;
 
@@ -11,8 +9,12 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.Config;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.R;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.local_db.DBHandler;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.msg_structs.Message;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.utils.PrivateBroadcast;
 
 import android.app.Service;
@@ -29,12 +31,14 @@ import android.widget.Toast;
 
 public class MQTTService extends Service {
 	
-	private Queue<ServiceMessage> msgStore = new LinkedList<ServiceMessage>();
 	private MqttClient mqttClient;
 	private boolean activityIsActive = true;
 	private TopicsSubscribeBroadCastReceiver mTopicsSubscribeReceiver = new TopicsSubscribeBroadCastReceiver();
 	private ServiceBroadCastReceiver mActivityReceiver = new ServiceBroadCastReceiver();
 	private ArrayList<String> subscribedTopics = new ArrayList<String>();
+	private EventCallback evcall;
+	private ObjectMapper jmapper = new ObjectMapper();
+	private MQTTService self;
 	
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -45,6 +49,9 @@ public class MQTTService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
+		this.self = this;
+		this.evcall = new EventCallback(this);
 		
 		Config cfg = Config.getInstance();
 		
@@ -89,7 +96,7 @@ public class MQTTService extends Service {
 				
 				PrivateBroadcast.broadcastStatus(this, true, Config.SERVICE_CON_STATUS_FILTER);
 				
-				mqttClient.setCallback(new EventCallback(this));
+				mqttClient.setCallback(evcall);
 				
 				/* Erst jetzt sollte gesetzt werden, dass man angemeldet ist */
 				spref.edit()
@@ -102,6 +109,7 @@ public class MQTTService extends Service {
 			PrivateBroadcast.broadcastStatus(this, false, Config.SERVICE_CON_STATUS_FILTER);
 		} catch  (Exception e) {
 			Log.d(Config.TAG, "SSLSocket-Fehler: " + e.getMessage());
+			PrivateBroadcast.broadcastStatus(this, false, Config.SERVICE_CON_STATUS_FILTER);
 		}
 		
 		/* BroadcastReceiver binden */
@@ -110,11 +118,26 @@ public class MQTTService extends Service {
 	
 	
 	
+	public boolean restartIfNotConnected() {
+		
+		if(!mqttClient.isConnected()) {
+			try {
+				mqttClient.connect();
+			} catch (MqttException e) {
+				Log.e(Config.TAG, "Konnte Verbindung nicht wieder herstellen: " + e.getMessage());
+			}
+		}
+		
+		return true;
+	}
+	
+	
+	
     public void bindBroadCastReceivers(boolean bind) {
     	if(bind) {
     		/* Den Service über die Sichtbarkeit einer Activity informieren */
     		LocalBroadcastManager.getInstance(this).registerReceiver(mActivityReceiver,
-  			      new IntentFilter(Config.ACTIVITY_ACTIVE_FILTER));
+  			      new IntentFilter(Config.ACTIVITY_FILTER));
     		
     		/* Auf zu abonnierende Topics horchen */
     		LocalBroadcastManager.getInstance(this).registerReceiver(mTopicsSubscribeReceiver,
@@ -129,12 +152,19 @@ public class MQTTService extends Service {
 	
 	public void handleMsg(String topic, String msg) {
 		
-		if(activityIsActive) {
-			PrivateBroadcast.broadcastMsg(this, topic, msg);
+		DBHandler dbh = new DBHandler(getApplicationContext());
+		dbh.open();
+		
+		Message m = null;
+		try {
+			m = jmapper.readValue(msg, Message.class);
+		} catch (Exception e) {
+			Log.e(Config.TAG, "Fehler beim Marshalling einkommender Nachricht: " + e.getMessage());
 		}
-		else {
-			this.msgStore.offer(new ServiceMessage(topic, msg));
-		}
+		
+		dbh.createMsg(m);
+		
+		PrivateBroadcast.broadcastMsgAvail(this, Config.MESSAGE_AVAIL_FILTER);
 		
 		Log.d(Config.TAG, "New Message: " + topic + ":" + msg + "\n");
 	}
@@ -143,10 +173,11 @@ public class MQTTService extends Service {
 		return activityIsActive;
 	}
 	
+	
 	@Override
 	public void onDestroy() {
 		
-		/* Vor dem zerstören nich vorher die aktiven BroadcastReceiver lösen */
+		/* Vor dem Zerstören noch vorher die aktiven BroadcastReceiver lösen */
 		bindBroadCastReceivers(false);
 		
 		try {
@@ -165,17 +196,18 @@ public class MQTTService extends Service {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			activityIsActive = intent.getBooleanExtra("active", false);
 			
-			if(activityIsActive) {
-				Log.d(Config.TAG, "Activity is active!");
-				
-				for(ServiceMessage msg: msgStore) {
-					handleMsg(msg.getTopic(), msg.getMsg());
-				}
+			
+			if(intent.hasExtra("status")) {
+				activityIsActive = intent.getBooleanExtra("status", false);
+				/* Wenn die MainActivity wieder aktiv ist, dann soll der Notificationzähler zurück gesetzt werden */
+				evcall.resetNotifcation();
+			}
+			else if(intent.hasExtra("restartIfNeeded")) {
+				self.restartIfNotConnected();
 			}
 			else {
-				Log.d(Config.TAG, "Activity is inactive!");
+				
 			}
 		}
 	}

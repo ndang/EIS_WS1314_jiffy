@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class JiffyLocalSQLiteHelper extends SQLiteOpenHelper {
 	
 	public final static String DB_NAME = "jiffy.db";
-	public final static int DB_VERSION = 4;
+	public final static int DB_VERSION = 2;
 	
 	private final static String DB_CREATE_USER = "CREATE TABLE User (" + 
 			"user_id INTEGER PRIMARY KEY, " +
@@ -17,7 +17,7 @@ public class JiffyLocalSQLiteHelper extends SQLiteOpenHelper {
 			"type TEXT NULL)";
 	
 	private final static String DB_CREATE_MSG = "CREATE TABLE Message (" + 
-			"msg_uuid STRING PRIMARY KEY , " +
+			"msg_uuid TEXT PRIMARY KEY , " +
 			"user_id TEXT NULL ," +
 			"msg TEXT NULL ," +
 			"msg_subject TEXT NULL ," +
@@ -25,14 +25,16 @@ public class JiffyLocalSQLiteHelper extends SQLiteOpenHelper {
 			"msg_subtype TEXT NULL , " +
 			"msg_subtext TEXT NULL , " +
 			"received_date TEXT NULL ," +
-			"unread NUMERIC NOT NULL)";
+			"unread INTEGER NOT NULL)";
 	
 	private final static String DB_CREATE_GRADES = "CREATE TABLE Grades ("+
 			"grade_id INTEGER PRIMARY KEY," +
 			"value NUMERIC NULL , " +
 			"grade_weight INTEGER NULL , " +
+			"date_given TEXT NULL , " +
 			"comment TEXT NULL , " +
 			"subject TEXT NULL , " +
+			"student_id INTEGER NULL ," +
 			"teacher_id INTEGER NULL)";
 	
 	

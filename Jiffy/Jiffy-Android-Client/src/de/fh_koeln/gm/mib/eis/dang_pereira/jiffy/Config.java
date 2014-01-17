@@ -11,8 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Config {
 	
 	public final static String TAG = "Jiffy-Client";
-	public final static String NOTIFY_LED_COLOR = "#ff0000ff";
-	public static String ACTIVITY_ACTIVE_FILTER = "de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.activity_active";
+	public final static String NOTIFY_LED_COLOR = "#ff3084a7";
+	public static String ACTIVITY_FILTER = "de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.activity_active";
 	public static String SERVICE_CON_STATUS_FILTER = "de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.service_con_status";
 	public static String SERVICE_SUBSCRIBE_TOPICS_FILTER = "de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.service_subscribe_topics";
 	public static String MESSAGE_AVAIL_FILTER = "de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.message_avail";

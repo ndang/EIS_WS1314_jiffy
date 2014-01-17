@@ -3,18 +3,23 @@ package de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.activities;
 import java.util.ArrayList;
 
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.Config;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.InitActivity;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.R;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.local_db.DBHandler;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.local_db.LocalMessage;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.msg_structs.Id;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.msg_structs.Message;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.msg_structs.SchoolMsg;
-import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.rest_res_structs.User;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.service.MQTTService;
+import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.utils.PrivateBroadcast;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -24,9 +29,9 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
+	private DBHandler dbh;
 	
 	private TextView tvUnreadMsgCount;
-	
 	
 	private MessageBroadCastReceiver mMessageReceiver = new MessageBroadCastReceiver();
 	
@@ -35,15 +40,30 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		
 		tvUnreadMsgCount = (TextView) findViewById(R.id.lbl_countMsg);
 		
 		
+		/* Überprüfen, ob der Service läuft;
+		 * wenn nicht, dann lösche das loggedIn-Feld und gehe zurück zum Login-Formular */
+		if(!this.checkIfServiceIsRunning()) {
+			SharedPreferences spref = getSharedPreferences("account", Context.MODE_PRIVATE);
+			spref.edit()
+				.remove("loggedIn")
+			.commit();
+			
+			Intent i = new Intent(this, InitActivity.class);
+			startActivity(i);
+			finish();
+		}
 		
-		DBHandler dbh = new DBHandler(getApplicationContext());
 		
-		dbh.open();		
-
+		dbh = new DBHandler(getApplicationContext());
+		dbh.open();
+		
+		dbh.setMsgAsUnread("");
+		
+		tvUnreadMsgCount.setText("" + dbh.getNumUnreadMsgs());
+		
 		/*
 		de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.rest_res_structs.Id userId =
 				new de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.rest_res_structs.Id(1, "blaa", null); 
@@ -60,7 +80,7 @@ public class MainActivity extends Activity {
 		
 		/*
 		Message m = new Message();
-		m.setMsgUUID("UUID2");
+		m.setMsgUUID("UUID4");
 		m.setFromUserId(new Id(1, "/user/2"));
 		m.setMsgText("Bllaaaa");
 		m.setMsgSubject("Subj");
@@ -75,15 +95,15 @@ public class MainActivity extends Activity {
 		m.setSchool(s);
 
 		dbh.createMsg(m);
-		
+		*/
 		
 		ArrayList<LocalMessage> lmList = dbh.getMessages();
 		
 		for(LocalMessage lm: lmList) {
 			Log.d(Config.TAG, "Msg: " + lm.getName() + " - " + lm.getSubject() + " - " + lm.getDate());
 		}
-		*/
 		
+		bindBroadCastReceivers(true);
 	}
 
 	
@@ -125,21 +145,39 @@ public class MainActivity extends Activity {
 
 	}
 
+	
+	public boolean checkIfServiceIsRunning() {
+	    ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+	        if (MQTTService.class.getName().equals(service.service.getClassName())) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		
+		PrivateBroadcast.broadcastStatus(getApplicationContext(), false, Config.ACTIVITY_FILTER);
+	}
+	
     @Override
     public void onResume() {
     	super.onResume();
+    	
+    	tvUnreadMsgCount.setText("" + dbh.getNumUnreadMsgs());
+    	PrivateBroadcast.broadcastStatus(getApplicationContext(), true, Config.ACTIVITY_FILTER);
+    	//PrivateBroadcast.broadcastServiceRestart(getApplicationContext());
     }
-	
 	
     public class MessageBroadCastReceiver extends BroadcastReceiver {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			String topic = intent.getStringExtra("topic");
-			String msg = intent.getStringExtra("msg");
-			
-			Log.d(Config.TAG, topic + " | " + msg);
+			tvUnreadMsgCount.setText("" + dbh.getNumUnreadMsgs());
 		}
 	}
-	
 }

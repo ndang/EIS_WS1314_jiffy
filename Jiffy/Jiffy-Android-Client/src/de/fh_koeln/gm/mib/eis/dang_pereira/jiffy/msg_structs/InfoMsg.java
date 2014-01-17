@@ -8,6 +8,9 @@ public class InfoMsg {
 	@JsonProperty("class_broadcast")
 	public Boolean class_broadcast;
 	
+	@JsonProperty("class")
+	public Id sclass;
+	
 	@JsonProperty("desc_date")
 	public String desc_date;
 	
@@ -30,6 +33,17 @@ public class InfoMsg {
 		this.class_broadcast = class_broadcast;
 	}
 	
+	
+	@JsonGetter("class")
+	public Id getSClass() {
+		return this.sclass;
+	}
+
+	@JsonSetter("class")
+	public void setSClass(Id sclass) {
+		this.sclass = sclass;
+	}
+	
 
 	@JsonGetter("desc_date")
 	public String getDescDate() {
@@ -43,6 +57,6 @@ public class InfoMsg {
 	
 	
 	public String toString() {
-		return "{ \"class_broadcast\": " + this.class_broadcast + ", \"desc_date\": " + this.desc_date + " }";
+		return "{ \"class_broadcast\": " + this.class_broadcast + ", \"class\": " + this.sclass + ",\"desc_date\": " + this.desc_date + " }";
 	}
 }
