@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.widget.TabHost;
 
 public class EducationOverview extends Activity{
 
@@ -16,17 +17,19 @@ public class EducationOverview extends Activity{
 		setContentView(R.layout.education_overview);
 		
         
-        // Get the message from the intent
-//        Intent intent = getIntent();
-//        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-//        
-//        // Create the text view
-//        TextView textView = new TextView(this);
-//        textView.setTextSize(40);
-//        textView.setText(message);
-//        
-//        // Set the text view as the activity layout
-//        setContentView(textView);
+		TabHost tabs=(TabHost)findViewById(android.R.id.tabhost);
+	    tabs.setup();
+	    
+	    TabHost.TabSpec spec=tabs.newTabSpec("tag1");
+
+	    spec.setContent(R.id.child1);
+	    spec.setIndicator("Alice");
+	    tabs.addTab(spec);
+
+	    spec=tabs.newTabSpec("tag2");
+	    spec.setContent(R.id.child2);
+	    spec.setIndicator("Bob");
+	    tabs.addTab(spec);
 	}
 
 	@Override
