@@ -12,7 +12,9 @@ import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.rest_res_structs.Topics;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.rest_res_structs.User;
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.rest_res_structs.Users;
 
+import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -50,7 +52,14 @@ public class ResourceGetter {
 					
 					try {
 						Users users = jmapper.readValue(resp.getByteArray("data"), Users.class);
-						User user = users.getUsers().get(0); 
+						User user = users.getUsers().get(0);
+						
+						if(user.getUser().getID() != null) {
+							SharedPreferences spref = cw.getSharedPreferences("account", Context.MODE_PRIVATE);
+							spref.edit()
+								.putInt("userId", user.getUser().getID())
+							.commit();
+						}
 						
 						final String topicsURL = "/user/" + user.getUser().getID() + "/topics";
 						
@@ -75,15 +84,17 @@ public class ResourceGetter {
 										Log.e(Config.TAG, "Konnte JSON-Dokument nicht parsen: " + e.getMessage());
 									}
 									
-									if(topics != null) {
+									Bundle bdl = new Bundle();
+									
+									if(topics != null && topics.getTopics() != null) {
 										ArrayList<String> givenTopicsToSubscribe = topics.getTopics();
 										
-										if(givenTopicsToSubscribe != null) {
-											String[] topicsToSubsribe = givenTopicsToSubscribe.toArray(new String[givenTopicsToSubscribe.size()]);
-											Bundle bdl = new Bundle();
-											bdl.putStringArray("topicsToSubscribe", topicsToSubsribe);
-											callback.receive(true, bdl);
-										}
+										String[] topicsToSubsribe = givenTopicsToSubscribe.toArray(new String[givenTopicsToSubscribe.size()]);
+										bdl.putStringArray("topicsToSubscribe", topicsToSubsribe);
+										callback.receive(true, bdl);
+									}
+									else {
+										callback.receive(false, bdl);
 									}
 									
 								}
@@ -101,4 +112,30 @@ public class ResourceGetter {
 		}, headers);
 
 	}
+	
+	
+	
+	public void checkRESTConnection(final ResourceCallback rc) {
+		
+		/* Request -> Verfügbarkeit prüfen */
+		new RestAsyncTask().execute(this.cw, "GET", "/", new HTTPCallback() {
+			
+			@Override
+			public void handle(Bundle resp) {
+				if(resp == null)
+					return;
+
+				boolean available = false;
+				
+				if(resp.containsKey("available")) {
+					available = resp.getBoolean("available");
+				}
+					
+				rc.receive(available, new Bundle());
+				
+			}
+		}, headers);
+	}
+	
+	
 }

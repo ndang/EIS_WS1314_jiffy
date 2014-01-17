@@ -92,9 +92,8 @@ public class RestAsyncTask extends AsyncTask<Object, Void, Bundle> {
 		for(Object key: headers.keySet()) {
 			req.setHeader((String)key, (String)headers.get(key));
 		}
-		
+		boolean endpointAvailable = false;
 		Bundle resp = new Bundle();
-		
 		
 		HttpResponse httpResp;
 		try {
@@ -114,11 +113,14 @@ public class RestAsyncTask extends AsyncTask<Object, Void, Bundle> {
 			
 			if(data != null)
 				resp.putByteArray("data", data);
+			endpointAvailable = true;
 			
 		} catch (IOException e) {
 			Log.d(Config.TAG, "Konnte die Verbindung nicht herstellen: " + e.getMessage());
 		}
-			
+		
+		resp.putBoolean("available", endpointAvailable);
+		
 	    return resp;
 	}
 

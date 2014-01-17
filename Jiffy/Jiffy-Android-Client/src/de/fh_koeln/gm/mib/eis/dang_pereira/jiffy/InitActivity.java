@@ -1,5 +1,7 @@
 package de.fh_koeln.gm.mib.eis.dang_pereira.jiffy;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.util.HashMap;
 
 import de.fh_koeln.gm.mib.eis.dang_pereira.jiffy.Config;
@@ -97,8 +99,27 @@ public class InitActivity extends Activity {
 						
 						pd = ProgressDialog.show(self, "Anmeldung", "Bitte warten...");
 						
-						/* Starte den Hintergrundservice */
-						startService();
+						HashMap<String, String> headers = new HashMap<String, String>();
+						headers.put("Authorization", "Basic " + Base64.encodeToString((username + ":" + password).getBytes(), Base64.NO_WRAP));
+						
+						ResourceGetter rg = new ResourceGetter(getApplication(), headers);
+						
+						rg.checkRESTConnection(new ResourceCallback() {
+							
+							@Override
+							public void receive(boolean status, Bundle bdl) {
+
+								if(status) {
+									/* Starte den Hintergrundservice */
+									startService();
+								}
+								else {
+									Toast.makeText(self, "Verbindung konnte nicht hergestellt werden!", Toast.LENGTH_LONG).show();
+								}
+								
+								pd.dismiss();
+							}
+						});
 					}
 				}
 			});
@@ -182,15 +203,12 @@ public class InitActivity extends Activity {
 					Log.e(Config.TAG, "Keine Benutzerdaten gegeben! Zu voreilig? ;)");
 				} else {
 					
-					// TODO: Verfügbarkeit des REST-Endpoints prüfen!
-					
-					/* Zu abonnierende Topics vom REST-Endpoint liefern lassen */
-					
 					HashMap<String, String> headers = new HashMap<String, String>();
 					headers.put("Authorization", "Basic " + Base64.encodeToString((username + ":" + password).getBytes(), Base64.NO_WRAP));
 					
 					ResourceGetter rg = new ResourceGetter(getApplication(), headers);
 					
+					/* Zu abonnierende Topics vom REST-Endpoint liefern lassen */
 					/* Eine schmutziger schmutziger Art das zu lösen; AAALL THE CALLBACKS!!! */
 					rg.getTopicsToSubscribe(username, new ResourceCallback() {
 						
